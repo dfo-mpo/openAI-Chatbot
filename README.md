@@ -26,7 +26,33 @@ Clone the repository to your local machine with the following command:
 ```bash
 git clone https://github.com/your-repository-url.git
 cd into-your-repository-directory
-
-### 2. Clone the Repository
-Clone the repository to your local machine with the following command:
+```
+### 3. Install Dependencies
+Install all required dependencies by running the following command in the project directory:
 ```bash
+pip install -r requirements.txt
+```
+### 4. Set Up Environment Variables
+Create a .env file in the root directory of your project and populate it with necessary API keys and other sensitive configurations:
+```bash
+OPENAI_API_KEY = ""
+OPENAI_API_ENDPOINT = ""
+
+BLOB_CONNECTION_STR = ""
+BLOB_CONTAINER_NAME = ""
+
+openai.api_type = ""
+OPENAI_API_BASE = ""
+
+ 
+DI_API_ENDPOINT = ""
+DI_API_KEY = ""
+```
+For API key configuration, refer to the instructions available at SharePoint Link (placeholder).
+
+### 5. Run the Application
+Start the local server by running:
+```bash
+python manage.py runserver
+```
+You can access the web application by visiting http://127.0.0.1:8000 in your web browser.
