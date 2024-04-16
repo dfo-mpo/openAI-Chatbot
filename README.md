@@ -50,7 +50,6 @@ OPENAI_API_ENDPOINT = ""
 
 openai.api_type = ""
 OPENAI_API_BASE = ""
-
  
 DI_API_ENDPOINT = ""
 DI_API_KEY = ""
