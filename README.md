@@ -48,9 +48,6 @@ Create a .env file in the root directory of your project and populate it with ne
 OPENAI_API_KEY = ""
 OPENAI_API_ENDPOINT = ""
 
-BLOB_CONNECTION_STR = ""
-BLOB_CONTAINER_NAME = ""
-
 openai.api_type = ""
 OPENAI_API_BASE = ""
 
