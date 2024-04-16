@@ -17,8 +17,7 @@ We utilize Azure AI to power the AI ChatBot and CSV/PDF Analyzer. Azure AI provi
 
 ### Document Intelligence
 Document Intelligence is used to read and interpret the contents of documents uploaded to the web application. It helps in:
-- Automatically extracting text and data from documents, which can be further analyzed by our tools.
-- Providing a layer of cognitive understanding that supports features like the Redactor and Sensitivity Score Calculator.
+- Automatically extracting text and data from structured and unstructured documents.
 
 ## Prerequisites
 Before you begin the setup process, make sure to install the following:
