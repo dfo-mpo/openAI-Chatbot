@@ -24,8 +24,8 @@ During installation, ensure to check the box that says 'Add Python 3.9 to PATH'.
 ### 2. Clone the Repository
 Clone the repository to your local machine with the following command:
 ```bash
-git clone https://github.com/your-repository-url.git
-cd into-your-repository-directory
+git clone https://github.com/dfo-mpo/openAI-Chatbot.git
+cd openAI-Chatbot
 ```
 ### 3. Install Dependencies
 Install all required dependencies by running the following command in the project directory:
