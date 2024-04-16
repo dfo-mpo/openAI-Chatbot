@@ -8,6 +8,17 @@ The DFO OpenAI Tool Suite is a web application equipped with a suite of AI tools
 - **CSV/PDF Analyzer**: Analyzes and extracts information from PDF documents by uploading the document along with a CSV file containing engineered prompts.
 - **Sensitivity Score Calculator**: Computes the sensitivity level of uploaded documents based on custom parameters.
 - **Redactor**: Scans and redacts specific information from uploaded PDF documents.
+  
+## Integration with Azure AI and Document Intelligence
+### Azure AI
+We utilize Azure AI to power the AI ChatBot and CSV/PDF Analyzer. Azure AI provides advanced machine learning models that can interpret and respond to user queries, and analyze text data extracted from documents. This integration allows for:
+- Enhanced natural language processing for real-time conversation with documents.
+- Sophisticated data extraction and analysis from CSV and PDF files, enabling deep insights into document contents.
+
+### Document Intelligence
+Document Intelligence is used to read and interpret the contents of documents uploaded to the web application. It helps in:
+- Automatically extracting text and data from documents, which can be further analyzed by our tools.
+- Providing a layer of cognitive understanding that supports features like the Redactor and Sensitivity Score Calculator.
 
 ## Prerequisites
 Before you begin the setup process, make sure to install the following:
