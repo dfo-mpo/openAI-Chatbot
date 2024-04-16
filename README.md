@@ -27,3 +27,6 @@ Clone the repository to your local machine with the following command:
 git clone https://github.com/your-repository-url.git
 cd into-your-repository-directory
 
+### 2. Clone the Repository
+Clone the repository to your local machine with the following command:
+```bash
