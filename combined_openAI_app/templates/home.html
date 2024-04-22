@@ -1,0 +1,240 @@
+{% load static %}
+<!DOCTYPE html>
+
+{% load i18n %}
+{% block subcontent %}
+
+<html class="no-js" lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>Home</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link href="https://wet-boew.github.io/themes-dist/GCWeb/GCWeb/assets/favicon.ico" rel="icon" type="image/x-icon" />
+    <link rel="stylesheet" href="https://wet-boew.github.io/themes-dist/GCWeb/GCWeb/css/theme.min.css" />
+    <noscript><link rel="stylesheet" href="https://wet-boew.github.io/themes-dist/GCWeb/wet-boew/css/noscript.min.css" /></noscript>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.js"></script>
+    <script src="https://wet-boew.github.io/themes-dist/GCWeb/wet-boew/js/wet-boew.min.js"></script>
+    <script src="https://wet-boew.github.io/themes-dist/GCWeb/GCWeb/js/theme.min.js"></script>
+    <style>
+        .app-section {
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            background-color: #fff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+        .app-section:hover {
+            background-color: #f5f5f5;
+            cursor: pointer;
+        }
+        .app-section h3 {
+            color: #005a9c; 
+        }
+        .app-container {
+            margin-top: 30px;
+        }
+        .wb-navcurr1 ul {
+            display: flex;
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+
+
+        .wb-navcurr1 li {
+            margin-right: 80px; 
+            font-size: 1.2em;
+        }
+
+        .wb-navcurr1 a {
+            color: #fff; 
+            text-decoration: none;
+        }
+
+        .wb-navcurr1 a:hover {
+            text-decoration: underline;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .app-section {
+            /* Existing styles... */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-section .content {
+            flex-grow: 1;
+        }
+        .space{
+            padding: 46px;
+        }
+        .space2{
+            padding: 9px;
+        }
+    </style>
+</head>
+<body vocab="http://schema.org/" typeof="WebPage">
+    
+
+    <header>
+        <div id="wb-bnr" class="container">
+            <div class="row">
+                <div >
+                    <a href="https://www.dfo-mpo.gc.ca/index-eng.html" property="url">
+                        <img src="{% url 'banner-image' %}" alt="Government of Canada" property="logo" />
+                    </a>
+                    <meta property="name" content="Government of Canada">
+                </div>
+            </div>
+        </div>
+        
+  
+        <footer id="wb-info">
+
+            <div class="landscape">
+                <nav class="container wb-navcurr1">
+                    <ul>
+                        <li >
+                            <a class="nav-link" href="{% url 'home' %}">Home</a>
+                        </li>
+                        <li >
+                            <a class="nav-link" href="{% url 'demo_home' %}">Analyze</a>
+                        </li>
+                        <li >
+                            <a class="nav-link" href="{% url 'chat_home' %}">Chat</a>
+                        </li>
+                        <li >
+                            <a class="nav-link" href="{% url 'PII' %}">PII Redactor</a>
+                        </li>
+                        <li >
+                            <a class="nav-link" href="{% url 'SSC' %}">Sensitivity Score</a>
+                        </li>
+                        <li >
+                            <a class="nav-link" href="{% url 'overview' %}">Help</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        
+        </footer>
+
+                       
+        </div>
+        <nav id="wb-bc" property="breadcrumb">
+        <h2>You are here:</h2>
+        <div class="container">
+            <ol class="breadcrumb" typeof="BreadcrumbList">
+                <li property="itemListElement" typeof="ListItem">
+                    <a property="item" typeof="WebPage" href="{% url 'home' %}">
+                        <span property="name">Home</span>
+                    </a>
+                    <meta property="position" content="1">
+                </li>
+            </ol>
+        </div>
+        </nav>
+
+    </header>
+
+    <main property="mainContentOfPage" class="container" resource="#wb-main" typeof="WebPageElement">
+        <h1>Welcome to the DFO PSSI OpenAI Portal</h1>
+        <p>Employing AI allows us to transcend traditional data handling limitations, thereby modernizing the management of Pacific salmon data through advanced analysis and user interaction.</p>
+
+       
+        <div class="container app-container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="app-section" onclick="window.location.href='{% url 'demo_home' %}';">
+                        <h3>CSV/PDF Analyzer</h3>
+                        <p>Engineer specific and detailed prompts for Document Analysis</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="app-section" onclick="window.location.href='{% url 'chat_home' %}';">
+                        <h3>PDF Chatbot</h3>
+                        <p>Chat live with your document. For more general inquiries</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="app-section" onclick="window.location.href='{% url 'PII' %}';">
+                        <h3>PII Redactor</h3>
+                        <p>Redact Personally Identifiable Information from an uploaded PDF</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="app-section" onclick="window.location.href='{% url 'SSC' %}';">
+                        <h3>Sensitivity Score Calculator</h3>
+                        <p>Check the Sensitivity Score of an uploaded document using cutom parameters</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="space2"></div>
+
+        <p><a href="{% url 'overview' %}" class="btn btn-primary">Learn More about the Apps</a></p>
+    <!-- Main content footer starts -->
+        <footer class="pagedetails">
+        <h2 class="wb-inv">Page details</h2><div class="row"><div class="col-sm-8 col-md-9 col-lg-9">
+        <div data-ajax-replace="/GCWeb/sites/feedback/ajax/report-problem-en.html">
+    
+        </div>
+        </div>
+    </div>
+    
+                </div><div class="wb-share col-sm-4 col-md-3" data-wb-share='{"lnkClass": "btn btn-default btn-block"}'></div><div class="col-xs-12">
+                <dl id="wb-dtmd">
+                    <dt>Date modified:</dt>
+                    <dd><time property="dateModified">2024-04-22</time></dd>
+                </dl>
+            </div>
+        </div>
+    </footer>
+    <!-- Main content footer ends -->
+    </main>
+
+    <div class="space"></div>
+    
+
+    <footer id="wb-info">
+
+        <div class="landscape">
+            <nav class="container wb-navcurr">
+                <h3>Fisheries and Oceans Canada (DFO)</h3>
+                <h2 class="wb-inv">About government</h2>
+                <ul class="list-unstyled colcount-xs-2 colcount-md-3"><li><a href="https://www.dfo-mpo.gc.ca/contact/index-eng.htm">Contact us</a></li>
+                    <li><a href="https://www.dfo-mpo.gc.ca/career-carriere/index-eng.html">Job opportunities</a></li>
+                    <li><a href="https://www.canada.ca/en/government/system.html">About government</a></li>
+            </nav>
+        </div>
+    
+        <div class="brand">
+        <div class="container">
+            <div class="row ">
+    
+                <nav class="col-md-9 col-lg-10 ftr-urlt-lnk">
+                    <h2 class="wb-inv">About this site</h2>
+                    <ul><li><a href="https://www.canada.ca/en/social.html">Social media</a></li>
+                        <li><a href="https://www.canada.ca/en/mobile.html">Mobile applications</a></li>
+                        <li><a href="https://www1.canada.ca/en/newsite.html">About Canada.ca</a></li>
+                        <li><a href="https://www.canada.ca/en/transparency/terms.html">Terms and conditions</a></li>
+                        <li><a href="https://www.canada.ca/en/transparency/privacy.html">Privacy</a></li></ul>
+                </nav>
+    
+                <div class="col-xs-6 visible-sm visible-xs tofpg">
+                    <a href="#wb-cont">Top of Page <span class="glyphicon glyphicon-chevron-up"></span></a>
+                </div><div class="col-xs-6 col-md-3 col-lg-2 text-right"><img src="https://wet-boew.github.io/themes-dist/GCWeb/GCWeb/assets/wmms-blk.svg" alt="Symbol of the Government of Canada" />
+                </div>
+            </div>
+        </div>
+    </div>
+    </footer>
+</body>
+</html>
+
+{% endblock %}
