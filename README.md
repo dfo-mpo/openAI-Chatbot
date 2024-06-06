@@ -54,8 +54,7 @@ OPENAI_API_BASE = ""
 DI_API_ENDPOINT = ""
 DI_API_KEY = ""
 ```
-For API key configuration, navigate to or create an instance of OpenAI and Document Intelligence on Azure. 
-<img width="613" alt="8" src="https://github.com/dfo-mpo/openAI-Chatbot/assets/159082030/9af600d1-72bb-4122-9504-73d3a3e54b04">
+
 
 ### 5. Run the Application
 Start the local server by running:
