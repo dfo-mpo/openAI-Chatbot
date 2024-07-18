@@ -10,7 +10,6 @@ from azure.core.credentials import AzureKeyCredential
 from io import BytesIO
 from django.conf import settings
 
-endpoint = "https://pssidfodocumentintelligence.cognitiveservices.azure.com/" 
 
 # Create your models here.
 #------------------OpenAI Inputs--------------------
