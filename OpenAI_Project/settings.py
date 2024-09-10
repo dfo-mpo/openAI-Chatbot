@@ -15,8 +15,8 @@ from decouple import config
 import os
 
 # openAI API key
-OPENAI_API_KEY = config("OPENAI_API_KEY", cast=str, default="")
-OPENAI_API_ENDPOINT = config("OPENAI_API_ENDPOINT", cast=str, default="")
+OPENAI_API_KEY = config("OPENAI_API_KEY", cast=str, default="be0ae36abd3e48868200a48a909ab71a")
+OPENAI_API_ENDPOINT = config("OPENAI_API_ENDPOINT", cast=str, default="https://pssiopenaiocr.openai.azure.com/")
 OPENAI_API_BASE = config("OPENAI_API_BASE", cast=str, default="")
 
 DI_API_KEY = config("DI_API_KEY", cast=str, default="")
