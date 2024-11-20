@@ -7,6 +7,7 @@ from django.core.files.storage import default_storage
 from django.http import HttpResponseBadRequest
 from pypdf import PdfReader
 import os
+import io
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
@@ -16,6 +17,9 @@ import re
 from pdfminer.high_level import extract_text
 from presidio_analyzer import AnalyzerEngine
 import fitz  
+import requests
+import numpy
+from PIL import Image
 
 def banner_image(request):
     image_path = os.path.join(settings.BASE_DIR, 'imgs', 'banner.jpg')
@@ -25,15 +29,15 @@ def banner_image(request):
 def home(request):
     return render(request, 'home.html')
 
-def PII(request):
-    return render(request, 'PII.html')
+def fence(request):
+    return render(request, 'fence.html')
 
-def SSC(request):
-    return render(request, 'SSC.html')
+def scale(request):
+    return render(request, 'scale.html')
 
      
-def chat_home(request):
-    return render(request, 'chat_home.html')
+def french(request):
+    return render(request, 'french.html')
     
 def overview(request):
     return render(request, 'overview.html')
@@ -74,52 +78,77 @@ def analyze_sensitivity(request):
     if request.method == 'POST':
         uploaded_file = request.FILES['document']
         fs = FileSystemStorage()
-        filename = fs.save(uploaded_file.name, uploaded_file)
+        filename = fs.save(uploaded_file.name, uploaded_file) # Note this will stay stored in the web app, TODO: add remove of old documents
         document_path = fs.path(filename)
-        analyzer = AnalyzerEngine()
 
-        # Extract text from PDF
-        score = pii_recognition_example(document_path)
+        # Open the TIFF file and convert it to PNG  
+        image = Image.open(document_path)  
+        npimg = numpy.array(image)  
+        listimg = npimg.tolist()  
+  
+        # Convert image to PNG  
+        png_image_io = io.BytesIO()  
+        image.save(png_image_io, format='PNG')  
+        png_image_io.seek(0)  
+          
+        # Store PNG image in session or save to file system  
+        png_filename = f"{filename.rsplit('.', 1)[0]}.png"  
+        fs.save(png_filename, png_image_io)  
+  
+        # Create a URL for the PNG file  
+        png_url = fs.url(png_filename)  
+        request.session['uploaded_png_url'] = png_url  
 
-        # Clean up the file after analysis
-        fs.delete(filename)
+        # Extract list from array from image
+        image = Image.open(document_path)
+        npimg = numpy.array(image)
+        listimg = npimg.tolist()
+        apilink = "https://www.example.com"
 
-        print("Sensitivity Score Calculated: ", score)
+        r = requests.post("https://ringtail-tops-hopelessly.ngrok-free.app/scale", verify=False, json={"imagelist": listimg})
+        print("Age predicted: ", r)
+        print(r.json()['output'])
+        return JsonResponse({"output": r.json()['output']})
 
-        return JsonResponse({"score": score})
 
 
-
-def upload_document2(request):
+def upload_video(request):
     if request.method == 'POST':
         uploaded_file = request.FILES.get('document')
-        if uploaded_file and uploaded_file.name.lower().endswith('.pdf'):
+        if uploaded_file and uploaded_file.name.lower().endswith(('.mp4', '.avi')):
             fs = FileSystemStorage()
             
             # Split the filename and extension
             name, extension = os.path.splitext(uploaded_file.name)
             # Define the new filename with '-redacted' appended
-            new_filename = f"{name}-redacted{extension}"
-            
-            # Save the original file
-            filename = fs.save(uploaded_file.name, uploaded_file)
-            uploaded_file_url = fs.url(filename)
-            full_temp_path = os.path.join(fs.location, filename)
+            # new_filename = f"{name}-analyzed{extension}"
+            new_filename = os.path.join('cached_outputs', f"{name}.mp4")
+
+            # Check if the file does not already exist
+            filename = uploaded_file.name
+            if not fs.exists(uploaded_file.name):
+                # Save the original file
+                filename = fs.save(uploaded_file.name, uploaded_file)
             
             # Define the output path with the new filename
-            output_pdf_path = os.path.join(fs.location, new_filename)
+            processed_path = os.path.join(fs.location, new_filename)
             
             # Call your redaction function here
-            redact_pdf_based_on_pii(full_temp_path, output_pdf_path)
+            # redact_pdf_based_on_pii(document_path, processed_path)
 
-            # Make sure to delete the original file
-            os.remove(full_temp_path)
+            # # Make sure to delete the original file
+            # os.remove(full_temp_path)
+
+            # Store paths or videos in memory
+            original_video_url = fs.url(filename)
+            processed_video_url = fs.url(new_filename)
+            print(processed_video_url)
+            # request.session['uploaded_video_url'] = original_video_url
+            # request.session['processed_video_url'] = processed_video_url
             
-            # Return the path to the redacted PDF with the new filename
-            redacted_pdf_url = fs.url(new_filename)
-            return JsonResponse({'redactedPdfUrl': redacted_pdf_url})
+            return JsonResponse({'processedVideoURL': processed_video_url, 'uploadedVideoURL': original_video_url})
         else:
-            return HttpResponseBadRequest("Please upload a valid PDF file.")
+            return HttpResponseBadRequest("Please upload a valid video file.")
 
  
  

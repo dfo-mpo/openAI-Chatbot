@@ -99,17 +99,17 @@
                         <li >
                             <a class="nav-link" href="{% url 'home' %}">Home</a>
                         </li>
-                        <li >
+                        <!-- <li >
                             <a class="nav-link" href="{% url 'demo_home' %}">Analyze</a>
+                        </li> -->
+                        <li >
+                            <a class="nav-link" href="{% url 'french' %}">French Translation</a>
                         </li>
                         <li >
-                            <a class="nav-link" href="{% url 'chat_home' %}">Chat</a>
+                            <a class="nav-link" href="{% url 'fence' %}">Fence Counting</a>
                         </li>
                         <li >
-                            <a class="nav-link" href="{% url 'PII' %}">PII Redactor</a>
-                        </li>
-                        <li >
-                            <a class="nav-link" href="{% url 'SSC' %}">Sensitivity Score</a>
+                            <a class="nav-link" href="{% url 'scale' %}">Scale Ageing</a>
                         </li>
                         <li >
                             <a class="nav-link" href="{% url 'overview' %}">Help</a>
@@ -139,36 +139,36 @@
     </header>
 
     <main property="mainContentOfPage" class="container" resource="#wb-main" typeof="WebPageElement">
-        <h1>Welcome to the DFO PSSI OpenAI Portal</h1>
-        <p>Employing AI allows us to transcend traditional data handling limitations, thereby modernizing the management of Pacific salmon data through advanced analysis and user interaction.</p>
+        <h1>Welcome to the DFO ML-AI Portal</h1>
+        <p>Current machine Learning Projects at DFO:</p>
 
        
         <div class="container app-container">
             <div class="row">
-                <div class="col-md-6">
+                <!-- <div class="col-md-6">
                     <div class="app-section" onclick="window.location.href='{% url 'demo_home' %}';">
                         <h3>CSV/PDF Analyzer</h3>
                         <p>Engineer specific and detailed prompts for Document Analysis</p>
                     </div>
-                </div>
+                </div> -->
                 <div class="col-md-6">
-                    <div class="app-section" onclick="window.location.href='{% url 'chat_home' %}';">
-                        <h3>PDF Chatbot</h3>
-                        <p>Chat live with your document. For more general inquiries</p>
+                    <div class="app-section" onclick="window.location.href='{% url 'french' %}';">
+                        <h3>French Translation</h3>
+                        <p>Automated English-to-French translation</p>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <div class="app-section" onclick="window.location.href='{% url 'PII' %}';">
-                        <h3>PII Redactor</h3>
-                        <p>Redact Personally Identifiable Information from an uploaded PDF</p>
+                    <div class="app-section" onclick="window.location.href='{% url 'fence' %}';">
+                        <h3>Fence Counting</h3>
+                        <p>Automated counting of salmon species from fence videos</p>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="app-section" onclick="window.location.href='{% url 'SSC' %}';">
-                        <h3>Sensitivity Score Calculator</h3>
-                        <p>Check the Sensitivity Score of an uploaded document using cutom parameters</p>
+                    <div class="app-section" onclick="window.location.href='{% url 'scale' %}';">
+                        <h3>Scale Ageing</h3>
+                        <p>Automate ageing process from salmon scale images</p>
                     </div>
                 </div>
             </div>

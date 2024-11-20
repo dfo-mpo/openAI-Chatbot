@@ -10,8 +10,10 @@ import os
 from azure.ai.formrecognizer import DocumentAnalysisClient
 from azure.core.credentials import AzureKeyCredential
 import re
-from pypdf import PdfReader
+import fitz
 import tiktoken
+import requests
+
 # <----------------------------------------------------- Config API keys/endpoints ------------------------------------------------------> 
 
 # Configure OpenAI settings
@@ -29,11 +31,11 @@ key = getattr(settings, 'DI_API_KEY')
 
 # <----------------------------------------------------- Rendering functions ------------------------------------------------------> 
 
-def chat_home(request):
+def french(request):
     """
     Renders the home page for the chat application.
     """
-    return render(request, 'chat_home.html')
+    return render(request, 'french.html')
     
 def overview(request):
     """
@@ -65,20 +67,72 @@ def get_content(file):
     - Extract the content and refine it using the 'refine_content' function.
     - Handle exceptions and return the refined content.
     """
-    refined_content = "Start of Document or pdf"  
+    refined_content = ""  
+    try:  
+        # Open the PDF file  
+        document = fitz.open(file)  
+          
+        # Initialize a variable to store the extracted text  
+        text = ""  
+  
+        # Iterate over each page and extract text  
+        for page_num in range(len(document)):  
+            page = document.load_page(page_num)  
+            text += page.get_text()  
+  
+        # Close the document  
+        document.close()  
+
+        return re.sub(r'\s+', ' ', text) 
+  
+    except Exception as e:  
+        print(f"Error processing document: {e}")  
+        return None   
+      
+    # Append a marker to indicate the end of the document content.  
+    # refined_content += "\n-- End of Document --" 
+
+    # Document Intelligence option - there is a model for just text extraction if it is ever needed
     client = DocumentAnalysisClient(endpoint=endpoint, credential=AzureKeyCredential(key))
     try:
         # Open the file and analyze it.
         with open(file, 'rb') as f:
-            poller = client.begin_analyze_document("prebuilt-document", document=f)
+            poller = client.begin_analyze_document("prebuilt-read", document=f)
             result = poller.result()
             content = result.content
-            refined_content = refine_content(result)
+            # refined_content = refine_content(result)
     except Exception as e:
         print(f"Error processing document: {e}")
-    # Append a marker to indicate the end of the document content.
-    refined_content += "End of Document or pdf"
-    return refined_content
+    # # Append a marker to indicate the end of the document content.
+    # refined_content += ""
+    return content
+
+def get_content_raw(file):
+    """
+    Extracts and refines the content of a document using Document Intelligence.
+
+    Steps:
+    - Initialize the client with endpoint and key.
+    - Open the file in binary mode and analyze the document.
+    - Extract the content and refine it using the 'refine_content' function.
+    - Handle exceptions and return the refined content.
+    """
+    link = "https://ringtail-tops-hopelessly.ngrok-free.app"
+    try:
+        # Open the file and analyze it.
+        with open(file, 'rb') as f:
+            doc =f
+
+            
+        
+            
+        
+    except Exception as e:
+        print(f"Error processing document: {e}")
+
+    return requests.post(link+'/translate', json={"engtext": doc}).json()['output']
+
+
 
 def refine_content(result):
     """
@@ -134,15 +188,17 @@ def upload_document(request):
         if uploaded_file and uploaded_file.name.lower().endswith('.pdf'):
             # Save the uploaded file using Django's file system storage.
             fs = FileSystemStorage()
-            filename = fs.save(uploaded_file.name, uploaded_file)
+            filename = fs.save(uploaded_file.name, uploaded_file) # Note this will stay stored in the web app, TODO: add remove of old documents
             uploaded_file_url = fs.url(filename)
             # Store the URL of the uploaded file in the session.
             request.session['uploaded_pdf_url'] = uploaded_file_url
  
             full_temp_path = os.path.join(fs.location, filename)
             extracted_text = get_content(full_temp_path)
+            print(f"extracted content: {extracted_text}")
             # Store the extracted document content in the session.
             request.session['document_content'] = extracted_text
+
             # Redirect the user to the chat page after successful upload and processing.
             return redirect('chat')
         else:
@@ -175,7 +231,7 @@ def chatbot_view(request):
     elif request.method == 'GET':
         chat_history = request.session.get('chat_history', [])
         document_content = request.session.get('document_content', '')
-        return StreamingHttpResponse(request_openai_response(chat_history, document_content), content_type='text/event-stream')
+        return StreamingHttpResponse(request_translate_response(document_content), content_type='text/event-stream')
     
 def num_tokens_from_string(string) -> int:
     encoding = tiktoken.get_encoding('cl100k_base')
@@ -217,3 +273,16 @@ def request_openai_response(chat_history, document_content):
             yield f"data: {data}\n\n"
     except Exception as e:
         yield f"data: {{'error': 'Error fetching data from OpenAI: {str(e)}'}}\n\n"
+
+def request_translate_response(document_content):
+    try:
+        link = "https://ringtail-tops-hopelessly.ngrok-free.app"
+
+        print(document_content)
+        r = requests.post(link+'/translate', json={"engtext": document_content})
+        
+        data = json.dumps({'translation': r.json()['output']})
+        print(data)
+        yield data
+    except Exception as e:
+        yield f"data: {{'error': 'Error fetching data from API: {str(e)}'}}\n\n"

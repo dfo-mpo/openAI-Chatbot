@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot</title>
+    <title>French Translation</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
     <link href="https://wet-boew.github.io/themes-dist/GCWeb/GCWeb/assets/favicon.ico" rel="icon" type="image/x-icon" />
     <meta content="width=device-width, initial-scale=1" name="viewport">
@@ -18,7 +18,13 @@
     <title>Chat</title>
 
     <style>
-    
+        .unselectable {  
+            user-select: none; /* Prevent text selection */  
+            pointer-events: none; /* Disable mouse interactions */  
+            background-color: gray !important; /* Optional: change appearance to indicate it's unselectable */   
+            cursor: not-allowed; /* Change cursor to indicate it's not clickable */  
+        } 
+
         #company-banner {
             position: absolute;
             top: 0;
@@ -250,15 +256,16 @@
 
         <!-- Chat Interface -->
         <div id="chat-interface" class="half-width">
-            <h1>OpenAI Chatbot</h1>
-            <div id="token-count">Token Used: 0/100,000</div>
-            <div id="chat-container">
+            <h1>French Translation</h1>
+            <!-- <div id="token-count">Token Used: 0/100,000</div> -->
+            <!-- <div id="chat-container">
                 <div id="chat-log"></div>
                 <div id="loading-indicator" class="ring"  style="display: none;" >Thinking<span></span></div>
-            </div>
+            </div> -->
             <div id="input-area">
-                <input type="text" id="question-input" placeholder="Ask a question...">
-                <button class="btn btn-primary" id="send-button">Send</button>
+                <!-- <input type="text" id="question-input" placeholder="Ask a question..."> -->
+                <button class="btn btn-primary" id="send-button">Translate</button>
+                <div id="french-text"></div>
             </div>
         </div>
     </div>
@@ -271,7 +278,7 @@
         const uploadedPdfUrl = "{{ uploaded_pdf_url }}";
         // Global variable to hold the PDF document object once it's loaded.
         let pdfDocGlobal = null;
-
+        let pdfcontent = ''
         // Load the DOM elements into variables for better calling conventions.
         const viewerContainer = document.getElementById('pdf-rendering-container');
         const closeBtn = document.getElementById('close-btn');
@@ -362,6 +369,7 @@
         const questionInput = document.getElementById('question-input'); // Input field for user's questions.
         const sendButton = document.getElementById('send-button'); // Button to initiate sending a message.
         const loadingIndicator = document.getElementById('loading-indicator'); // Indicator shown during message processing.
+        const frenchText = document.getElementById('french-text') // Output for french translation
         
         // Variables to track chat history and the token count for managing API usage, initialized at the start.
         let chatHistory = [];
@@ -426,123 +434,45 @@
         }
         // Add Event listener for when the 'Submit' button is clicked 
         sendButton.addEventListener('click', function() {
-            const question = questionInput.value.trim();
+            sendButton.classList.add('unselectable');
+            // const question = "";
             
-            // Check if the user actually entered a prompt
-            if (question !== '') {
-                // Disable the submit button until a reponse is generated
-                sendButton.disabled = true;
-                updateChatLog('user', question, true);
-                chatHistory.push({ role: 'user', content: question });
-                questionInput.value = '';
+            // // Disable the submit button until a reponse is generated
+            // sendButton.disabled = true;
+            // updateChatLog('user', question, true);
+            // chatHistory.push({ role: 'user', content: question });
+            // questionInput.value = '';
 
-                // Show loading indicator
-                const loadingIndicator = document.getElementById('loading-indicator');
-                loadingIndicator.style.display = 'block';
-                
-                // Sending the user's question to the server via a POST request.
-                fetch('/chatbot/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': csrftoken
-                    },
-                    // Appending the ChatHistory. This container users prompt and AI responses 
-                    body: JSON.stringify({ chatHistory: chatHistory })
-                })
-                // Check for errors 
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json(); 
-                })
-                .then(data => {
-                    console.log('Message successfully sent', data);
-                    // If the POST request is successful then we initalize the Stream
-                    const eventSource = new EventSource(`/chatbot/`);
-                    isFirstChunk = true;
-                    // Initalize the chunk accumulator 
-                    let response = '';
-                    let response_counter = 0;
-                    // This send a GET call to the backend. This should start the streamed AI response
-                    eventSource.onmessage = function(event) {
-                        // Read the returned JSON data
-                        const data = JSON.parse(event.data);
-                        const tokensUsed = data.tokens_used
-                        // Error checking for the returned json data
-                        if (data.content && data.content.choices && data.content.choices.length > 0) {
-                            const choice = data.content.choices[0];
-                            
-                            if (choice.delta && choice.delta.content) {
-                                if (isFirstChunk && choice.delta.content.trim() !== '') {
-                                    // The first non-empty chunk of a new message
-                                    isFirstChunk = false;
-                                    updateChatLog('openai', choice.delta.content, true);
-                                    response += choice.delta.content;
-                                } else if (!isFirstChunk) {
-                                    response_counter += 1;
-                                    // Subsequent chunks of an existing message
-                                    updateChatLog('openai', choice.delta.content);
-                                    // Accumulate the chucks so that we can actually read the html tags.
-                                    response += choice.delta.content;
-                                    // The AI responds with HTML markdown in the begining of the response. We can clean it once right away for better formatting
-                                    if (response_counter == 3){
-                                        response = cleanApiResponse(response)
-                                    }
-                                    // Replace the content in the chatlog with the formatted text 
-                                    updateChatLog('openai', response, false, true);
+            // // Show loading indicator
+            // const loadingIndicator = document.getElementById('loading-indicator');
+            // loadingIndicator.style.display = 'block';
+            
+            // Sending the user's question to the server via a POST request.
+            fetch('/chatbot/', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+            })
+            // Check for errors 
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); 
+            })
+            .then((responce) => {
+                // console.log(responce.translation);
 
-                                }
-                            }
+                // Proccess translation here
+                sendButton.style.display = 'none';
+                frenchText.textContent = responce.translation
 
-                            // If finish_reason is not null, we have reached the end of the complete message
-                            if (choice.finish_reason !== null) {
-                                // The AI responds with HTML markdowns. (Telling it to remove it does not really work)
-                                response = cleanApiResponse(response)
-                                // Once we clean the response, we replace the content of the chat log one final time
-                                updateChatLog('openai', response, false, true);
-                                // Update the chat history with most recent response
-                                chatHistory.push({ role: 'assistant', content: response });
-                                // Reset the the first chuck so that create a new container for the next message
-                                isFirstChunk = true;
-                                // Extract the source pages 
-                                const sourcePages = extractSourcePages(response);
-                                if (sourcePages.length > 0) {
-                                    // Call the rendering function for specific pages
-                                    renderSpecificPages(pdfDocGlobal, sourcePages);
-                                }
-                                tokenCount += tokensUsed;
-                                document.getElementById('token-count').textContent = `Tokens used: ${tokenCount} /100,000`;
-                                if (tokenCount >= 100000){
-                                    const myButton = document.getElementById('send-button');
-                                    const questionInput = document.getElementById('question-input');
-
-                                    myButton.disabled = true;
-
-                                    questionInput.disabled = true;
-                                    questionInput.placeholder = "Token limit exceeded";
-                                }
-                                sendButton.disabled = false;
-
-
-                            }
-
-                        }
-                    };
-
-                    eventSource.onerror = function(event) {
-                        // This error should happen after every full response is generated. Since A new stream is created for every new question
-                        console.error('EventSource failed.');
-                        loadingIndicator.style.display = 'none';
-                        eventSource.close();
-                    };
-                })
-                .catch(error => {
-                    console.error('Error:', error); // Log error if the fetch operation fails.
-                    loadingIndicator.style.display = 'none'; // Hide loading indicator on error
-                }); 
-            }
+            })
+            .catch(error => {
+                console.error('Error:', error); // Log error if the fetch operation fails.
+            }); 
         });
 
 
