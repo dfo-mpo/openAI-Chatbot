@@ -112,9 +112,7 @@ def analyze_sensitivity(request):
 
             # Create a URL for the PNG file  
             png_filename = f"{filename.rsplit('.', 1)[0]}.png" 
-            png_url = fs.path(png_filename)  
-            request.session['uploaded_png_url'] = png_url
-            print(png_url) 
+            png_url = fs.url(png_filename)  
 
         else:
             uploaded_file = request.FILES['document']
@@ -137,9 +135,7 @@ def analyze_sensitivity(request):
             fs.save(png_filename, png_image_io)  
 
             # Create a URL for the PNG file  
-            png_url = fs.path(png_filename)  
-            request.session['uploaded_png_url'] = png_url  
-            print(png_url) 
+            png_url = fs.url(png_filename)   
 
         # Extract list from array from image
         image = Image.open(document_path)
