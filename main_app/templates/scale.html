@@ -261,6 +261,10 @@
             color: black;
         }
 
+        .non-render {
+            display: none;
+        }
+
         #example-form {
             width: 100%;
         }
@@ -380,14 +384,22 @@
         </form>
         <div class="space2"></div>
         <div id="downloadSection" style="display: none;">
-            {% csrf_token %}  
-            <img src="" alt="Rendering of Uploaded Image" class="scale-img" id="upload-img">  
+            {% csrf_token %} 
+            {% if request.session.uploaded_png_url %} 
+                <img src="" alt="Rendering of Uploaded Image" class="scale-img" id="upload-img"> 
+            {% endif %} 
         </div>
         <div id="sensitivityScoreSection" style="display: none;">
             <div id="sensitivityScore" class="sensitivity-message"></div>
             {% csrf_token %}
-            <img src="" alt="Rendering of Uploaded Image" class="scale-img" id="upload-img">  
+            <img src="{{ request.session.sample1_tif_thumbnail_url }}" alt="Rendering of Uploaded Image" class="scale-img non-render" id="sample1-img">  
+            {% csrf_token %}
+            <img src="{{ request.session.sample2_tif_thumbnail_url }}" alt="Rendering of Uploaded Image" class="scale-img non-render" id="sample2-img">
+            {% csrf_token %}
+            <img src="{{ request.session.sample3_tif_thumbnail_url }}" alt="Rendering of Uploaded Image" class="scale-img non-render" id="sample3-img">
             <!-- <div id="sensitivityScore" class="sensitivity-message"></div> -->
+            {% csrf_token %} 
+            <img src="" alt="Rendering of Uploaded Image" class="scale-img" id="upload2-img"> 
         </div>
         <footer class="pagedetails">
         <h2 class="wb-inv">Page details</h2><div class="row"><div class="col-sm-8 col-md-9 col-lg-9">
@@ -464,6 +476,13 @@
                 }  
                 return cookieValue;  
             }  
+
+            function nonRender() {
+                $('#sample1-img').addClass('non-render');
+                $('#sample2-img').addClass('non-render');
+                $('#sample3-img').addClass('non-render');
+                $('#upload-img').addClass('non-render');
+            }
     
             const csrftoken = getCookie('csrftoken'); 
 
@@ -487,9 +506,21 @@
                                             .addClass('black-text');  
                         $('#sensitivityScoreSection').show(); // Show the sensitivity score 
                          // Update the image source with the new URL  
-                        var newImageUrl = response.uploaded_png_url; // Assuming the new URL is in the response  
+                        console.log(response.uploaded_name)
+                        nonRender();
+                        if (response.uploaded_name.includes("cached_outputs")) {
+                            if (response.uploaded_name.includes("_01")) {
+                                $('#sample1-img').removeClass('non-render');
+                            } else if (response.uploaded_name.includes("_02")) {
+                                $('#sample2-img').removeClass('non-render');
+                            } else if (response.uploaded_name.includes("_03")) {
+                                $('#sample3-img').removeClass('non-render');
+                            }
+                        } else $('#upload-img').removeClass('non-render');
+                        var newImageUrl = response.png_url; // Assuming the new URL is in the response  
+                        console.log(newImageUrl);
                         if (newImageUrl) {  
-                            $('#upload-img').attr('src', newImageUrl); // Update the image source  
+                            $('#upload2-img').attr('src', newImageUrl); // Update the image source  
                         } 
                         // Scroll to the sensitivityScore element  
                         $('html, body').animate({  
@@ -507,10 +538,10 @@
             } 
 
             // Update the image source with the new URL  
-            var newImageUrl = '{{ uploaded_png_url }}'; // Assuming the new URL is in the response  
-            if (newImageUrl) {  
-                $('.upload-img').attr('src', newImageUrl); // Update the image source  
-            } 
+            // var newImageUrl = '{{ uploaded_png_url }}'; // Assuming the new URL is in the response  
+            // if (newImageUrl) {  
+            //     $('.upload-img').attr('src', newImageUrl); // Update the image source  
+            // } 
 
             // Handle form submission for upload form  
             $('#upload-form').submit(function(e) {  

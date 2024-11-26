@@ -30,6 +30,34 @@ def home(request):
     return render(request, 'home.html')
 
 def fence(request):
+
+    fs = FileSystemStorage()
+    # Sample 1
+    sample_name = 'Chinook-9s.jpg'
+    filename = os.path.join('cached_outputs', sample_name)
+    example_file_url = fs.url(filename)
+    request.session['sample1_mp4_thumbnail_url'] = example_file_url
+    # Strip the .jpg extension and add .pdf  
+    pdf_name = sample_name.rsplit('.', 1)[0] + '.mp4'  
+    request.session['sample1_mp4_name_url'] = pdf_name
+
+    # Sample 2
+    sample_name = 'Sockeye-2s.jpg'
+    filename = os.path.join('cached_outputs', sample_name)
+    example_file_url = fs.url(filename)
+    request.session['sample2_mp4_thumbnail_url'] = example_file_url
+    # Strip the .jpg extension and add .pdf  
+    pdf_name = sample_name.rsplit('.', 1)[0] + '.mp4'  
+    request.session['sample2_mp4_name_url'] = pdf_name
+
+    # Sample 3
+    # sample_name = 'Chum_SCL_2001_03.png'
+    # filename = os.path.join('cached_outputs', sample_name)
+    # example_file_url = fs.url(filename)
+    # request.session['sample3_tif_thumbnail_url'] = example_file_url
+    # # Strip the .jpg extension and add .pdf  
+    # pdf_name = sample_name.rsplit('.', 1)[0] + '.tif'  
+    # request.session['sample3_tif_name_url'] = pdf_name
     return render(request, 'fence.html')
 
 def scale(request):
@@ -136,6 +164,8 @@ def analyze_sensitivity(request):
 
             # Create a URL for the PNG file  
             png_url = fs.url(png_filename)   
+            request.session['uploaded_png_url'] = png_url
+            print(png_url)
 
         # Extract list from array from image
         image = Image.open(document_path)
@@ -146,7 +176,7 @@ def analyze_sensitivity(request):
         r = requests.post("https://ringtail-tops-hopelessly.ngrok-free.app/scale", verify=False, json={"imagelist": listimg})
         print("Age predicted: ", r)
         print(r.json()['output'])
-        return JsonResponse({"output": r.json()['output'], "uploaded_png_url": png_url})
+        return JsonResponse({"output": r.json()['output'], "uploaded_name": png_filename, "png_url": png_url})
 
 
 
