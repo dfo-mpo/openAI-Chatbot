@@ -182,41 +182,54 @@ def analyze_sensitivity(request):
 
 def upload_video(request):
     if request.method == 'POST':
-        uploaded_file = request.FILES.get('document')
-        if uploaded_file and uploaded_file.name.lower().endswith(('.mp4', '.avi')):
+        print('test')
+        if 'example_document' in request.POST:
+            print('test2')
             fs = FileSystemStorage()
-            
-            # Split the filename and extension
-            name, extension = os.path.splitext(uploaded_file.name)
-            # Define the new filename with '-redacted' appended
-            # new_filename = f"{name}-analyzed{extension}"
-            new_filename = os.path.join('cached_outputs', f"{name}.mp4")
+            filename = os.path.join('cached_outputs', request.POST.get('example_document'))
+            document_path = fs.path(filename)
 
-            # Check if the file does not already exist
-            filename = uploaded_file.name
-            if not fs.exists(uploaded_file.name):
-                # Save the original file
-                filename = fs.save(uploaded_file.name, uploaded_file)
-            
-            # Define the output path with the new filename
-            processed_path = os.path.join(fs.location, new_filename)
-            
-            # Call your redaction function here
-            # redact_pdf_based_on_pii(document_path, processed_path)
-
-            # # Make sure to delete the original file
-            # os.remove(full_temp_path)
-
-            # Store paths or videos in memory
+            # Create a URLs
+            output_filename = f"{filename.rsplit('.', 1)[0]}-output.mp4" 
+            processed_video_url = fs.url(output_filename) 
             original_video_url = fs.url(filename)
-            processed_video_url = fs.url(new_filename)
-            print(processed_video_url)
-            # request.session['uploaded_video_url'] = original_video_url
-            # request.session['processed_video_url'] = processed_video_url
-            
-            return JsonResponse({'processedVideoURL': processed_video_url, 'uploadedVideoURL': original_video_url})
+        
         else:
-            return HttpResponseBadRequest("Please upload a valid video file.")
+            uploaded_file = request.FILES.get('document')
+            if uploaded_file and uploaded_file.name.lower().endswith(('.mp4', '.avi')):
+                fs = FileSystemStorage()
+                
+                # Split the filename and extension
+                name, extension = os.path.splitext(uploaded_file.name)
+                # Define the new filename with '-redacted' appended
+                # new_filename = f"{name}-analyzed{extension}"
+                new_filename = os.path.join('cached_outputs', f"{name}.mp4")
+
+                # Check if the file does not already exist
+                filename = uploaded_file.name
+                if not fs.exists(uploaded_file.name):
+                    # Save the original file
+                    filename = fs.save(uploaded_file.name, uploaded_file)
+                
+                # Define the output path with the new filename
+                processed_path = os.path.join(fs.location, new_filename)
+                
+                # Call your redaction function here
+                # redact_pdf_based_on_pii(document_path, processed_path)
+
+                # # Make sure to delete the original file
+                # os.remove(full_temp_path)
+
+                # Store paths or videos in memory
+                original_video_url = fs.url(filename)
+                processed_video_url = fs.url(new_filename)
+                print(processed_video_url)
+                # request.session['uploaded_video_url'] = original_video_url
+                # request.session['processed_video_url'] = processed_video_url
+            
+        return JsonResponse({'processedVideoURL': processed_video_url, 'uploadedVideoURL': original_video_url})
+    else:
+        return HttpResponseBadRequest("Please upload a valid video file.")
 
  
  

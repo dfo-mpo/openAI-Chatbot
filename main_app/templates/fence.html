@@ -306,7 +306,7 @@
             <input id="pdfFile" type="file" name="document" accept=".avi, .mp4">
             <button class="btn btn-primary" id="uploadButton" type="submit" disabled>Upload Document</button>
         </form> -->
-        <form class="container app-container" id="example-form" action="{% url 'upload_document' %}" method="post">  
+        <form class="container app-container" id="example-form" action="{% url 'upload_video' %}" method="post">  
             {% csrf_token %}  
             <input type="hidden" id="example_document_input" name="example_document" value="">
             <div class="example-documents">
@@ -390,14 +390,13 @@
                 }
             });
     
-            // Handle form submission
-            $('#upload-form').submit(function(e) {
-                e.preventDefault();
+            // Reusable function for form submission  
+            function submitForm(form) { 
                 $('#loading-overlay').show(); // Show loading indicator
-    
-                var formData = new FormData(this);
+
+                var formData = new FormData(form);
                 $.ajax({
-                    url: $(this).attr('action'), // URL from the form's action attribute
+                    url: $(form).attr('action'), // URL from the form's action attribute
                     type: 'POST',
                     data: formData,
                     contentType: false,
@@ -409,11 +408,10 @@
                         $('#displayVideos-head').show();
                         $('#loading-overlay').hide(); // Hide loading indicator
 
-                        console.log(response)
-
                         // Load uploaded video
                         var uploadVideo = $('#upload-video');
-                        console.log('Video Element:', uploadVideo);
+                        console.log('Video Element uploaded:', response.uploadedVideoURL);
+                        console.log('Video Element processed:', response.processedVideoURL);
                         uploadVideo.find('source').attr('src', response.uploadedVideoURL);
                         console.log(uploadVideo)
                         uploadVideo[0].load();
@@ -430,7 +428,43 @@
                         $('#loading-overlay').hide(); // Hide loading indicator
                     }
                 });
-            });
+            }
+
+            // // Handle form submission for upload form  
+            // $('#upload-form').submit(function(e) {  
+            //     e.preventDefault(); 
+            //     $('#example1-button').prop('disabled', false)
+            //                         .removeClass('selected');
+            //     $('#example2-button').prop('disabled', false)
+            //                         .removeClass('selected');
+            //     // $('#example3-button').prop('disabled', false)
+            //     //                     .removeClass('selected'); 
+            //     submitForm(this);  
+            // }); 
+
+            $('#example1-button').click(function(e) {  
+                e.preventDefault();
+                $('#example1-button').prop('disabled', true)
+                                    .addClass('selected');
+                $('#example2-button').prop('disabled', false)
+                                    .removeClass('selected');
+                // $('#example3-button').prop('disabled', false)
+                //                     .removeClass('selected');
+                $('#example_document_input').val('{{ request.session.sample1_mp4_name_url }}');  
+                submitForm($('#example-form')[0]); 
+            });  
+    
+            $('#example2-button').click(function(e) {  
+                e.preventDefault();
+                $('#example1-button').prop('disabled', false)
+                                    .removeClass('selected');
+                $('#example2-button').prop('disabled', true)
+                                    .addClass('selected');
+                // $('#example3-button').prop('disabled', false)
+                //                     .removeClass('selected'); 
+                $('#example_document_input').val('{{ request.session.sample2_mp4_name_url }}');  
+                submitForm($('#example-form')[0]); 
+            });  
     
             // Reset everything once the user clicks the download button
             $('#downloadButton').click(function() {
