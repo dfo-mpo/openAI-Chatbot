@@ -33,7 +33,7 @@ def fence(request):
 
     fs = FileSystemStorage()
     # Sample 1
-    sample_name = 'Chinook-9s.jpg'
+    sample_name = 'Chinook-9s.png'
     filename = os.path.join('cached_outputs', sample_name)
     example_file_url = fs.url(filename)
     request.session['sample1_mp4_thumbnail_url'] = example_file_url
@@ -42,7 +42,7 @@ def fence(request):
     request.session['sample1_mp4_name_url'] = pdf_name
 
     # Sample 2
-    sample_name = 'Sockeye-2s.jpg'
+    sample_name = 'Sockeye-2s.png'
     filename = os.path.join('cached_outputs', sample_name)
     example_file_url = fs.url(filename)
     request.session['sample2_mp4_thumbnail_url'] = example_file_url

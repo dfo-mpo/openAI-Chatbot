@@ -301,11 +301,11 @@
         <h1>Counting salmon from video</h1>
         <p>Select a video to get started</p>
 
-        <!-- <form id="upload-form" action="{% url 'upload_video' %}" method="post" enctype="multipart/form-data">
+        <form id="upload-form" action="{% url 'upload_video' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <input id="pdfFile" type="file" name="document" accept=".avi, .mp4">
             <button class="btn btn-primary" id="uploadButton" type="submit" disabled>Upload Document</button>
-        </form> -->
+        </form>
         <form class="container app-container" id="example-form" action="{% url 'upload_video' %}" method="post">  
             {% csrf_token %}  
             <input type="hidden" id="example_document_input" name="example_document" value="">

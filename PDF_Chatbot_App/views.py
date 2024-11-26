@@ -38,7 +38,7 @@ def french(request):
     """
     fs = FileSystemStorage()
     # Sample 1
-    sample_name = 'example_pdf1.jpg'
+    sample_name = 'example_pdf1.png'
     filename = os.path.join('cached_outputs', sample_name)
     example_file_url = fs.url(filename)
     request.session['sample1_pdf_thumbnail_url'] = example_file_url
@@ -47,7 +47,7 @@ def french(request):
     request.session['sample1_pdf_name_url'] = pdf_name
 
     # Sample 2
-    sample_name = 'example_pdf2.jpg'
+    sample_name = 'example_pdf2.png'
     filename = os.path.join('cached_outputs', sample_name)
     example_file_url = fs.url(filename)
     request.session['sample2_pdf_thumbnail_url'] = example_file_url
@@ -56,7 +56,7 @@ def french(request):
     request.session['sample2_pdf_name_url'] = pdf_name
 
     # Sample 3
-    sample_name = 'example_pdf3.jpg'
+    sample_name = 'example_pdf3.png'
     filename = os.path.join('cached_outputs', sample_name)
     example_file_url = fs.url(filename)
     request.session['sample3_pdf_thumbnail_url'] = example_file_url
