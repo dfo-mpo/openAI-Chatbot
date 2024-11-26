@@ -43,21 +43,25 @@ CSRF_TRUSTED_ORIGINS = [
     'https://dfo-openai.azurewebsites.net',
     'https://pssi-openai-analyzer-dev.dfo-sc2g-dev-ase01.appserviceenvironment.net',
     'https://127.0.0.1',
-    'https://pssi-openai-analyzer-prd-01.dfo-sc2g-prob-ase01.appserviceenvironment.net'
+    'https://pssi-openai-analyzer-prd-01.dfo-sc2g-prob-ase01.appserviceenvironment.net',
+    'https://aiwebapp-d8b4ape6a6byeghw.canadacentral-01.azurewebsites.net'
 ]
 
 ALLOWED_HOSTS = [
      'dfo-openai.azurewebsites.net',
      'pssi-openai-analyzer-dev.dfo-sc2g-dev-ase01.appserviceenvironment.net',
      '127.0.0.1',
-     'pssi-openai-analyzer-prd-01.dfo-sc2g-prob-ase01.appserviceenvironment.net'
+     'pssi-openai-analyzer-prd-01.dfo-sc2g-prob-ase01.appserviceenvironment.net',
+     'aiwebapp-d8b4ape6a6byeghw.canadacentral-01.azurewebsites.net'
 ]
 CORS_ORIGIN_WHITELIST = [
     'dfo-openai.azurewebsites.net',
     'pssi-openai-analyzer-dev.dfo-sc2g-dev-ase01.appserviceenvironment.net',
     '127.0.0.1',
-    'pssi-openai-analyzer-prd-01.dfo-sc2g-prob-ase01.appserviceenvironment.net'
+    'pssi-openai-analyzer-prd-01.dfo-sc2g-prob-ase01.appserviceenvironment.net',
+    'aiwebapp-d8b4ape6a6byeghw.canadacentral-01.azurewebsites.net'
 ]
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
