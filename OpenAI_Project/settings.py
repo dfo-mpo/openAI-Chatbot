@@ -40,20 +40,20 @@ SECRET_KEY = 'django-insecure-qrv$b+&p^(a08q97043oadg0u8kz3p_en6)j(f)rt-aupsn5b!
 DEBUG = True
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://dfo-openai.azurewebsites.net',
+    'https://sdpa-ml-tools.azurewebsites.net',
     'https://pssi-openai-analyzer-dev.dfo-sc2g-dev-ase01.appserviceenvironment.net',
     'https://127.0.0.1',
     'https://pssi-openai-analyzer-prd-01.dfo-sc2g-prob-ase01.appserviceenvironment.net'
 ]
 
 ALLOWED_HOSTS = [
-     'dfo-openai.azurewebsites.net',
+     'sdpa-ml-tools.azurewebsites.net',
      'pssi-openai-analyzer-dev.dfo-sc2g-dev-ase01.appserviceenvironment.net',
      '127.0.0.1',
      'pssi-openai-analyzer-prd-01.dfo-sc2g-prob-ase01.appserviceenvironment.net'
 ]
 CORS_ORIGIN_WHITELIST = [
-    'dfo-openai.azurewebsites.net',
+    'sdpa-ml-tools.azurewebsites.net',
     'pssi-openai-analyzer-dev.dfo-sc2g-dev-ase01.appserviceenvironment.net',
     '127.0.0.1',
     'pssi-openai-analyzer-prd-01.dfo-sc2g-prob-ase01.appserviceenvironment.net'
