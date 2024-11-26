@@ -150,6 +150,38 @@
             align-items: center;
         }
 
+        .thumbnail {
+            width: 250px;
+            margin: 10px;
+            position: relative;
+        }
+
+        .thumbnail img {
+            height: 229px
+        }
+
+        .thumbnail div {
+            position: absolute;
+            border: 1px solid #005a9c;
+            text-align: center;
+
+            background-color: #f5f5f5;
+            top: 110px;
+            left: 90px;
+        }
+
+        .thumbnail div span {
+            margin: 2px 8px;
+            text-align: center;
+            color: #005a9c;
+        }
+
+        .option-text {
+            margin-right: auto;
+            margin-left: 13px;
+            font-size: 18px;
+            margin-bottom: -5px;
+        }
  
         @keyframes rotate-one {
             0% {
@@ -187,6 +219,13 @@
             text-align: center; 
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
             width: 50%;
+        }
+
+        .example-documents {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 95%;
         }
 
         .title-card-heading {
@@ -294,16 +333,38 @@
 
     <main property="mainContentOfPage" class="container" resource="#wb-main" typeof="WebPageElement">
         <h1>Welcome to the French Translation Bot</h1>
-        <p>Upload a document to get started</p>
+        <p>Upload your own document or load an example document to get started</p>
 
         <form class="container app-container" id="upload-form" action="{% url 'upload_document' %}" method="post" enctype="multipart/form-data">
+            <p class="option-text">Option 1: Upload your own document</p>
             {% csrf_token %}
             <input type="file" name="document" accept=".pdf">
             <button  class="btn btn-primary" type="submit" disabled>Upload Document</button>
         </form>
     
         <div class="space2"></div>
-
+        <form class="container app-container" id="example-form" action="{% url 'upload_document' %}" method="post">  
+            <p class="option-text" style="margin-bottom: 10px;">Option 2: Select an example document</p>
+            {% csrf_token %}  
+            <input type="hidden" id="example_document_input" name="example_document" value="">
+            <div class="example-documents">
+                <button id="example1-button" class="btn thumbnail">
+                    <img src="{{ request.session.sample1_pdf_thumbnail_url }}" alt="Example PDF" class="pdf-img">
+                    <div><span>Sample</span></div>
+                    <p>"{{ request.session.sample1_pdf_name_url }}"</p>
+                </button>
+                <button id="example2-button" class="btn thumbnail">
+                    <img src="{{ request.session.sample2_pdf_thumbnail_url }}" alt="Example PDF" class="pdf-img">
+                    <div><span>Sample</span></div>
+                    <p>"{{ request.session.sample2_pdf_name_url }}"</p>
+                </button>
+                <button id="example3-button" class="btn thumbnail">
+                    <img src="{{ request.session.sample3_pdf_thumbnail_url }}" alt="Example PDF" class="pdf-img">
+                    <div><span>Sample</span></div>
+                    <p>"{{ request.session.sample3_pdf_name_url }}"</p>
+                </button>
+            </div>
+        </form> 
         <footer class="pagedetails">
         <h2 class="wb-inv">Page details</h2><div class="row"><div class="col-sm-8 col-md-9 col-lg-9">
         <div data-ajax-replace="/GCWeb/sites/feedback/ajax/report-problem-en.html">
@@ -315,7 +376,7 @@
                 </div><div class="wb-share col-sm-4 col-md-3" data-wb-share='{"lnkClass": "btn btn-default btn-block"}'></div><div class="col-xs-12">
                 <dl id="wb-dtmd">
                     <dt>Date modified:</dt>
-                    <dd><time property="dateModified">2024-04-22</time></dd>
+                    <dd><time property="dateModified">2024-11-22</time></dd>
                 </dl>
             </div>
         </div>
@@ -324,26 +385,49 @@
     </main>
 
     <div class="space"></div>
-    
+    <script type="text/javascript">  
+        document.addEventListener("DOMContentLoaded", function() {  
+            const fileInput = document.querySelector('input[type="file"]');  
+            const uploadButton = document.querySelector('button[type="submit"]');  
+            const example1Button = document.querySelector('#example1-button');  
+            const example2Button = document.querySelector('#example2-button');  
+            const example3Button = document.querySelector('#example3-button');  
+            const exampleForm = document.querySelector('#example-form');
+            const exampleDocumentInput = document.querySelector('#example_document_input');
 
-   
-    <script type="text/javascript">
-        document.addEventListener("DOMContentLoaded", function() {
-            const fileInput = document.querySelector('input[type="file"]');
-            const uploadButton = document.querySelector('button[type="submit"]');
-    
-            // Enable upload button only if a PDF file is selected
-            fileInput.addEventListener('change', function() {
-                const file = this.files[0];
-                uploadButton.disabled = !(file && file.type === "application/pdf");
+            const example1Name = "{{ request.session.sample1_pdf_name_url }}";
+            const example2Name = "{{ sample2_pdf_name_url }}";
+            const example3Name = "{{ sample3_pdf_name_url }}";
+  
+            // Enable upload button only if a PDF file is selected  
+            fileInput.addEventListener('change', function() {  
+                const file = this.files[0];  
+                uploadButton.disabled = !(file && file.type === "application/pdf");  
+            });  
+  
+            // Show loading overlay on form submission  
+            $('#upload-form').submit(function() {  
+                $('.loading-overlay').show();  
+            });  
+  
+            // Handle example document selection  
+            example1Button.addEventListener('click', function() {
+                // $('.loading-overlay').show();
+                exampleDocumentInput.value = '{{ request.session.sample1_pdf_name_url }}';
+                exampleForm.submit();  
             });
-    
-            // Show loading overlay on form submission
-            $('#upload-form').submit(function() {
-                $('.loading-overlay').show();
-            });
-        });
-    </script>
+            example2Button.addEventListener('click', function() {
+                // $('.loading-overlay').show();
+                exampleDocumentInput.value = '{{ request.session.sample2_pdf_name_url }}';
+                exampleForm.submit();  
+            });  
+            example3Button.addEventListener('click', function() {
+                // $('.loading-overlay').show();
+                exampleDocumentInput.value = '{{ request.session.sample3_pdf_name_url }}';
+                exampleForm.submit();  
+            });  
+        });  
+    </script> 
 
 
 </body>

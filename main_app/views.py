@@ -33,6 +33,35 @@ def fence(request):
     return render(request, 'fence.html')
 
 def scale(request):
+
+    fs = FileSystemStorage()
+    # Sample 1
+    sample_name = 'Chum_SCL_2001_01.png'
+    filename = os.path.join('cached_outputs', sample_name)
+    example_file_url = fs.url(filename)
+    request.session['sample1_tif_thumbnail_url'] = example_file_url
+    # Strip the .jpg extension and add .pdf  
+    pdf_name = sample_name.rsplit('.', 1)[0] + '.tif'  
+    request.session['sample1_tif_name_url'] = pdf_name
+
+    # Sample 2
+    sample_name = 'Chum_SCL_2001_02.png'
+    filename = os.path.join('cached_outputs', sample_name)
+    example_file_url = fs.url(filename)
+    request.session['sample2_tif_thumbnail_url'] = example_file_url
+    # Strip the .jpg extension and add .pdf  
+    pdf_name = sample_name.rsplit('.', 1)[0] + '.tif'  
+    request.session['sample2_tif_name_url'] = pdf_name
+
+    # Sample 3
+    sample_name = 'Chum_SCL_2001_03.png'
+    filename = os.path.join('cached_outputs', sample_name)
+    example_file_url = fs.url(filename)
+    request.session['sample3_tif_thumbnail_url'] = example_file_url
+    # Strip the .jpg extension and add .pdf  
+    pdf_name = sample_name.rsplit('.', 1)[0] + '.tif'  
+    request.session['sample3_tif_name_url'] = pdf_name
+
     return render(request, 'scale.html')
 
      
@@ -76,28 +105,41 @@ def pii_recognition_example(pdf_path):
 # Function to perform the sensitivity analysis
 def analyze_sensitivity(request):
     if request.method == 'POST':
-        uploaded_file = request.FILES['document']
-        fs = FileSystemStorage()
-        filename = fs.save(uploaded_file.name, uploaded_file) # Note this will stay stored in the web app, TODO: add remove of old documents
-        document_path = fs.path(filename)
+        if 'example_document' in request.POST:
+            fs = FileSystemStorage()
+            filename = os.path.join('cached_outputs', request.POST.get('example_document'))
+            document_path = fs.path(filename)
 
-        # Open the TIFF file and convert it to PNG  
-        image = Image.open(document_path)  
-        npimg = numpy.array(image)  
-        listimg = npimg.tolist()  
-  
-        # Convert image to PNG  
-        png_image_io = io.BytesIO()  
-        image.save(png_image_io, format='PNG')  
-        png_image_io.seek(0)  
+            # Create a URL for the PNG file  
+            png_filename = f"{filename.rsplit('.', 1)[0]}.png" 
+            png_url = fs.path(png_filename)  
+            request.session['uploaded_png_url'] = png_url
+            print(png_url) 
+
+        else:
+            uploaded_file = request.FILES['document']
+            fs = FileSystemStorage()
+            filename = fs.save(uploaded_file.name, uploaded_file) # Note this will stay stored in the web app, TODO: add remove of old documents
+            document_path = fs.path(filename)
+
+            # Open the TIFF file and convert it to PNG  
+            image = Image.open(document_path)  
+            npimg = numpy.array(image)  
+            listimg = npimg.tolist()  
+    
+            # Convert image to PNG  
+            png_image_io = io.BytesIO()  
+            image.save(png_image_io, format='PNG')  
+            png_image_io.seek(0)  
           
-        # Store PNG image in session or save to file system  
-        png_filename = f"{filename.rsplit('.', 1)[0]}.png"  
-        fs.save(png_filename, png_image_io)  
-  
-        # Create a URL for the PNG file  
-        png_url = fs.url(png_filename)  
-        request.session['uploaded_png_url'] = png_url  
+            # Store PNG image in session or save to file system  
+            png_filename = f"{filename.rsplit('.', 1)[0]}.png"  
+            fs.save(png_filename, png_image_io)  
+
+            # Create a URL for the PNG file  
+            png_url = fs.path(png_filename)  
+            request.session['uploaded_png_url'] = png_url  
+            print(png_url) 
 
         # Extract list from array from image
         image = Image.open(document_path)
@@ -108,7 +150,7 @@ def analyze_sensitivity(request):
         r = requests.post("https://ringtail-tops-hopelessly.ngrok-free.app/scale", verify=False, json={"imagelist": listimg})
         print("Age predicted: ", r)
         print(r.json()['output'])
-        return JsonResponse({"output": r.json()['output']})
+        return JsonResponse({"output": r.json()['output'], "uploaded_png_url": png_url})
 
 
 

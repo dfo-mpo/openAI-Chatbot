@@ -58,6 +58,7 @@
         .row {
             display: flex;
             flex-wrap: wrap;
+            align-items: stretch;
         }
 
         .app-section {
@@ -145,15 +146,15 @@
        
         <div class="container app-container">
             <div class="row">
-                <!-- <div class="col-md-6">
-                    <div class="app-section" onclick="window.location.href='{% url 'demo_home' %}';">
-                        <h3>CSV/PDF Analyzer</h3>
-                        <p>Engineer specific and detailed prompts for Document Analysis</p>
+                <div class="col-md-6">
+                    <div class="app-section" onclick="window.location.href='{% url 'scale' %}';">
+                        <h3 style="margin-top: 16px;">Scale Ageing</h3>
+                        <p>Automate ageing process from salmon scale images</p>
                     </div>
-                </div> -->
+                </div>
                 <div class="col-md-6">
                     <div class="app-section" onclick="window.location.href='{% url 'french' %}';">
-                        <h3>French Translation</h3>
+                        <h3 style="margin-top: 16px;">French Translation</h3>
                         <p>Automated English-to-French translation</p>
                     </div>
                 </div>
@@ -161,16 +162,16 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="app-section" onclick="window.location.href='{% url 'fence' %}';">
-                        <h3>Fence Counting</h3>
+                        <h3 style="margin-top: 16px;">Fence Counting</h3>
                         <p>Automated counting of salmon species from fence videos</p>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <!-- <div class="col-md-6">
                     <div class="app-section" onclick="window.location.href='{% url 'scale' %}';">
-                        <h3>Scale Ageing</h3>
+                        <h3 style="margin-top: 16px;">Scale Ageing</h3>
                         <p>Automate ageing process from salmon scale images</p>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="space2"></div>

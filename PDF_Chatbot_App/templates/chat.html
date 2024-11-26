@@ -248,7 +248,7 @@
 
         <!-- PDF Viewer Container -->
         <div id="pdf-viewer-container" class="half-width">
-            <h1>Uploaded PDF</h1>
+            <h1 id="pdf-header">{{ request.session.pdfHeaderText }}</h1>
             <button id="close-btn" style="display: none;">X</button>
             <h3 id="renderTitle" style="display: none;">Associated Pages</h3>
             <div id="pdf-rendering-container"></div> 
@@ -264,7 +264,7 @@
             </div> -->
             <div id="input-area">
                 <!-- <input type="text" id="question-input" placeholder="Ask a question..."> -->
-                <button class="btn btn-primary" id="send-button">Translate</button>
+                <button class="btn btn-primary" id="send-button" style="margin: auto;">Translate</button>
                 <div id="french-text"></div>
             </div>
         </div>
@@ -276,6 +276,7 @@
         const csrftoken = '{{ csrf_token }}';
         // URL of the uploaded PDF, dynamically provided by the Django backend.
         const uploadedPdfUrl = "{{ uploaded_pdf_url }}";
+
         // Global variable to hold the PDF document object once it's loaded.
         let pdfDocGlobal = null;
         let pdfcontent = ''

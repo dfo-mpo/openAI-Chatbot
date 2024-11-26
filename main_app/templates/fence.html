@@ -191,6 +191,33 @@
             flex-grow: 1;
         }
 
+        .thumbnail {
+            width: 250px;
+            margin: 10px
+        }
+
+        .thumbnail img {
+            height: 229px
+        }
+
+        .option-text {
+            margin-right: auto;
+            margin-left: 13px;
+            font-size: 18px;
+            margin-bottom: -5px;
+        }
+
+        .example-documents {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 95%;
+        }
+
+        #example-form {
+            width: 100%;
+        }
+
     </style>
 </head>
 
@@ -272,13 +299,31 @@
 
     <main property="mainContentOfPage" class="container" resource="#wb-main" typeof="WebPageElement">
         <h1>Counting salmon from video</h1>
-        <p>Upload a video to get started</p>
+        <p>Select a video to get started</p>
 
-        <form id="upload-form" action="{% url 'upload_video' %}" method="post" enctype="multipart/form-data">
+        <!-- <form id="upload-form" action="{% url 'upload_video' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <input id="pdfFile" type="file" name="document" accept=".avi, .mp4">
             <button class="btn btn-primary" id="uploadButton" type="submit" disabled>Upload Document</button>
-        </form>
+        </form> -->
+        <form class="container app-container" id="example-form" action="{% url 'upload_document' %}" method="post">  
+            {% csrf_token %}  
+            <input type="hidden" id="example_document_input" name="example_document" value="">
+            <div class="example-documents">
+                <button id="example1-button" class="btn thumbnail">
+                    <img src="{{ request.session.sample1_pdf_thumbnail_url }}" alt="Example PDF" class="pdf-img">
+                    <p>"{{ request.session.sample1_pdf_name_url }}"</p>
+                </button>
+                <button id="example2-button" class="btn thumbnail">
+                    <img src="{{ request.session.sample2_pdf_thumbnail_url }}" alt="Example PDF" class="pdf-img">
+                    <p>"{{ request.session.sample2_pdf_name_url }}"</p>
+                </button>
+                <button id="example3-button" class="btn thumbnail">
+                    <img src="{{ request.session.sample3_pdf_thumbnail_url }}" alt="Example PDF" class="pdf-img">
+                    <p>"{{ request.session.sample3_pdf_name_url }}"</p>
+                </button>
+            </div>
+        </form> 
     
         <div id="displayVideos" style="display: none;">
     
@@ -301,8 +346,6 @@
             <!-- <a id="downloadButton" class="btn btn-primary" href="#" download="Redacted_Document.pdf">Download Redacted PDF</a> -->
       
         </div>
-    
-        <div class="space2"></div>
 
         <footer class="pagedetails">
         <h2 class="wb-inv">Page details</h2><div class="row"><div class="col-sm-8 col-md-9 col-lg-9">
