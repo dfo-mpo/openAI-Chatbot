@@ -192,12 +192,12 @@
         }
 
         .thumbnail {
-            width: 250px;
+            width: 350px;
             margin: 10px
         }
 
         .thumbnail img {
-            height: 229px
+            height: 200px
         }
 
         .option-text {
@@ -210,7 +210,7 @@
         .example-documents {
             display: flex;
             flex-direction: row;
-            justify-content: space-between;
+            justify-content: space-around;
             width: 95%;
         }
 
@@ -311,17 +311,17 @@
             <input type="hidden" id="example_document_input" name="example_document" value="">
             <div class="example-documents">
                 <button id="example1-button" class="btn thumbnail">
-                    <img src="{{ request.session.sample1_pdf_thumbnail_url }}" alt="Example PDF" class="pdf-img">
-                    <p>"{{ request.session.sample1_pdf_name_url }}"</p>
+                    <img src="{{ request.session.sample1_mp4_thumbnail_url }}" alt="Example Video" class="pdf-img">
+                    <p>"{{ request.session.sample1_mp4_name_url }}"</p>
                 </button>
                 <button id="example2-button" class="btn thumbnail">
-                    <img src="{{ request.session.sample2_pdf_thumbnail_url }}" alt="Example PDF" class="pdf-img">
-                    <p>"{{ request.session.sample2_pdf_name_url }}"</p>
+                    <img src="{{ request.session.sample2_mp4_thumbnail_url }}" alt="Example Video" class="pdf-img">
+                    <p>"{{ request.session.sample2_mp4_name_url }}"</p>
                 </button>
-                <button id="example3-button" class="btn thumbnail">
+                <!-- <button id="example3-button" class="btn thumbnail">
                     <img src="{{ request.session.sample3_pdf_thumbnail_url }}" alt="Example PDF" class="pdf-img">
                     <p>"{{ request.session.sample3_pdf_name_url }}"</p>
-                </button>
+                </button> -->
             </div>
         </form> 
     

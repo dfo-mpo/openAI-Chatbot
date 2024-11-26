@@ -384,10 +384,10 @@
         </form>
         <div class="space2"></div>
         <div id="downloadSection" style="display: none;">
-            {% csrf_token %} 
+            <!-- {% csrf_token %} 
             {% if request.session.uploaded_png_url %} 
-                <img src="" alt="Rendering of Uploaded Image" class="scale-img" id="upload-img"> 
-            {% endif %} 
+                <img src="" alt="Rendering of Uploaded Image" class="scale-img non-render" id="upload-img"> 
+            {% endif %}  -->
         </div>
         <div id="sensitivityScoreSection" style="display: none;">
             <div id="sensitivityScore" class="sensitivity-message"></div>
@@ -399,7 +399,7 @@
             <img src="{{ request.session.sample3_tif_thumbnail_url }}" alt="Rendering of Uploaded Image" class="scale-img non-render" id="sample3-img">
             <!-- <div id="sensitivityScore" class="sensitivity-message"></div> -->
             {% csrf_token %} 
-            <img src="" alt="Rendering of Uploaded Image" class="scale-img" id="upload2-img"> 
+            <img src="" alt="Rendering of Uploaded Image" class="scale-img non-render" id="upload2-img"> 
         </div>
         <footer class="pagedetails">
         <h2 class="wb-inv">Page details</h2><div class="row"><div class="col-sm-8 col-md-9 col-lg-9">
@@ -516,7 +516,7 @@
                             } else if (response.uploaded_name.includes("_03")) {
                                 $('#sample3-img').removeClass('non-render');
                             }
-                        } else $('#upload-img').removeClass('non-render');
+                        } else $('#upload2-img').removeClass('non-render');
                         var newImageUrl = response.png_url; // Assuming the new URL is in the response  
                         console.log(newImageUrl);
                         if (newImageUrl) {  
@@ -545,7 +545,13 @@
 
             // Handle form submission for upload form  
             $('#upload-form').submit(function(e) {  
-                e.preventDefault();  
+                e.preventDefault(); 
+                $('#example1-button').prop('disabled', false)
+                                    .removeClass('selected');
+                $('#example2-button').prop('disabled', false)
+                                    .removeClass('selected');
+                $('#example3-button').prop('disabled', false)
+                                    .removeClass('selected'); 
                 submitForm(this);  
             }); 
 
