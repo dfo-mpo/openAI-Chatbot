@@ -235,6 +235,18 @@
             width: 100%;
         }
 
+        header {  
+            position: fixed;  
+            top: 0;  
+            left: 0;  
+            width: 100%;  
+            z-index: 1000;  
+            background-color: #fff; /* Ensure background color */  
+        }  
+        body {  
+            padding-top: 145px; /* Adjust padding top to avoid content being hidden behind the fixed header */  
+        }
+
     </style>
 </head>
 
@@ -292,7 +304,10 @@
 
                        
         </div>
-        <nav id="wb-bc" property="breadcrumb">
+        
+
+    </header>
+    <nav id="wb-bc" property="breadcrumb">
         <h2>You are here:</h2>
         <div class="container">
             <ol class="breadcrumb" typeof="BreadcrumbList">
@@ -310,11 +325,9 @@
                 </li>
             </ol>
         </div>
-        </nav>
-
-    </header>
-
+    </nav>
     <main property="mainContentOfPage" class="container" resource="#wb-main" typeof="WebPageElement">
+        
         <h1>Counting salmon from video</h1>
         <p>A computer vision model used to analyze each frame (image) of river video footage. The model predicts classification of salmon species and object detection. <br>Upload your own MP4 or select a video to get started.</p>
 
@@ -446,7 +459,7 @@
                         
                         // Scroll to the sensitivityScore element  
                         $('html, body').animate({  
-                            scrollTop: $('#displayVideos-head').offset().top  
+                            scrollTop: $('#displayVideos-head').offset().top - 145
                         }, 1000); // Adjust the duration of the scroll in milliseconds (1000ms = 1 second) 
                     },
                     error: function(xhr, status, error) {
