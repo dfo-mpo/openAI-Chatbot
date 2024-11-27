@@ -18,7 +18,7 @@
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 6px 6px 20px -8px rgba(0, 0, 0, 0.3);
             margin-top: 20px; /* Adjusted margin for spacing */
             display: flex;
             flex-direction: column;
@@ -350,10 +350,10 @@
 
     <main property="mainContentOfPage" class="container" resource="#wb-main" typeof="WebPageElement">
         <h1>Ageing salmon from scale image</h1>
-        <p>Upload you own or select an image to get started</p>
+        <p>A computer vision machine learning model trained on annotated salmon scale photos. The model can classify the age of the salmon with high accuracy.<br>Upload you own TIF or select an image to get started</p>
 
         <form id="upload-form" action="{% url 'analyze_sensitivity' %}" method="post" enctype="multipart/form-data">
-            <p class="option-text">Option 1: Upload your own document</p>
+            <p class="option-text">Option 1: Upload your own image (TIF)</p>
             {% csrf_token %}
             <input id="pdfFile" type="file" name="document" accept=".tif">
             <button class="btn btn-primary" id="uploadButton" type="submit" disabled>Upload Image</button>
@@ -518,7 +518,6 @@
                             }
                         } else $('#upload2-img').removeClass('non-render');
                         var newImageUrl = response.png_url; // Assuming the new URL is in the response  
-                        console.log(newImageUrl);
                         if (newImageUrl) {  
                             $('#upload2-img').attr('src', newImageUrl); // Update the image source  
                         } 

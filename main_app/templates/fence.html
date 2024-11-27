@@ -18,7 +18,7 @@
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 6px 6px 20px -8px rgba(0, 0, 0, 0.3);
             margin-top: 20px; /* Adjusted margin for spacing */
             display: flex;
             flex-direction: column;
@@ -193,11 +193,28 @@
 
         .thumbnail {
             width: 350px;
-            margin: 10px
+            margin: 10px;
+            position: relative;
         }
 
         .thumbnail img {
             height: 200px
+        }
+
+        .thumbnail div {
+            position: absolute;
+            border: 1px solid #005a9c;
+            text-align: center;
+
+            background-color: #f5f5f5;
+            top: 95px;
+            left: 140px;
+        }
+
+        .thumbnail div span {
+            margin: 2px 8px;
+            text-align: center;
+            color: #005a9c;
         }
 
         .option-text {
@@ -299,23 +316,27 @@
 
     <main property="mainContentOfPage" class="container" resource="#wb-main" typeof="WebPageElement">
         <h1>Counting salmon from video</h1>
-        <p>Select a video to get started</p>
+        <p>A computer vision model used to analyze each frame (image) of river video footage. The model predicts classification of salmon species and object detection. <br>Upload your own MP4 or select a video to get started.</p>
 
         <form id="upload-form" action="{% url 'upload_video' %}" method="post" enctype="multipart/form-data">
+            <p class="option-text">Option 1: Upload your own video</p>
             {% csrf_token %}
             <input id="pdfFile" type="file" name="document" accept=".avi, .mp4">
             <button class="btn btn-primary" id="uploadButton" type="submit" disabled>Upload Document</button>
         </form>
         <form class="container app-container" id="example-form" action="{% url 'upload_video' %}" method="post">  
+            <p class="option-text" style="margin-bottom: 10px;">Option 2: Select an example document</p>
             {% csrf_token %}  
             <input type="hidden" id="example_document_input" name="example_document" value="">
             <div class="example-documents">
                 <button id="example1-button" class="btn thumbnail">
                     <img src="{{ request.session.sample1_mp4_thumbnail_url }}" alt="Example Video" class="pdf-img">
+                    <div><span>Sample</span></div>
                     <p>"{{ request.session.sample1_mp4_name_url }}"</p>
                 </button>
                 <button id="example2-button" class="btn thumbnail">
                     <img src="{{ request.session.sample2_mp4_thumbnail_url }}" alt="Example Video" class="pdf-img">
+                    <div><span>Sample</span></div>
                     <p>"{{ request.session.sample2_mp4_name_url }}"</p>
                 </button>
                 <!-- <button id="example3-button" class="btn thumbnail">
@@ -406,7 +427,7 @@
                         // $('#downloadButton').attr('download', response.filename); 
                         $('#displayVideos').show(); // Show download button and message
                         $('#displayVideos-head').show();
-                        $('#loading-overlay').hide(); // Hide loading indicator
+                        
 
                         // Load uploaded video
                         var uploadVideo = $('#upload-video');
@@ -419,7 +440,14 @@
                         // Load processed video
                         var processedVideo = $('#processed-video');
                         processedVideo.find('source').attr('src', response.processedVideoURL);
-                        processedVideo[0].load();                        
+                        processedVideo[0].load();  
+
+                        $('#loading-overlay').hide(); // Hide loading indicator
+                        
+                        // Scroll to the sensitivityScore element  
+                        $('html, body').animate({  
+                            scrollTop: $('#displayVideos-head').offset().top  
+                        }, 1000); // Adjust the duration of the scroll in milliseconds (1000ms = 1 second) 
                     },
                     error: function(xhr, status, error) {
                         // Handle any errors here
