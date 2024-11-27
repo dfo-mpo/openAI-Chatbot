@@ -79,7 +79,7 @@
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 8px 8px rgba(5, 0, 63, 0.1);
+            box-shadow: 6px 6px 20px -8px rgba(0, 0, 0, 0.3);
             width: 25%; 
             margin-top: 20px; 
             display: flex;
@@ -95,8 +95,6 @@
             box-sizing: border-box;
             border-radius: 4px;
         }
-       
- 
 
         .loader {
             position: absolute;
@@ -213,6 +211,55 @@
             font-weight: bold;
             color: rgb(0, 0, 0);
         }
+        .example-documents {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 95%;
+        }
+        .thumbnail {
+            width: 250px;
+            margin: 10px;
+            position: relative;
+        }
+
+        .thumbnail img {
+            height: 229px
+        }
+
+        .thumbnail div {
+            position: absolute;
+            border: 1px solid #005a9c;
+            text-align: center;
+
+            background-color: #f5f5f5;
+            top: 110px;
+            left: 90px;
+        }
+
+        .thumbnail div span {
+            margin: 2px 8px;
+            text-align: center;
+            color: #005a9c;
+        }
+
+        .option-text {
+            margin-right: auto;
+            margin-left: 13px;
+            font-size: 18px;
+            margin-bottom: -5px;
+        }
+        header {  
+            position: fixed;  
+            top: 0;  
+            left: 0;  
+            width: 100%;  
+            z-index: 1000;  
+            background-color: #fff; /* Ensure background color */  
+        }  
+        body {  
+            padding-top: 145px; /* Adjust padding top to avoid content being hidden behind the fixed header */  
+        }
 
     </style>
 </head>
@@ -269,11 +316,11 @@
                 </nav>
             </div>
         
-        </footer>
-
-                       
+        </footer>             
         </div>
-        <nav id="wb-bc" property="breadcrumb">
+    </header>
+
+    <nav id="wb-bc" property="breadcrumb">
         <h2>You are here:</h2>
         <div class="container">
             <ol class="breadcrumb" typeof="BreadcrumbList">
@@ -291,10 +338,7 @@
                 </li>
             </ol>
         </div>
-        </nav>
-
-    </header>
-
+    </nav>
     <main property="mainContentOfPage" class="container" resource="#wb-main" typeof="WebPageElement">
         <h1>Welcome to the French Translation Bot</h1>
         <p>Model: Google's Multilingual machine translation model MADLAD400 10B</p>

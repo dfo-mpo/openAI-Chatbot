@@ -255,6 +255,18 @@
             box-sizing: border-box;
             border-radius: 4px;
         }
+
+        header {  
+            position: fixed;  
+            top: 0;  
+            left: 0;  
+            width: 100%;  
+            z-index: 1000;  
+            background-color: #fff; /* Ensure background color */  
+        }  
+        body {  
+            padding-top: 145px; /* Adjust padding top to avoid content being hidden behind the fixed header */  
+        }
  
     </style>
 </head>
@@ -302,11 +314,11 @@
                 </nav>
             </div>
         
-        </footer>
-
-                       
+        </footer>            
         </div>
-        <nav id="wb-bc" property="breadcrumb">
+    </header>
+
+    <nav id="wb-bc" property="breadcrumb">
         <h2>You are here:</h2>
         <div class="container">
             <ol class="breadcrumb" typeof="BreadcrumbList">
@@ -330,9 +342,7 @@
                 </li>
             </ol>
         </div>
-        </nav>
-
-    </header>
+    </nav>
     <div class="container chat-container">
         <div class="loading-overlay" style="display:none;">
             <div class="loader">

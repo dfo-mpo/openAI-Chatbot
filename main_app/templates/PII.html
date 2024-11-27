@@ -191,6 +191,18 @@
             flex-grow: 1;
         }
 
+        header {  
+            position: fixed;  
+            top: 0;  
+            left: 0;  
+            width: 100%;  
+            z-index: 1000;  
+            background-color: #fff; /* Ensure background color */  
+        }  
+        body {  
+            padding-top: 145px; /* Adjust padding top to avoid content being hidden behind the fixed header */  
+        }
+
     </style>
 </head>
 
@@ -248,11 +260,11 @@
                 </nav>
             </div>
         
-        </footer>
-
-                       
+        </footer>         
         </div>
-        <nav id="wb-bc" property="breadcrumb">
+    </header>
+
+    <nav id="wb-bc" property="breadcrumb">
         <h2>You are here:</h2>
         <div class="container">
             <ol class="breadcrumb" typeof="BreadcrumbList">
@@ -270,10 +282,7 @@
                 </li>
             </ol>
         </div>
-        </nav>
-
-    </header>
-
+    </nav>
     <main property="mainContentOfPage" class="container" resource="#wb-main" typeof="WebPageElement">
         <h1>Personally Identifiable Information Redactor</h1>
         <p>Upload a PDF document to get started</p>
