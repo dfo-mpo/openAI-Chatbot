@@ -61,6 +61,12 @@
             align-items: stretch;
         }
 
+        .card {
+            padding-bottom: 0px !important;
+            height: 100%;
+            margin-bottom: 7px;
+        }
+
         .app-section {
             /* Existing styles... */
             display: flex;
@@ -104,9 +110,6 @@
                             <a class="nav-link" href="{% url 'demo_home' %}">Analyze</a>
                         </li> -->
                         <li >
-                            <a class="nav-link" href="{% url 'french' %}">French Translation</a>
-                        </li>
-                        <li >
                             <a class="nav-link" href="{% url 'fence' %}">Fence Counting</a>
                         </li>
                         <li >
@@ -140,39 +143,34 @@
     </header>
 
     <main property="mainContentOfPage" class="container" resource="#wb-main" typeof="WebPageElement">
-        <h1>Welcome to the DFO ML-AI Portal</h1>
-        <p>Current machine Learning Projects at DFO:</p>
+        <h1>Welcome to the DFO PSSI OpenAI Portal - Computer Vision</h1>
+        <p>Current computer vision projects at DFO:</p>
 
        
         <div class="container app-container">
-            <div class="row">
+            <div class="row" style="margin-bottom: 24px;">
                 <div class="col-md-6">
-                    <div class="app-section" onclick="window.location.href='{% url 'scale' %}';">
+                    <div class="app-section card" onclick="window.location.href='{% url 'scale' %}';">
                         <h3 style="margin-top: 16px;">Scale Ageing</h3>
                         <p>Automate ageing process from salmon scale images</p>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="app-section" onclick="window.location.href='{% url 'french' %}';">
-                        <h3 style="margin-top: 16px;">French Translation</h3>
-                        <p>Automated English-to-French translation</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="app-section" onclick="window.location.href='{% url 'fence' %}';">
+                    <div class="app-section card" onclick="window.location.href='{% url 'fence' %}';">
                         <h3 style="margin-top: 16px;">Fence Counting</h3>
                         <p>Automated counting of salmon species from fence videos</p>
                     </div>
                 </div>
-                <!-- <div class="col-md-6">
+                
+            </div>
+            <!-- <div class="row">
+                <div class="col-md-6">
                     <div class="app-section" onclick="window.location.href='{% url 'scale' %}';">
                         <h3 style="margin-top: 16px;">Scale Ageing</h3>
                         <p>Automate ageing process from salmon scale images</p>
                     </div>
-                </div> -->
-            </div>
+                </div>
+            </div> -->
         </div>
         <div class="space2"></div>
 

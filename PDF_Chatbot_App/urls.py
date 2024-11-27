@@ -8,10 +8,10 @@ from django.conf.urls.static import static
 from PDF_Chatbot_App.views import chatbot_view, upload_document, chat, banner_image, refine_content, overview
 
 urlpatterns = [
-    path('french/', french, name='french'),
+    # path('french/', french, name='french'),
     path('chat_upload/', upload_document, name='upload_document'),
     path('overview', overview, name='overview'),
-    path('chat/', chat, name='chat'),
+    # path('chat/', chat, name='chat'),
 
     path('chatbot/', chatbot_view, name='chatbot'),
     path('banner-image/', banner_image, name='banner-image'),

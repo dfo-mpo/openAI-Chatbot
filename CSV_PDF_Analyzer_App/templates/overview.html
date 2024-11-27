@@ -101,17 +101,14 @@
                         <li >
                             <a class="nav-link" href="{% url 'home' %}">Home</a>
                         </li>
-                        <li >
+                        <!-- <li >
                             <a class="nav-link" href="{% url 'demo_home' %}">Analyze</a>
+                        </li> -->
+                        <li >
+                            <a class="nav-link" href="{% url 'fence' %}">Fence Counting</a>
                         </li>
                         <li >
-                            <a class="nav-link" href="{% url 'chat_home' %}">Chat</a>
-                        </li>
-                        <li >
-                            <a class="nav-link" href="{% url 'PII' %}">PII Redactor</a>
-                        </li>
-                        <li >
-                            <a class="nav-link" href="{% url 'SSC' %}">Sensitivity Score</a>
+                            <a class="nav-link" href="{% url 'scale' %}">Scale Ageing</a>
                         </li>
                         <li >
                             <a class="nav-link" href="{% url 'overview' %}">Help</a>
@@ -149,7 +146,7 @@
     <main property="mainContentOfPage" class="container" resource="#wb-main" typeof="WebPageElement">
 
     <h1>About the DFO OpenAI Suite</h1>
-    <p>DFO has created AI powered tools that allow comprehensive analysis of documents in real time to combat the following challenges: </p>
+    <p>DFO has created Computer Vision powered tools that allow comprehensive analysis of images in real time to combat the following challenges: </p>
         <ul>
             <li>Reading, reviewing and extracting necessary content is time consuming</li>
             <li>Lack of standardized data extraction hinders transparency and consistency</li>
@@ -164,30 +161,29 @@
         <!-- CSV/PDF Analyzer Section -->
         <h1>
             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#csvPdfAnalyzer" aria-expanded="false" aria-controls="csvPdfAnalyzer">
-                <h2>CSV/PDF Analyzer <i class="fas fa-chevron-down icon-spacing"></i> </h2>
+                <h2>Scale Ageing<i class="fas fa-chevron-down icon-spacing"></i> </h2>
             </button>
         </h1>
         <div class="collapse" id="csvPdfAnalyzer">
             <div class="card card-body app-section">
-                Allows users to analyze and extract information from a single PDF document by uploading that PDF document along with a CSV file containing engineered prompts​
-                
+                Allows users to analyze and extract the age and species of a Salmon from a scale image. In a scale image, the ring patterns provide valuable information about the age and growth history of the salmon.
             </div>
         </div>
 
         <!-- PDF Chatbot Section -->
         <p>
             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#pdfChatbot" aria-expanded="false" aria-controls="pdfChatbot">
-                <h2>PDF Chatbot <i class="fas fa-chevron-down icon-spacing"></i> </h2>
+                <h2>Fence Counting<i class="fas fa-chevron-down icon-spacing"></i> </h2>
             </button>
         </p>
         <div class="collapse" id="pdfChatbot">
             <div class="card card-body app-section">
-                Allows users to chat with their PDF document in real time. Suited For more general inquires and simple prompts. ​
+                Allows users to obtain a count by Salmon species from a video. Suited for short video clips to test the models capabilities. ​
                 
             </div>
         </div>
 
-        <!-- PII Redactor Section -->
+        <!-- PII Redactor Section
         <p>
             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#piiRedactor" aria-expanded="false" aria-controls="piiRedactor">
                 <h2>PII Redactor <i class="fas fa-chevron-down icon-spacing"></i> </h2>
@@ -200,7 +196,7 @@
             </div>
         </div>
 
-        <!-- Sensitivity Score Calculator Section -->
+        Sensitivity Score Calculator Section
         <p>
             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#sensitivityScore" aria-expanded="false" aria-controls="sensitivityScore">
                 <h2>Sensitivity Score Calculator <i class="fas fa-chevron-down icon-spacing"></i> </h2>
@@ -211,7 +207,7 @@
                 Allows user to check how sensitive a PDF is by uploading the document and recieving a sensitivity score
                 
             </div>
-        </div>
+        </div> -->
 
     </div>
     
