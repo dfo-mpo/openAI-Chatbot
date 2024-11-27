@@ -182,9 +182,7 @@ def analyze_sensitivity(request):
 
 def upload_video(request):
     if request.method == 'POST':
-        print('test')
         if 'example_document' in request.POST:
-            print('test2')
             fs = FileSystemStorage()
             filename = os.path.join('cached_outputs', request.POST.get('example_document'))
             document_path = fs.path(filename)

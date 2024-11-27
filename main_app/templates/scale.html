@@ -281,6 +281,14 @@
             padding-top: 145px; /* Adjust padding top to avoid content being hidden behind the fixed header */  
         }
 
+        #scrollToggleDiv {
+            position: fixed;
+            bottom: 50px;
+            right: 50px;
+            cursor: pointer;
+            user-select: none;
+        }
+
     </style>
 </head>
 
@@ -552,6 +560,14 @@
             //     $('.upload-img').attr('src', newImageUrl); // Update the image source  
             // } 
 
+            $('#scrollToggleDiv').click(function(e) {
+                e.preventDefault();
+
+                $('html, body').animate({  
+                    scrollTop: 0
+                }, 1000);
+            });
+
             // Handle form submission for upload form  
             $('#upload-form').submit(function(e) {  
                 e.preventDefault(); 
@@ -604,6 +620,21 @@
                 resetFormAndHideDownload(); // Call the reset function
             });
         });
+
+        document.addEventListener("DOMContentLoaded", function() {  
+            const scrollToggleDiv = document.getElementById('scrollToggleDiv');  
+    
+            window.addEventListener('scroll', function() {  
+                const scrollPosition = window.scrollY || window.pageYOffset;  
+                const windowHeight = window.innerHeight;  
+    
+                if (scrollPosition >= windowHeight / 2) {  
+                    scrollToggleDiv.style.display = 'block';  
+                } else {  
+                    scrollToggleDiv.style.display = 'none';  
+                }  
+            });  
+        }); 
     </script>
     
 </body>

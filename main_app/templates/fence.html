@@ -247,6 +247,19 @@
             padding-top: 145px; /* Adjust padding top to avoid content being hidden behind the fixed header */  
         }
 
+        .selected {
+            border: 1px solid #005a9c;
+            cursor: not-allowed;
+        }
+
+        #scrollToggleDiv {
+            position: fixed;
+            bottom: 50px;
+            right: 50px;
+            cursor: pointer;
+            user-select: none;
+        }
+
     </style>
 </head>
 
@@ -380,7 +393,7 @@
             <!-- <a id="downloadButton" class="btn btn-primary" href="#" download="Redacted_Document.pdf">Download Redacted PDF</a> -->
       
         </div>
-
+        <div id="scrollToggleDiv" style="display: none;">Back to top</div> 
         <footer class="pagedetails">
         <h2 class="wb-inv">Page details</h2><div class="row"><div class="col-sm-8 col-md-9 col-lg-9">
         <div data-ajax-replace="/GCWeb/sites/feedback/ajax/report-problem-en.html">
@@ -506,12 +519,35 @@
                 $('#example_document_input').val('{{ request.session.sample2_mp4_name_url }}');  
                 submitForm($('#example-form')[0]); 
             });  
+
+            $('#scrollToggleDiv').click(function(e) {
+                e.preventDefault();
+
+                $('html, body').animate({  
+                    scrollTop: 0
+                }, 1000);
+            });
     
             // Reset everything once the user clicks the download button
             $('#downloadButton').click(function() {
                 resetFormAndHideDownload(); // Call the reset function
             });
         });
+
+        document.addEventListener("DOMContentLoaded", function() {  
+            const scrollToggleDiv = document.getElementById('scrollToggleDiv');  
+    
+            window.addEventListener('scroll', function() {  
+                const scrollPosition = window.scrollY || window.pageYOffset;  
+                const windowHeight = window.innerHeight;  
+    
+                if (scrollPosition >= windowHeight / 2) {  
+                    scrollToggleDiv.style.display = 'block';  
+                } else {  
+                    scrollToggleDiv.style.display = 'none';  
+                }  
+            });  
+        }); 
     </script>
     
 </body>
