@@ -35,6 +35,10 @@ def SSC(request):
 def chat_home(request):
     return render(request, 'chat_home.html')
     
+def translation_home(request):
+    return render(request, 'french.html')
+
+
 def overview(request):
     return render(request, 'overview.html')
 

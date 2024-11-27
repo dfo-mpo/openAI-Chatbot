@@ -112,6 +112,9 @@
                             <a class="nav-link" href="{% url 'SSC' %}">Sensitivity Score</a>
                         </li>
                         <li >
+                            <a class="nav-link" href="{% url 'translation_home' %}">French Translation</a>
+                        </li>
+                        <li >
                             <a class="nav-link" href="{% url 'overview' %}">Help</a>
                         </li>
                     </ul>
@@ -172,6 +175,13 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="app-section" onclick="window.location.href='{% url 'translation_home' %}';">
+                        <h3>French Translation</h3>
+                        <p>Autmomate English to French translation</p>
+                    </div>
+                </div>
         </div>
         <div class="space2"></div>
 
