@@ -19,4 +19,4 @@ urlpatterns = [
     path('translatebot/', chatbot_view_translate, name='translatebot'),
     path('banner-image/', banner_image, name='banner-image'),
     path('refine_content/', refine_content, name='refine_content')
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
