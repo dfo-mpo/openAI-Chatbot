@@ -14,7 +14,7 @@
     <title>Scale Ageing - Upload Image</title>
     <style>
         
-        form {
+        form, .form {
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
@@ -221,12 +221,14 @@
             width: 250px;
             margin: 10px;
             position: relative;
+            border-radius: 4px;
         }
 
         .thumbnail div {
             position: absolute;
             border: 1px solid #005a9c;
             text-align: center;
+            border-radius: 4px;
 
             background-color: #f5f5f5;
             top: 110px;
@@ -278,7 +280,8 @@
             background-color: #fff; /* Ensure background color */  
         }  
         body {  
-            padding-top: 145px; /* Adjust padding top to avoid content being hidden behind the fixed header */  
+            padding-top: 145px; /* Adjust padding top to avoid content being hidden behind the fixed header */ 
+            background-color: #f8f8f8;
         }
 
         #scrollToggleDiv {
@@ -287,6 +290,31 @@
             right: 50px;
             cursor: pointer;
             user-select: none;
+        }
+
+        #choose-btn {
+            background-color: #edeaea;
+            color: black;
+            padding: 0px 7px;
+            line-height: 20px;
+            min-height: 28px;
+        }
+
+        #chosen-txt {
+            font-size: 15px;
+            margin: auto 5px;
+            height: 18px;
+            line-height: 20px;
+        }
+
+        .input-box {
+            border: 1px solid #ccc;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            width: calc(100% - 20px);
+            padding: 10px;
+            border-radius: 4px;
         }
 
     </style>
@@ -367,35 +395,42 @@
         <h1>Ageing salmon from scale image</h1>
         <p>A computer vision machine learning model trained on annotated salmon scale photos. The model can classify the age of the salmon with high accuracy.<br>Upload you own TIF or select an image to get started</p>
 
-        <form id="upload-form" action="{% url 'analyze_sensitivity' %}" method="post" enctype="multipart/form-data">
+        <!-- <form id="upload-form" action="{% url 'analyze_sensitivity' %}" method="post" enctype="multipart/form-data">
             <p class="option-text">Option 1: Upload your own image (TIF)</p>
             {% csrf_token %}
             <input id="pdfFile" type="file" name="document" accept=".tif">
             <button class="btn btn-primary" id="uploadButton" type="submit" disabled>Upload Image</button>
     
-        </form>
-        <div class="space2"></div>
-        <form class="container app-container" id="example-form" action="{% url 'analyze_sensitivity' %}" method="post">  
-            <p class="option-text" style="margin-bottom: 10px;">Option 2: Select an example document</p>
+        </form> -->
+        <div id="upload-form" class="form">
+            <p class="option-text" style="margin-top: -10px; margin-bottom: 5px;">Upload an image.</p>
+            <div class="input-box">
+                <button class="btn btn-primary" id="choose-btn" type="submit">Choose File</button>
+                <p id="chosen-txt">No document chosen</p>
+            </div>
+        </div>
+        <form class="container app-container" id="example-form" action="{% url 'analyze_sensitivity' %}" method="post" hidden>  
+            <p class="option-text" style="margin-bottom: 10px;">Select the image you want to upload.</p>
             {% csrf_token %}  
             <input type="hidden" id="example_document_input" name="example_document" value="">
             <div class="example-documents">
-                <button id="example1-button" class="btn thumbnail">
+                <button id="example1-button" class="btn thumbnail" type="button">
                     <img src="{{ request.session.sample1_tif_thumbnail_url }}" alt="Example Image" class="scale-img">
                     <div><span>Sample</span></div>
                     <p>"{{ request.session.sample1_tif_name_url }}"</p>
                 </button>
-                <button id="example2-button" class="btn thumbnail">
+                <button id="example2-button" class="btn thumbnail" type="button">
                     <img src="{{ request.session.sample2_tif_thumbnail_url }}" alt="Example Image" class="scale-img">
                     <div><span>Sample</span></div>
                     <p>"{{ request.session.sample2_tif_name_url }}"</p>
                 </button>
-                <button id="example3-button" class="btn thumbnail">
+                <button id="example3-button" class="btn thumbnail" type="button">
                     <img src="{{ request.session.sample3_tif_thumbnail_url }}" alt="Example Image" class="scale-img">
                     <div><span>Sample</span></div>
                     <p>"{{ request.session.sample3_tif_name_url }}"</p>
                 </button>
             </div>
+            <button class="btn btn-primary" id="uploadButton" type="submit" disabled>Upload Document</button>
         </form>
         <div class="space2"></div>
         <div id="downloadSection" style="display: none;">
@@ -427,7 +462,7 @@
                 </div><div class="wb-share col-sm-4 col-md-3" data-wb-share='{"lnkClass": "btn btn-default btn-block"}'></div><div class="col-xs-12">
                 <dl id="wb-dtmd">
                     <dt>Date modified:</dt>
-                    <dd><time property="dateModified">2024-04-22</time></dd>
+                    <dd><time property="dateModified">2024-11-19</time></dd>
                 </dl>
             </div>
         </div>
@@ -577,6 +612,19 @@
                 submitForm(this);  
             }); 
 
+            $('#choose-btn').click(function(e) {
+                e.preventDefault();
+                console.log('test')
+                // $('example-form').removeClass('hide');
+                $('#example-form').removeAttr('hidden');
+                $('#choose-btn').prop('disabled', true);
+
+                // Scroll to the example-form element  
+                $('html, body').animate({  
+                    scrollTop: $('#upload-form').offset().top - 145
+                }, 1000); // Adjust the duration of the scroll in milliseconds (1000ms = 1 second) 
+            })
+
             $('#example1-button').click(function(e) {  
                 e.preventDefault();
                 $('#example1-button').prop('disabled', true)
@@ -586,7 +634,9 @@
                 $('#example3-button').prop('disabled', false)
                                     .removeClass('selected');
                 $('#example_document_input').val('{{ request.session.sample1_tif_name_url }}');  
-                submitForm($('#example-form')[0]); 
+                $('#chosen-txt').text('{{ request.session.sample1_tif_name_url }}');
+                $('#uploadButton').prop('disabled', false);
+                // submitForm($('#example-form')[0]); 
             });  
     
             $('#example2-button').click(function(e) {  
@@ -598,7 +648,9 @@
                 $('#example3-button').prop('disabled', false)
                                     .removeClass('selected'); 
                 $('#example_document_input').val('{{ request.session.sample2_tif_name_url }}');  
-                submitForm($('#example-form')[0]); 
+                $('#chosen-txt').text('{{ request.session.sample2_tif_name_url }}');
+                $('#uploadButton').prop('disabled', false);
+                // submitForm($('#example-form')[0]); 
             });  
     
             $('#example3-button').click(function(e) {  
@@ -610,8 +662,19 @@
                 $('#example3-button').prop('disabled', true)
                                     .addClass('selected');
                 $('#example_document_input').val('{{ request.session.sample3_tif_name_url }}');  
-                submitForm($('#example-form')[0]); 
+                $('#chosen-txt').text('{{ request.session.sample3_tif_name_url }}');
+                $('#uploadButton').prop('disabled', false);
+                // submitForm($('#example-form')[0]); 
             });
+
+            $('#uploadButton').click(function(e) {  
+                e.preventDefault();
+                
+                $('#example-form').attr('hidden', true);
+                $('#choose-btn').prop('disabled', false);
+
+                submitForm($('#example-form')[0]); 
+            }); 
 
             $('#downloadButton').click(function() {
                 resetFormAndHideDownload(); // Call the reset function

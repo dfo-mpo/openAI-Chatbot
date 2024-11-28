@@ -14,7 +14,7 @@
     <style>
 
 
-        form {
+        form, .form {
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
@@ -195,6 +195,7 @@
             width: 350px;
             margin: 10px;
             position: relative;
+            border-radius: 4px;
         }
 
         .thumbnail img {
@@ -205,6 +206,7 @@
             position: absolute;
             border: 1px solid #005a9c;
             text-align: center;
+            border-radius: 4px;
 
             background-color: #f5f5f5;
             top: 95px;
@@ -245,6 +247,7 @@
         }  
         body {  
             padding-top: 145px; /* Adjust padding top to avoid content being hidden behind the fixed header */  
+            background-color: #f8f8f8;
         }
 
         .selected {
@@ -259,6 +262,32 @@
             cursor: pointer;
             user-select: none;
         }
+
+        #choose-btn {
+            background-color: #edeaea;
+            color: black;
+            padding: 0px 7px;
+            line-height: 20px;
+            min-height: 28px;
+        }
+
+        #chosen-txt {
+            font-size: 15px;
+            margin: auto 5px;
+            height: 18px;
+            line-height: 20px;
+        }
+
+        .input-box {
+            border: 1px solid #ccc;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            width: calc(100% - 20px);
+            padding: 10px;
+            border-radius: 4px;
+        }
+
 
     </style>
 </head>
@@ -341,23 +370,30 @@
         <h1>Counting salmon from video</h1>
         <p>A computer vision model used to analyze each frame (image) of river video footage. The model predicts classification of salmon species and object detection. <br>Upload your own MP4 or select a video to get started.</p>
 
-        <form id="upload-form" action="{% url 'upload_video' %}" method="post" enctype="multipart/form-data">
+        <!-- <form id="upload-form" action="{% url 'upload_video' %}" method="post" enctype="multipart/form-data">
             <p class="option-text">Option 1: Upload your own video</p>
             {% csrf_token %}
             <input id="pdfFile" type="file" name="document" accept=".avi, .mp4">
             <button class="btn btn-primary" id="uploadButton" type="submit" disabled>Upload Document</button>
-        </form>
-        <form class="container app-container" id="example-form" action="{% url 'upload_video' %}" method="post">  
-            <p class="option-text" style="margin-bottom: 10px;">Option 2: Select an example document</p>
+        </form> -->
+        <div id="upload-form" class="form">
+            <p class="option-text" style="margin-top: -10px; margin-bottom: 5px;">Upload a video.</p>
+            <div class="input-box">
+                <button class="btn btn-primary" id="choose-btn" type="submit">Choose File</button>
+                <p id="chosen-txt">No document chosen</p>
+            </div>
+        </div>
+        <form class="container app-container" id="example-form" action="{% url 'upload_video' %}" method="post" hidden>  
+            <p class="option-text" style="margin-bottom: 10px;">Select the video you want to upload.</p>
             {% csrf_token %}  
             <input type="hidden" id="example_document_input" name="example_document" value="">
             <div class="example-documents">
-                <button id="example1-button" class="btn thumbnail">
+                <button id="example1-button" class="btn thumbnail" type="button">
                     <img src="{{ request.session.sample1_mp4_thumbnail_url }}" alt="Example Video" class="pdf-img">
                     <div><span>Sample</span></div>
                     <p>"{{ request.session.sample1_mp4_name_url }}"</p>
                 </button>
-                <button id="example2-button" class="btn thumbnail">
+                <button id="example2-button" class="btn thumbnail" type="button">
                     <img src="{{ request.session.sample2_mp4_thumbnail_url }}" alt="Example Video" class="pdf-img">
                     <div><span>Sample</span></div>
                     <p>"{{ request.session.sample2_mp4_name_url }}"</p>
@@ -367,6 +403,7 @@
                     <p>"{{ request.session.sample3_pdf_name_url }}"</p>
                 </button> -->
             </div>
+            <button class="btn btn-primary" id="uploadButton" type="submit" disabled>Upload Document</button>
         </form> 
     
         <div id="displayVideos" style="display: none;">
@@ -493,6 +530,19 @@
             //     submitForm(this);  
             // }); 
 
+            $('#choose-btn').click(function(e) {
+                e.preventDefault();
+                console.log('test')
+                // $('example-form').removeClass('hide');
+                $('#example-form').removeAttr('hidden');
+                $('#choose-btn').prop('disabled', true);
+
+                // Scroll to the example-form element  
+                $('html, body').animate({  
+                    scrollTop: $('#upload-form').offset().top - 145
+                }, 1000); // Adjust the duration of the scroll in milliseconds (1000ms = 1 second) 
+            })
+
             $('#example1-button').click(function(e) {  
                 e.preventDefault();
                 $('#example1-button').prop('disabled', true)
@@ -501,8 +551,10 @@
                                     .removeClass('selected');
                 // $('#example3-button').prop('disabled', false)
                 //                     .removeClass('selected');
-                $('#example_document_input').val('{{ request.session.sample1_mp4_name_url }}');  
-                submitForm($('#example-form')[0]); 
+                $('#example_document_input').val('{{ request.session.sample1_mp4_name_url }}'); 
+                $('#chosen-txt').text('{{ request.session.sample1_mp4_name_url }}');
+                $('#uploadButton').prop('disabled', false);
+                // submitForm($('#example-form')[0]); 
             });  
     
             $('#example2-button').click(function(e) {  
@@ -514,8 +566,19 @@
                 // $('#example3-button').prop('disabled', false)
                 //                     .removeClass('selected'); 
                 $('#example_document_input').val('{{ request.session.sample2_mp4_name_url }}');  
+                $('#chosen-txt').text('{{ request.session.sample2_mp4_name_url }}');
+                $('#uploadButton').prop('disabled', false);
+                // submitForm($('#example-form')[0]); 
+            });
+
+            $('#uploadButton').click(function(e) {  
+                e.preventDefault();
+                
+                $('#example-form').attr('hidden', true);
+                $('#choose-btn').prop('disabled', false);
+
                 submitForm($('#example-form')[0]); 
-            });  
+            }); 
 
             $('#scrollToggleDiv').click(function(e) {
                 e.preventDefault();
