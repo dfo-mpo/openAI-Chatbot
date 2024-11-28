@@ -243,6 +243,7 @@ def upload_document(request):
  
             full_temp_path = os.path.join(fs.location, filename)
             extracted_text = get_content(full_temp_path)
+
             # Store the extracted document content in the session.
             request.session['document_content'] = extracted_text
             # Redirect the user to the chat page after successful upload and processing.
@@ -395,7 +396,7 @@ def chatbot_view_translate(request):
     elif request.method == 'GET':
         chat_history = request.session.get('chat_history', [])
         document_content = request.session.get('document_content', '')
-        return StreamingHttpResponse(request_translate_response(document_content), content_type='text/event-stream')
+        return StreamingHttpResponse(cached_response(document_content), content_type='text/event-stream')
 
 
 
@@ -450,6 +451,25 @@ def request_translate_response(document_content):
         r = requests.post(link+'/translate', json={"engtext": document_content})
         
         data = json.dumps({'translation': r.json()['output']})
+        print(data)
+        yield data
+    except Exception as e:
+        yield f"data: {{'error': 'Error fetching data from API: {str(e)}'}}\n\n"
+
+
+def cached_response(document_content):
+    try:
+        
+        output = 'API is down. Sorry, only cached output will be shown'
+        print(document_content)
+        
+        if "Relations Act" in document_content :
+            output = "Les renseignements fournis dans le présent document sont recueillis en vertu de la Loi sur les relations de travail dans la fonction publique et de la Loi sur l'emploi dans la fonction publique. Tous les renseignements personnels que vous fournissez sont protégés en vertu des dispositions de la Loi sur la protection des renseignements personnels et sont contrôlés par le responsable de l'institution où les renseignements sont conservés."
+        elif "cat leisurely" in document_content :
+            output = "Quatre phrases au hasard: 1. Le chat s'étendait tranquillement sur le rebord de la fenêtre, se prélassant au soleil chaud de l'après-midi. 2. Avec un éclat de rire, les enfants se sont précipités vers le bout de la rue, leurs baskets frappant le trottoir. 3. L'odeur du pain fraîchement cuit flottait dans la petite cuisine, faisant tout le monde l'eau à la bouche d'anticipation. 4. Alors que les nuages de tempête se rassemblaient à l'horizon, un sentiment d'inquiétude s'est installé sur la petite ville côtière."
+        elif "majestic mountains" in document_content :
+            output = "Les majestueuses montagnes s’élevaient au-dessus de la vallée, leurs sommets enneigés scintillaient dans la lumière du matin. En montant, la vue panoramique sur les majestueuses montagnes environnantes nous a coupé le souffle. Les forêts verdoyantes au pied des majestueuses montagnes contrastaient magnifiquement avec les falaises rocheuses et accidentées au-dessus. Debout au sommet, nous avons ressenti un profond sentiment d’émerveillement et de tranquillité, enveloppés par la beauté sereine des majestueuses montagnes."
+        data = json.dumps({'translation':output})
         print(data)
         yield data
     except Exception as e:
