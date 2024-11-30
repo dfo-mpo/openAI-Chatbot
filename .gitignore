@@ -3,5 +3,4 @@
 
 # Ignore all directories containing .pyc files  
 **/__pycache__/  
-*/__pycache__/  
-/__pycache__/ 
+ 

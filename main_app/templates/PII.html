@@ -6,11 +6,12 @@
     <link href="https://wet-boew.github.io/themes-dist/GCWeb/GCWeb/assets/favicon.ico" rel="icon" type="image/x-icon" />
     <link rel="stylesheet" href="https://wet-boew.github.io/themes-dist/GCWeb/GCWeb/css/theme.min.css" />
     <noscript><link rel="stylesheet" href="https://wet-boew.github.io/themes-dist/GCWeb/wet-boew/css/noscript.min.css" /></noscript>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.js"></script>
     <script src="https://wet-boew.github.io/themes-dist/GCWeb/wet-boew/js/wet-boew.min.js"></script>
     <script src="https://wet-boew.github.io/themes-dist/GCWeb/GCWeb/js/theme.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-    <title>PPP Redactor - Upload Document</title>
+    <title>PII Redactor - Upload Document</title>
     <style>
 
 
@@ -18,7 +19,7 @@
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 6px 6px 20px -8px rgba(0, 0, 0, 0.3);
             margin-top: 20px; /* Adjusted margin for spacing */
             display: flex;
             flex-direction: column;
@@ -296,6 +297,28 @@
             border-radius: 4px;
         }
 
+        #uploadButton {
+            margin-top: 15px;
+        }
+
+        #pdf-viewer-container {
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        #pdf-viewer-container div {
+            box-shadow: 6px 6px 20px -8px rgba(0, 0, 0, 0.3);
+        }
+
+        #pdf-viewer-container h1{
+            color: #333;
+            text-align: center;
+            margin-top: 50px;
+        }
+
     </style>
 </head>
 
@@ -378,23 +401,55 @@
     </nav>
     <main property="mainContentOfPage" class="container" resource="#wb-main" typeof="WebPageElement">
         <h1>Personally Identifiable Information Redactor</h1>
-        <p>Upload a PDF document to get started</p>
+        <p>An algorithm using Mircosoft's Presidio to identify and redact any personally identifiable information.<br>Upload a PDF document to get started.</p>
 
-        <form id="upload-form" action="{% url 'upload_document2' %}" method="post" enctype="multipart/form-data">
+        <!-- <form id="upload-form" action="{% url 'upload_document2' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <input id="pdfFile" type="file" name="document" accept=".pdf">
             <button class="btn btn-primary" id="uploadButton" type="submit" disabled>Upload Document</button>
-        </form>
-    
+        </form> -->
+        <div id="upload-form" class="form">
+            <p class="option-text" style="margin-top: -10px; margin-bottom: 5px;">Upload a document.</p>
+            <div class="input-box">
+                <button class="btn btn-primary" id="choose-btn" type="button">Choose File</button>
+                <p id="chosen-txt">No document chosen</p>
+            </div>
+        </div>
+        <form class="container app-container" id="example-form" action="{% url 'upload_document2' %}" method="post" hidden>  
+            <p class="option-text" style="margin-bottom: 10px;">Select the document you want to upload.</p>
+            {% csrf_token %}  
+            <input type="hidden" id="example_document_input" name="example_document" value="">
+            <div class="example-documents">
+                <button id="example1-button" class="btn thumbnail" type="button">
+                    <img src="{{ request.session.sample1_pii_thumbnail_url }}" alt="Example PDF" class="pdf-img">
+                    <div><span>Sample</span></div>
+                    <p>"{{ request.session.sample1_pii_name_url }}"</p>
+                </button>
+                <button id="example2-button" class="btn thumbnail" type="button">
+                    <img src="{{ request.session.sample2_pii_thumbnail_url }}" alt="Example PDF" class="pdf-img">
+                    <div><span>Sample</span></div>
+                    <p>"{{ request.session.sample2_pii_name_url }}"</p>
+                </button>
+                <button id="example3-button" class="btn thumbnail" type="button">
+                    <img src="{{ request.session.sample3_pii_thumbnail_url }}" alt="Example PDF" class="pdf-img">
+                    <div><span>Sample</span></div>
+                    <p>"{{ request.session.sample3_pii_name_url }}"</p>
+                </button>
+            </div>
+            <button class="btn btn-primary" id="uploadButton" type="submit" disabled>Upload Document</button>
+        </form> 
         <div id="downloadSection" style="display: none;">
     
             <p id="downloadSection-head" class="title-card-desc" style="display: none;">Your Redacted PDF is Ready!</p>
             <a id="downloadButton" class="btn btn-primary" href="#" download="Redacted_Document.pdf">Download Redacted PDF</a>
       
         </div>
-    
+        <div id="pdf-viewer-container" class="half-width" hidden>
+            <h1>Redacted PDF</h1>
+            <div id="pdf-rendering-container"></div> 
+        </div>
         <div class="space2"></div>
-
+        <div id="scrollToggleDiv" style="display: none;">Back to top</div> 
         <footer class="pagedetails">
         <h2 class="wb-inv">Page details</h2><div class="row"><div class="col-sm-8 col-md-9 col-lg-9">
         <div data-ajax-replace="/GCWeb/sites/feedback/ajax/report-problem-en.html">
@@ -406,7 +461,7 @@
                 </div><div class="wb-share col-sm-4 col-md-3" data-wb-share='{"lnkClass": "btn btn-default btn-block"}'></div><div class="col-xs-12">
                 <dl id="wb-dtmd">
                     <dt>Date modified:</dt>
-                    <dd><time property="dateModified">2024-04-22</time></dd>
+                    <dd><time property="dateModified">2024-11-22</time></dd>
                 </dl>
             </div>
         </div>
@@ -419,6 +474,49 @@
     <!-- JavaScript Logic for Upload and Download -->
     <script>
         $(document).ready(function() {
+            const viewerContainer = document.getElementById('pdf-rendering-container');
+
+            // Initializes a promise chain to manage the sequential rendering of PDF pages.
+            let renderQueue;
+
+            /**
+             * Renders all pages of a PDF document.
+             * This is useful for initially displaying the document or when the user chooses to view the entire document.
+             * @param {PDFDocumentProxy} pdfDoc - The PDF document object.
+             */        
+            function renderAllPages(pdfDoc) {
+                viewerContainer.innerHTML = ''; // Clears the PDF viewer container.
+
+                // Loops through each page of the PDF and calls the function to render it.
+                for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
+                    renderPage(pdfDoc, pageNum);
+                }
+            }
+
+            /**
+             * Renders a single page within the PDF viewer container.
+             * This function is used by both renderAllPages and renderSpecificPages to render individual pages.
+             * @param {PDFDocumentProxy} pdfDoc - The PDF document object.
+             * @param {number} pageNum - The number of the page to render.
+             */
+            function renderPage(pdfDoc, pageNum) {
+                // Adds each page rendering task to the queue to ensure sequential rendering.
+                renderQueue = renderQueue.then(() => pdfDoc.getPage(pageNum).then(page => {
+                    // Calculate the witdh and height dynamically so that the page rendring is based on the browser width
+                    const viewport = page.getViewport({ scale: 1 });
+                    const scale = viewerContainer.clientWidth / viewport.width;
+                    const adjustedViewport = page.getViewport({ scale });
+                    const canvas = document.createElement('canvas');
+                    canvas.height = adjustedViewport.height;
+                    canvas.width = adjustedViewport.width;
+                    viewerContainer.appendChild(canvas);
+
+                    // Renders the page into the canvas context.
+                    const ctx = canvas.getContext('2d');
+                    const renderContext = { canvasContext: ctx, viewport: adjustedViewport };
+                    return page.render(renderContext).promise;
+                }));
+            }
             // Function to reset the form and hide download link
             function resetFormAndHideDownload() {
                 $('#pdfFile').val(''); // Clear the file input
@@ -428,24 +526,23 @@
             }
     
             // Handle the change event on file input to enable the upload button
-            $('#pdfFile').change(function() {
-                const file = this.files[0];
-                if (file && file.type === "application/pdf") {
-                    $('#uploadButton').prop('disabled', false); // Enable the button
-                } else {
-                    $('#uploadButton').prop('disabled', true); // Disable the button
-                    alert("Please select a PDF file.");
-                }
-            });
+            // $('#pdfFile').change(function() {
+            //     const file = this.files[0];
+            //     if (file && file.type === "application/pdf") {
+            //         $('#uploadButton').prop('disabled', false); // Enable the button
+            //     } else {
+            //         $('#uploadButton').prop('disabled', true); // Disable the button
+            //         alert("Please select a PDF file.");
+            //     }
+            // });
     
-            // Handle form submission
-            $('#upload-form').submit(function(e) {
-                e.preventDefault();
+            // Reusable function for form submission  
+            function submitForm(form) { 
                 $('#loading-overlay').show(); // Show loading indicator
     
-                var formData = new FormData(this);
+                var formData = new FormData(form);
                 $.ajax({
-                    url: $(this).attr('action'), // URL from the form's action attribute
+                    url: $(form).attr('action'), // URL from the form's action attribute
                     type: 'POST',
                     data: formData,
                     contentType: false,
@@ -455,7 +552,26 @@
                         $('#downloadButton').attr('download', response.filename); 
                         $('#downloadSection').show(); // Show download button and message
                         $('#downloadSection-head').show();
+                        $('#pdf-viewer-container').removeAttr('hidden');
+
+                        renderQueue = Promise.resolve();
+
+                        // Loads and displays the PDF document if a URL is provided, using PDF.js library.
+                        if (response.redactedPdfUrl) {
+                            pdfjsLib.getDocument(response.redactedPdfUrl).promise.then(function(pdfDoc) {
+                                pdfDocGlobal = pdfDoc;
+                                renderAllPages(pdfDocGlobal); // Calls the function to render all pages of the loaded PDF document.
+                            }).catch(function(error) {
+                                console.error("Error loading PDF: ", error); // Logs error if the PDF document fails to load.
+                            });
+                        }
+
                         $('#loading-overlay').hide(); // Hide loading indicator
+                        
+                        // Scroll to the downloadSection element  
+                        $('html, body').animate({  
+                            scrollTop: $('#downloadSection-head').offset().top - 145
+                        }, 1000); // Adjust the duration of the scroll in milliseconds (1000ms = 1 second) 
                     },
                     error: function(xhr, status, error) {
                         // Handle any errors here
@@ -464,6 +580,89 @@
                         $('#loading-overlay').hide(); // Hide loading indicator
                     }
                 });
+            }
+
+            $('#scrollToggleDiv').click(function(e) {
+                e.preventDefault();
+
+                $('html, body').animate({  
+                    scrollTop: 0
+                }, 1000);
+            });
+
+            // Handle form submission for upload form  
+            $('#upload-form').submit(function(e) {  
+                e.preventDefault(); 
+                $('#example1-button').prop('disabled', false)
+                                    .removeClass('selected');
+                $('#example2-button').prop('disabled', false)
+                                    .removeClass('selected');
+                $('#example3-button').prop('disabled', false)
+                                    .removeClass('selected'); 
+                submitForm(this);  
+            }); 
+
+            $('#choose-btn').click(function(e) {
+                e.preventDefault();
+                // $('example-form').removeClass('hide');
+                $('#example-form').removeAttr('hidden');
+                $('#choose-btn').prop('disabled', true);
+
+                // Scroll to the example-form element  
+                $('html, body').animate({  
+                    scrollTop: $('#upload-form').offset().top - 145
+                }, 1000); // Adjust the duration of the scroll in milliseconds (1000ms = 1 second) 
+            })
+
+            $('#example1-button').click(function(e) {  
+                e.preventDefault();
+                $('#example1-button').prop('disabled', true)
+                                    .addClass('selected');
+                $('#example2-button').prop('disabled', false)
+                                    .removeClass('selected');
+                $('#example3-button').prop('disabled', false)
+                                    .removeClass('selected');
+                $('#example_document_input').val('{{ request.session.sample1_pii_name_url }}');  
+                $('#chosen-txt').text('{{ request.session.sample1_pii_name_url }}');
+                $('#uploadButton').prop('disabled', false);
+                // submitForm($('#example-form')[0]); 
+            });  
+    
+            $('#example2-button').click(function(e) {  
+                e.preventDefault();
+                $('#example1-button').prop('disabled', false)
+                                    .removeClass('selected');
+                $('#example2-button').prop('disabled', true)
+                                    .addClass('selected');
+                $('#example3-button').prop('disabled', false)
+                                    .removeClass('selected'); 
+                $('#example_document_input').val('{{ request.session.sample2_pii_name_url }}');  
+                $('#chosen-txt').text('{{ request.session.sample2_pii_name_url }}');
+                $('#uploadButton').prop('disabled', false);
+                // submitForm($('#example-form')[0]); 
+            });  
+    
+            $('#example3-button').click(function(e) {  
+                e.preventDefault();
+                $('#example1-button').prop('disabled', false)
+                                    .removeClass('selected');
+                $('#example2-button').prop('disabled', false)
+                                    .removeClass('selected');
+                $('#example3-button').prop('disabled', true)
+                                    .addClass('selected');
+                $('#example_document_input').val('{{ request.session.sample3_pii_name_url }}');  
+                $('#chosen-txt').text('{{ request.session.sample3_pii_name_url }}');
+                $('#uploadButton').prop('disabled', false);
+                // submitForm($('#example-form')[0]); 
+            });
+
+            $('#uploadButton').click(function(e) {  
+                e.preventDefault();
+                
+                $('#example-form').attr('hidden', true);
+                $('#choose-btn').prop('disabled', false);
+
+                submitForm($('#example-form')[0]); 
             });
     
             // Reset everything once the user clicks the download button

@@ -80,7 +80,6 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 6px 6px 20px -8px rgba(0, 0, 0, 0.3);
-            width: 25%; 
             margin-top: 20px; 
             display: flex;
             flex-direction: column;
@@ -217,6 +216,20 @@
             justify-content: space-between;
             width: 95%;
         }
+
+        .selected {
+            border: 1px solid #005a9c;
+            cursor: not-allowed;
+        }
+
+        #scrollToggleDiv {
+            position: fixed;
+            bottom: 50px;
+            right: 50px;
+            cursor: pointer;
+            user-select: none;
+        }
+        
         .thumbnail {
             width: 250px;
             margin: 10px;
@@ -295,6 +308,10 @@
             width: calc(100% - 20px);
             padding: 10px;
             border-radius: 4px;
+        }
+
+        #uploadButton {
+            margin-top: 15px;
         }
 
     </style>
@@ -380,11 +397,18 @@
         <p>Model: Google's Multilingual machine translation model MADLAD400 10B</p>
         <p>Upload a document to get started</p>
 
-        <form class="container app-container" id="upload-form" action="{% url 'upload_document_translation' %}" method="post" enctype="multipart/form-data">
+        <!-- <form class="container app-container" id="upload-form" action="{% url 'upload_document_translation' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="file" name="document" accept=".pdf">
             <button  class="btn btn-primary" type="submit" disabled>Upload Document</button>
-        </form>
+        </form> -->
+        <div id="upload-form" class="form">
+            <p class="option-text" style="margin-top: -10px; margin-bottom: 5px;">Upload a document.</p>
+            <div class="input-box">
+                <button class="btn btn-primary" id="choose-btn" type="button">Choose File</button>
+                <p id="chosen-txt">No document chosen</p>
+            </div>
+        </div>
     
         <!-- <div class="space2"></div>
 
@@ -406,28 +430,30 @@
     </footer> -->
 
         <!-- <div class="space2"></div> -->
-        <form class="container app-container" id="example-form" action="{% url 'upload_document_translation' %}" method="post">  
-            <p class="option-text" style="margin-bottom: 10px;">Option 2: Select an example document</p>
+        <form class="container app-container" id="example-form" action="{% url 'upload_document_translation' %}" method="post" hidden>  
+            <p class="option-text" style="margin-bottom: 10px;">Select the document you want to upload.</p>
             {% csrf_token %}  
             <input type="hidden" id="example_document_input" name="example_document" value="">
             <div class="example-documents">
-                <button id="example1-button" class="btn thumbnail">
+                <button id="example1-button" class="btn thumbnail" type="button">
                     <img src="{{ request.session.sample1_pdf_thumbnail_url }}" alt="Example PDF" class="pdf-img">
                     <div><span>Sample</span></div>
                     <p>"{{ request.session.sample1_pdf_name_url }}"</p>
                 </button>
-                <button id="example2-button" class="btn thumbnail">
+                <button id="example2-button" class="btn thumbnail" type="button">
                     <img src="{{ request.session.sample2_pdf_thumbnail_url }}" alt="Example PDF" class="pdf-img">
                     <div><span>Sample</span></div>
                     <p>"{{ request.session.sample2_pdf_name_url }}"</p>
                 </button>
-                <button id="example3-button" class="btn thumbnail">
+                <button id="example3-button" class="btn thumbnail" type="button">
                     <img src="{{ request.session.sample3_pdf_thumbnail_url }}" alt="Example PDF" class="pdf-img">
                     <div><span>Sample</span></div>
                     <p>"{{ request.session.sample3_pdf_name_url }}"</p>
                 </button>
             </div>
+            <button class="btn btn-primary" id="uploadButton" type="submit" disabled>Upload Document</button>
         </form> 
+        <div id="scrollToggleDiv" style="display: none;">Back to top</div> 
         <footer class="pagedetails">
         <h2 class="wb-inv">Page details</h2><div class="row"><div class="col-sm-8 col-md-9 col-lg-9">
         <div data-ajax-replace="/GCWeb/sites/feedback/ajax/report-problem-en.html">
@@ -480,7 +506,8 @@
 <script type="text/javascript">  
     document.addEventListener("DOMContentLoaded", function() {  
         const fileInput = document.querySelector('input[type="file"]');  
-        const uploadButton = document.querySelector('button[type="submit"]');  
+        const uploadButton = document.querySelector('button[type="submit"]'); 
+        const chooseBtn = document.querySelector('#choose-btn'); 
         const example1Button = document.querySelector('#example1-button');  
         const example2Button = document.querySelector('#example2-button');  
         const example3Button = document.querySelector('#example3-button');  
@@ -492,33 +519,99 @@
         const example3Name = "{{ sample3_pdf_name_url }}";
 
         // Enable upload button only if a PDF file is selected  
-        fileInput.addEventListener('change', function() {  
-            const file = this.files[0];  
-            uploadButton.disabled = !(file && file.type === "application/pdf");  
-        });  
+        // fileInput.addEventListener('change', function() {  
+        //     const file = this.files[0];  
+        //     uploadButton.disabled = !(file && file.type === "application/pdf");  
+        // });  
 
-        // Show loading overlay on form submission  
-        $('#upload-form').submit(function() {  
-            $('.loading-overlay').show();  
-        });  
+        // Handle form submission for upload form  
+        $('#example-form').submit(function(e) {  
+                e.preventDefault(); 
+                $('#example1-button').prop('disabled', false)
+                                    .removeClass('selected');
+                $('#example2-button').prop('disabled', false)
+                                    .removeClass('selected');
+                $('#example3-button').prop('disabled', false)
+                                    .removeClass('selected'); 
+                exampleForm.submit(); 
+        }); 
+
+        $('#choose-btn').click(function(e) {
+                e.preventDefault();
+                // $('example-form').removeClass('hide');
+                $('#example-form').removeAttr('hidden');
+                $('#choose-btn').prop('disabled', true);
+
+                // Scroll to the example-form element  
+                $('html, body').animate({  
+                    scrollTop: $('#upload-form').offset().top - 145
+                }, 1000); // Adjust the duration of the scroll in milliseconds (1000ms = 1 second) 
+        })
 
         // Handle example document selection  
         example1Button.addEventListener('click', function() {
             // $('.loading-overlay').show();
-            exampleDocumentInput.value = '{{ request.session.sample1_pdf_name_url }}';
-            exampleForm.submit();  
+            $('#example1-button').prop('disabled', true)
+                                .addClass('selected');
+            $('#example2-button').prop('disabled', false)
+                                .removeClass('selected');
+            $('#example3-button').prop('disabled', false)
+                                .removeClass('selected');
+            $('#example_document_input').val('{{ request.session.sample1_pdf_name_url }}');  
+            $('#chosen-txt').text('{{ request.session.sample1_pdf_name_url }}');
+            $('#uploadButton').prop('disabled', false);
+            // exampleForm.submit();  
         });
         example2Button.addEventListener('click', function() {
             // $('.loading-overlay').show();
-            exampleDocumentInput.value = '{{ request.session.sample2_pdf_name_url }}';
-            exampleForm.submit();  
+            $('#example1-button').prop('disabled', false)
+                                .removeClass('selected');
+            $('#example2-button').prop('disabled', true)
+                                .addClass('selected');
+            $('#example3-button').prop('disabled', false)
+                                .removeClass('selected'); 
+            $('#example_document_input').val('{{ request.session.sample2_pdf_name_url }}');  
+            $('#chosen-txt').text('{{ request.session.sample2_pdf_name_url }}');
+            $('#uploadButton').prop('disabled', false);
+            // exampleForm.submit();  
         });  
         example3Button.addEventListener('click', function() {
             // $('.loading-overlay').show();
-            exampleDocumentInput.value = '{{ request.session.sample3_pdf_name_url }}';
-            exampleForm.submit();  
-        });  
+            $('#example1-button').prop('disabled', false)
+                                .removeClass('selected');
+            $('#example2-button').prop('disabled', false)
+                                .removeClass('selected');
+            $('#example3-button').prop('disabled', true)
+                                .addClass('selected');
+            $('#example_document_input').val('{{ request.session.sample3_pdf_name_url }}');  
+            $('#chosen-txt').text('{{ request.session.sample3_pdf_name_url }}');
+            $('#uploadButton').prop('disabled', false);
+            // exampleForm.submit();  
+        }); 
+        
+        $('#scrollToggleDiv').click(function(e) {
+            e.preventDefault();
+
+            $('html, body').animate({  
+                scrollTop: 0
+            }, 1000);
+        });
     });  
+
+    document.addEventListener("DOMContentLoaded", function() {  
+        const scrollToggleDiv = document.getElementById('scrollToggleDiv');  
+
+        window.addEventListener('scroll', function() {  
+            const scrollPosition = window.scrollY || window.pageYOffset;  
+            const windowHeight = window.innerHeight;  
+
+            if (scrollPosition >= windowHeight / 2) {  
+                scrollToggleDiv.style.display = 'block';  
+            } else {  
+                scrollToggleDiv.style.display = 'none';  
+            }  
+        });  
+    });
 </script> 
 
 
