@@ -17,10 +17,10 @@ import requests
 
 # Configure OpenAI settings
 openai.api_type = "azure"
-openai.api_version = "2023-07-01-preview"
+openai.api_version = "2024-05-01-preview"
 openai.api_base = getattr(settings, 'OPENAI_API_BASE')
 openai.api_key = getattr(settings, 'OPENAI_API_KEY')
-model_id = 'gpt-4-turbo-1106p'
+model_id = 'gpt-4-turbo'
 
 # Configure Azure Document Analysis settings
 endpoint = getattr(settings, 'DI_API_ENDPOINT')
@@ -32,8 +32,36 @@ key = getattr(settings, 'DI_API_KEY')
 
 def chat_home(request):
     """
-    Renders the home page for the chat application.
+    Renders the home page for the chat application. Gets the URLS for example documents.
+
     """
+    fs = FileSystemStorage()
+    # Sample 1
+    sample_name = 'personal_computers.png'
+    filename = os.path.join('cached_outputs', sample_name)
+    example_file_url = fs.url(filename)
+    request.session['sample1_chat_thumbnail_url'] = example_file_url
+    # Strip the .jpg extension and add .pdf  
+    pdf_name = sample_name.rsplit('.', 1)[0] + '.pdf'  
+    request.session['sample1_chat_name_url'] = pdf_name
+
+    # Sample 2
+    sample_name = 'glimpse_through_time.png'
+    filename = os.path.join('cached_outputs', sample_name)
+    example_file_url = fs.url(filename)
+    request.session['sample2_chat_thumbnail_url'] = example_file_url
+    # Strip the .jpg extension and add .pdf  
+    pdf_name = sample_name.rsplit('.', 1)[0] + '.pdf'  
+    request.session['sample2_chat_name_url'] = pdf_name
+
+    # Sample 3
+    sample_name = 'environment_&_landscape.png'
+    filename = os.path.join('cached_outputs', sample_name)
+    example_file_url = fs.url(filename)
+    request.session['sample3_chat_thumbnail_url'] = example_file_url
+    # Strip the .jpg extension and add .pdf  
+    pdf_name = sample_name.rsplit('.', 1)[0] + '.pdf'  
+    request.session['sample3_chat_name_url'] = pdf_name
     return render(request, 'chat_home.html')
 
 # def translation_home(request):
@@ -230,17 +258,14 @@ def upload_document(request):
     - Handle invalid uploads with an error message.
     """
     if request.method == 'POST':
-        # Attempt to retrieve the uploaded file from the request.
-        uploaded_file = request.FILES.get('document')
-        # Ensure the file is a PDF before proceeding.
-        if uploaded_file and uploaded_file.name.lower().endswith('.pdf'):
-            # Save the uploaded file using Django's file system storage.
+        if 'example_document' in request.POST:
             fs = FileSystemStorage()
-            filename = fs.save(uploaded_file.name, uploaded_file)
+            filename = os.path.join('cached_outputs', request.POST.get('example_document'))
             uploaded_file_url = fs.url(filename)
+
             # Store the URL of the uploaded file in the session.
             request.session['uploaded_pdf_url'] = uploaded_file_url
- 
+
             full_temp_path = os.path.join(fs.location, filename)
             extracted_text = get_content(full_temp_path)
 
@@ -249,8 +274,27 @@ def upload_document(request):
             # Redirect the user to the chat page after successful upload and processing.
             return redirect('chat')
         else:
-            # Return an error response if the uploaded file is not a valid PDF.
-            return HttpResponseBadRequest("Please upload a valid PDF file.")
+            # Attempt to retrieve the uploaded file from the request.
+            uploaded_file = request.FILES.get('document')
+            # Ensure the file is a PDF before proceeding.
+            if uploaded_file and uploaded_file.name.lower().endswith('.pdf'):
+                # Save the uploaded file using Django's file system storage.
+                fs = FileSystemStorage()
+                filename = fs.save(uploaded_file.name, uploaded_file)
+                uploaded_file_url = fs.url(filename)
+                # Store the URL of the uploaded file in the session.
+                request.session['uploaded_pdf_url'] = uploaded_file_url
+    
+                full_temp_path = os.path.join(fs.location, filename)
+                extracted_text = get_content(full_temp_path)
+
+                # Store the extracted document content in the session.
+                request.session['document_content'] = extracted_text
+                # Redirect the user to the chat page after successful upload and processing.
+                return redirect('chat')
+            else:
+                # Return an error response if the uploaded file is not a valid PDF.
+                return HttpResponseBadRequest("Please upload a valid PDF file.")
     else:
         # If the request method is not POST, render the chat home page.
         return render(request, 'chat_home.html')

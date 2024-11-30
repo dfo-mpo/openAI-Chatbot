@@ -93,10 +93,6 @@ def SSC(request):
     pdf_name = sample_name.rsplit('.', 1)[0] + '.pdf'  
     request.session['sample3_pii_name_url'] = pdf_name
     return render(request, 'SSC.html')
-
-     
-def chat_home(request):
-    return render(request, 'chat_home.html')
     
 def translation_home(request):
     return render(request, 'french.html')

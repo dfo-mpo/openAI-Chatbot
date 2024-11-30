@@ -670,6 +670,21 @@
                 resetFormAndHideDownload(); // Call the reset function
             });
         });
+
+        document.addEventListener("DOMContentLoaded", function() {  
+            const scrollToggleDiv = document.getElementById('scrollToggleDiv');  
+
+            window.addEventListener('scroll', function() {  
+                const scrollPosition = window.scrollY || window.pageYOffset;  
+                const windowHeight = window.innerHeight;  
+
+                if (scrollPosition >= windowHeight / 2) {  
+                    scrollToggleDiv.style.display = 'block';  
+                } else {  
+                    scrollToggleDiv.style.display = 'none';  
+                }  
+            });  
+        });
     </script>
     
 </body>

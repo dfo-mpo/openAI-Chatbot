@@ -526,26 +526,30 @@
 
         // Handle form submission for upload form  
         $('#example-form').submit(function(e) {  
-                e.preventDefault(); 
-                $('#example1-button').prop('disabled', false)
-                                    .removeClass('selected');
-                $('#example2-button').prop('disabled', false)
-                                    .removeClass('selected');
-                $('#example3-button').prop('disabled', false)
-                                    .removeClass('selected'); 
-                exampleForm.submit(); 
+            e.preventDefault(); 
+
+            $('#example-form').attr('hidden', true);
+            $('#choose-btn').prop('disabled', false);
+            
+            $('#example1-button').prop('disabled', false)
+                                .removeClass('selected');
+            $('#example2-button').prop('disabled', false)
+                                .removeClass('selected');
+            $('#example3-button').prop('disabled', false)
+                                .removeClass('selected'); 
+            exampleForm.submit(); 
         }); 
 
         $('#choose-btn').click(function(e) {
-                e.preventDefault();
-                // $('example-form').removeClass('hide');
-                $('#example-form').removeAttr('hidden');
-                $('#choose-btn').prop('disabled', true);
+            e.preventDefault();
+            // $('example-form').removeClass('hide');
+            $('#example-form').removeAttr('hidden');
+            $('#choose-btn').prop('disabled', true);
 
-                // Scroll to the example-form element  
-                $('html, body').animate({  
-                    scrollTop: $('#upload-form').offset().top - 145
-                }, 1000); // Adjust the duration of the scroll in milliseconds (1000ms = 1 second) 
+            // Scroll to the example-form element  
+            $('html, body').animate({  
+                scrollTop: $('#upload-form').offset().top - 145
+            }, 1000); // Adjust the duration of the scroll in milliseconds (1000ms = 1 second) 
         })
 
         // Handle example document selection  
