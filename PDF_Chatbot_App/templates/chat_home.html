@@ -402,17 +402,16 @@
     </nav>
     <main property="mainContentOfPage" class="container" resource="#wb-main" typeof="WebPageElement">
         <h1>Welcome to the PDF chatbot</h1>
-        <p>Uses OpenAI to answer questions for a given document and provide sourcing of information.<br>Upload a document to get started</p>
+        <p>Uses OpenAI to answer questions for a given document and provide sourcing of information. Upload a document to get started - These samples are for demonstration purposes only.</p>
 
         <!-- <form class="container app-container" id="upload-form" action="{% url 'upload_document' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="file" name="document" accept=".pdf">
             <button  class="btn btn-primary" type="submit" disabled>Upload Document</button>
         </form> -->
-        
+
         <div id="upload-form" class="form">
-            <p class="option-text" style="margin-top: -10px; margin-bottom: -10px;">Upload a document</p>
-            <i style="font-size: 14px; margin: 0px auto 5px 10px">These samples are for demonstration purposes only</i>
+            <p class="option-text" style="margin-top: -10px; margin-bottom: 5px;">Upload a document</p>
             <div class="input-box">
                 <button class="btn btn-primary" id="choose-btn" type="button">Choose File</button>
                 <p id="chosen-txt">No document chosen</p>
