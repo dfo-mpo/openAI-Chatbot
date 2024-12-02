@@ -355,23 +355,23 @@ class OpenAIView(CommonFormMixin, CreateView):
     def post(self, request, *args, **kwargs):
         fs = FileSystemStorage()
         # Extract files from the request.
-        # csv_file = request.FILES.get('csv_file')
-        # pdf_file = request.FILES.get('pdf_file')
-        print(request.FILES.get('csv_file'))
-        print(request.FILES.get('pdf_file'))
-        csv_file = os.path.join('cached_outputs', request.FILES.get('csv_file'))
-        pdf_file = os.path.join('cached_outputs', request.FILES.get('pdf_file'))
+        csv_file = request.FILES.get('csv_file')
+        pdf_file = request.FILES.get('pdf_file')
+        # print(request.FILES.get('csv_file'))
+        # print(request.FILES.get('pdf_file'))
+        # csv_file = os.path.join('cached_outputs', request.FILES.get('csv_file'))
+        # pdf_file = os.path.join('cached_outputs', request.FILES.get('pdf_file'))
 
         # Validate that both files are present.
-        # if not csv_file or not pdf_file:
-        #     # Return an error response if either file is missing.
-        #     return JsonResponse({'error': "Both a CSV and a PDF file are required."}, status=400)
+        if not csv_file or not pdf_file:
+            # Return an error response if either file is missing.
+            return JsonResponse({'error': "Both a CSV and a PDF file are required."}, status=400)
 
         # Save the uploaded files to media storage and get their paths.
-        # csv_file_path = self.save_file(csv_file, 'csv')
-        # pdf_file_path = self.save_file(pdf_file, 'pdf')
-        csv_file_path = fs.path(csv_file)
-        pdf_file_path = fs.path(pdf_file)
+        csv_file_path = self.save_file(csv_file, 'csv')
+        pdf_file_path = self.save_file(pdf_file, 'pdf')
+        # csv_file_path = fs.path(csv_file)
+        # pdf_file_path = fs.path(pdf_file)
 
         # Initialize document processing classes with the uploaded files. CA is for combined files
         document_type = model.DocumentType("CA", csv_file_path)

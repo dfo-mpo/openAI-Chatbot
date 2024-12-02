@@ -11,8 +11,8 @@ from io import BytesIO
 from django.conf import settings
 
 # Free version of DI API
-endpoint = "https://pssidfodocumentintelligence.cognitiveservices.azure.com/" 
-key = "39cb31f842ce4e92a6d0d7b33a5eda18" 
+endpoint = getattr(settings, 'DI_API_ENDPOINT')
+key = getattr(settings, 'DI_API_KEY')
 
 # Create your models here.
 #------------------OpenAI Inputs--------------------

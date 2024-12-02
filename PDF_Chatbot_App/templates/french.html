@@ -394,8 +394,8 @@
     </nav>
     <main property="mainContentOfPage" class="container" resource="#wb-main" typeof="WebPageElement">
         <h1>Welcome to the French Translation Bot</h1>
-        <p>Model: Google's Multilingual machine translation model MADLAD400 10B</p>
-        <p>Upload a document to get started</p>
+        <p>Model: Google's Multilingual machine translation model MADLAD400 10B<br>Upload a document to get started</p>
+        <p></p>
 
         <!-- <form class="container app-container" id="upload-form" action="{% url 'upload_document_translation' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
@@ -403,7 +403,8 @@
             <button  class="btn btn-primary" type="submit" disabled>Upload Document</button>
         </form> -->
         <div id="upload-form" class="form">
-            <p class="option-text" style="margin-top: -10px; margin-bottom: 5px;">Upload a document.</p>
+            <p class="option-text" style="margin-top: -10px; margin-bottom: -10px;">Upload a document</p>
+            <i style="font-size: 14px; margin: 0px auto 5px 10px">These samples are for demonstration purposes only</i>
             <div class="input-box">
                 <button class="btn btn-primary" id="choose-btn" type="button">Choose File</button>
                 <p id="chosen-txt">No document chosen</p>

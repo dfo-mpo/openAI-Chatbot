@@ -401,7 +401,7 @@
     </nav>
     <main property="mainContentOfPage" class="container" resource="#wb-main" typeof="WebPageElement">
         <h1>Personally Identifiable Information Redactor</h1>
-        <p>An algorithm using Mircosoft's Presidio to identify and redact any personally identifiable information.<br>Upload a PDF document to get started.</p>
+        <p>An algorithm using Mircosoft's Presidio to identify and redact any personally identifiable information.<br>Upload a PDF document to get started</p>
 
         <!-- <form id="upload-form" action="{% url 'upload_document2' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
@@ -409,7 +409,8 @@
             <button class="btn btn-primary" id="uploadButton" type="submit" disabled>Upload Document</button>
         </form> -->
         <div id="upload-form" class="form">
-            <p class="option-text" style="margin-top: -10px; margin-bottom: 5px;">Upload a document.</p>
+            <p class="option-text" style="margin-top: -10px; margin-bottom: -10px;">Upload a document</p>
+            <i style="font-size: 14px; margin: 0px auto 5px 10px">These samples are for demonstration purposes only</i>
             <div class="input-box">
                 <button class="btn btn-primary" id="choose-btn" type="button">Choose File</button>
                 <p id="chosen-txt">No document chosen</p>
