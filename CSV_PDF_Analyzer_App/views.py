@@ -7,11 +7,11 @@ import pandas as pd
 from azure.ai.formrecognizer import DocumentAnalysisClient
 from azure.core.credentials import AzureKeyCredential
 from azure.storage.blob import BlobServiceClient
+from django.core.files.storage import default_storage, FileSystemStorage
 import os
 from io import BytesIO
 from django.conf import settings
 from azure.identity import DefaultAzureCredential
-from django.core.files.storage import default_storage
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.core.files.base import ContentFile
@@ -353,18 +353,25 @@ class OpenAIView(CommonFormMixin, CreateView):
     template_name = 'openai.html'
 
     def post(self, request, *args, **kwargs):
+        fs = FileSystemStorage()
         # Extract files from the request.
-        csv_file = request.FILES.get('csv_file')
-        pdf_file = request.FILES.get('pdf_file')
+        # csv_file = request.FILES.get('csv_file')
+        # pdf_file = request.FILES.get('pdf_file')
+        print(request.FILES.get('csv_file'))
+        print(request.FILES.get('pdf_file'))
+        csv_file = os.path.join('cached_outputs', request.FILES.get('csv_file'))
+        pdf_file = os.path.join('cached_outputs', request.FILES.get('pdf_file'))
 
         # Validate that both files are present.
-        if not csv_file or not pdf_file:
-            # Return an error response if either file is missing.
-            return JsonResponse({'error': "Both a CSV and a PDF file are required."}, status=400)
+        # if not csv_file or not pdf_file:
+        #     # Return an error response if either file is missing.
+        #     return JsonResponse({'error': "Both a CSV and a PDF file are required."}, status=400)
 
         # Save the uploaded files to media storage and get their paths.
-        csv_file_path = self.save_file(csv_file, 'csv')
-        pdf_file_path = self.save_file(pdf_file, 'pdf')
+        # csv_file_path = self.save_file(csv_file, 'csv')
+        # pdf_file_path = self.save_file(pdf_file, 'pdf')
+        csv_file_path = fs.path(csv_file)
+        pdf_file_path = fs.path(pdf_file)
 
         # Initialize document processing classes with the uploaded files. CA is for combined files
         document_type = model.DocumentType("CA", csv_file_path)
@@ -420,6 +427,62 @@ class OpenAIView(CommonFormMixin, CreateView):
         return file_path
 
     def get(self, request, *args, **kwargs):
+        print(self.template_name)
+
+        fs = FileSystemStorage()
+        # Sample 1
+        sample_name = 'personal_computers.png'
+        filename = os.path.join('cached_outputs', sample_name)
+        example_file_url = fs.url(filename)
+        request.session['sample1_chat_thumbnail_url'] = example_file_url
+        # Strip the .jpg extension and add .pdf  
+        pdf_name = sample_name.rsplit('.', 1)[0] + '.pdf'  
+        request.session['sample1_chat_name_url'] = pdf_name
+
+        # Sample 2
+        sample_name = 'glimpse_through_time.png'
+        filename = os.path.join('cached_outputs', sample_name)
+        example_file_url = fs.url(filename)
+        request.session['sample2_chat_thumbnail_url'] = example_file_url
+        # Strip the .jpg extension and add .pdf  
+        pdf_name = sample_name.rsplit('.', 1)[0] + '.pdf'  
+        request.session['sample2_chat_name_url'] = pdf_name
+
+        # Sample 3
+        sample_name = 'environment_&_landscape.png'
+        filename = os.path.join('cached_outputs', sample_name)
+        example_file_url = fs.url(filename)
+        request.session['sample3_chat_thumbnail_url'] = example_file_url
+        # Strip the .jpg extension and add .pdf  
+        pdf_name = sample_name.rsplit('.', 1)[0] + '.pdf'  
+        request.session['sample3_chat_name_url'] = pdf_name
+
+        # Sample 1
+        sample_name = 'computer_prompts.png'
+        filename = os.path.join('cached_outputs', sample_name)
+        example_file_url = fs.url(filename)
+        request.session['sample1_csv_thumbnail_url'] = example_file_url
+        # Strip the .jpg extension and add .pdf  
+        pdf_name = sample_name.rsplit('.', 1)[0] + '.csv'  
+        request.session['sample1_csv_name_url'] = pdf_name
+
+        # Sample 2
+        sample_name = 'time_prompts.png'
+        filename = os.path.join('cached_outputs', sample_name)
+        example_file_url = fs.url(filename)
+        request.session['sample2_csv_thumbnail_url'] = example_file_url
+        # Strip the .jpg extension and add .pdf  
+        pdf_name = sample_name.rsplit('.', 1)[0] + '.csv'  
+        request.session['sample2_csv_name_url'] = pdf_name
+
+        # Sample 3
+        sample_name = 'landscape_prompts.png'
+        filename = os.path.join('cached_outputs', sample_name)
+        example_file_url = fs.url(filename)
+        request.session['sample3_csv_thumbnail_url'] = example_file_url
+        # Strip the .jpg extension and add .pdf  
+        pdf_name = sample_name.rsplit('.', 1)[0] + '.csv'  
+        request.session['sample3_csv_name_url'] = pdf_name
         return render(request, self.template_name, {
             'h1': self.h1,
         })

@@ -256,6 +256,65 @@
             border-radius: 4px;
         }
 
+        .selected {
+            border: 1px solid #005a9c;
+            cursor: not-allowed;
+        }
+
+        .thumbnail {
+            width: 250px;
+            margin: 10px;
+            position: relative;
+            border-radius: 4px;
+        }
+
+        .thumbnail div {
+            position: absolute;
+            border: 1px solid #005a9c;
+            text-align: center;
+            border-radius: 4px;
+
+            background-color: #f5f5f5;
+            top: 110px;
+            left: 90px;
+        }
+
+        .thumbnail div span {
+            margin: 2px 8px;
+            text-align: center;
+            color: #005a9c;
+        }
+
+        .thumbnail img {
+            height: 229px
+        }
+
+        .option-text {
+            margin-right: auto;
+            margin-left: 13px;
+            font-size: 18px;
+            margin-bottom: -5px;
+        }
+
+        .example-documents {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 95%;
+        }
+
+        .black-text {
+            color: black;
+        }
+
+        .non-render {
+            display: none;
+        }
+
+        #example-form {
+            width: 100%;
+        }
+
         header {  
             position: fixed;  
             top: 0;  
@@ -265,8 +324,56 @@
             background-color: #fff; /* Ensure background color */  
         }  
         body {  
-            padding-top: 145px; /* Adjust padding top to avoid content being hidden behind the fixed header */  
+            padding-top: 145px; /* Adjust padding top to avoid content being hidden behind the fixed header */ 
             background-color: #f8f8f8;
+        }
+
+        #scrollToggleDiv {
+            position: fixed;
+            bottom: 50px;
+            right: 50px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        #choose-btn {
+            background-color: #edeaea;
+            color: black;
+            padding: 0px 7px;
+            line-height: 20px;
+            min-height: 28px;
+        }
+
+        #chosen-txt {
+            font-size: 15px;
+            margin: auto 5px;
+            height: 18px;
+            line-height: 20px;
+        }
+
+        .input-box {
+            border: 1px solid #ccc;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            width: calc(100% - 20px);
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        #uploadButton {
+            margin-top: 15px;
+        }
+
+        .form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 6px 6px 20px -8px rgba(0, 0, 0, 0.3);
+            margin-top: 20px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
         }
  
     </style>
@@ -361,7 +468,7 @@
                 <div class="file-container">
                     <div class="file-upload-wrapper">
                         <label for="csvFile" class="file-upload-message">{% trans "Upload CSV File:" %}</label>
-                        <input type="file" name="csv_file" id="csvFile" class="form-control-file" accept=".csv" required hidden>
+                        <input name="csv_file" id="csvFile" class="form-control-file" value="" required hidden>
                         <label for="csvFile" class="btn btn-primary">Choose File</label>
                         <span id="csvFileName" class="file-name"></span>
                         <i class="fas fa-check checkmark" id="csvCheckmark"></i>
@@ -369,13 +476,55 @@
                     </div>
                     <div class="file-upload-wrapper">
                         <label for="pdfFile" class="file-upload-message">{% trans "Upload PDF Document:" %}</label>
-                        <input type="file" name="pdf_file" id="pdfFile" class="form-control-file" accept=".pdf" required hidden>
+                        <input name="pdf_file" id="pdfFile" class="form-control-file" value="" required hidden>
                         <label for="pdfFile" class="btn btn-primary">Choose File</label>
                         <span id="pdfFileName" class="file-name"></span>
                         <i class="fas fa-check checkmark" id="pdfCheckmark"></i>
                         <span class="clear-btn" data-file-type="pdf">Clear</span>
                     </div>
                 </div>
+                <div class="container app-container form" id="csv-form" hidden>  
+                    <p class="option-text" style="margin-bottom: 10px;">Select the prompts you want to upload.</p>
+                    <div class="example-documents">
+                        <button id="example1-csv-button" class="btn thumbnail" type="button">
+                            <img src="{{ request.session.sample1_csv_thumbnail_url }}" alt="Example CSV" class="pdf-img">
+                            <div><span>Sample</span></div>
+                            <p>"{{ request.session.sample1_csv_name_url }}"</p>
+                        </button>
+                        <button id="example2-csv-button" class="btn thumbnail" type="button">
+                            <img src="{{ request.session.sample2_csv_thumbnail_url }}" alt="Example CSV" class="pdf-img">
+                            <div><span>Sample</span></div>
+                            <p>"{{ request.session.sample2_csv_name_url }}"</p>
+                        </button>
+                        <button id="example3-csv-button" class="btn thumbnail" type="button">
+                            <img src="{{ request.session.sample3_csv_thumbnail_url }}" alt="Example CSV" class="pdf-img">
+                            <div><span>Sample</span></div>
+                            <p>"{{ request.session.sample3_csv_name_url }}"</p>
+                        </button>
+                    </div>
+                    <button class="btn btn-primary" id="uploadCSVButton" type="button" disabled>Upload Document</button>
+                </div>
+                <div class="container app-container form" id="pdf-form" hidden>  
+                    <p class="option-text" style="margin-bottom: 10px;">Select the document you want to upload.</p>
+                    <div class="example-documents">
+                        <button id="example1-pdf-button" class="btn thumbnail" type="button">
+                            <img src="{{ request.session.sample1_chat_thumbnail_url }}" alt="Example PDF" class="pdf-img">
+                            <div><span>Sample</span></div>
+                            <p>"{{ request.session.sample1_chat_name_url }}"</p>
+                        </button>
+                        <button id="example2-pdf-button" class="btn thumbnail" type="button">
+                            <img src="{{ request.session.sample2_chat_thumbnail_url }}" alt="Example PDF" class="pdf-img">
+                            <div><span>Sample</span></div>
+                            <p>"{{ request.session.sample2_chat_name_url }}"</p>
+                        </button>
+                        <button id="example3-pdf-button" class="btn thumbnail" type="button">
+                            <img src="{{ request.session.sample3_chat_thumbnail_url }}" alt="Example PDF" class="pdf-img">
+                            <div><span>Sample</span></div>
+                            <p>"{{ request.session.sample3_chat_name_url }}"</p>
+                        </button>
+                    </div>
+                    <button class="btn btn-primary" id="uploadPDFButton" type="button" disabled>Upload Document</button>
+                </div> 
                 <button type="submit" class="btn btn-primary" id="analyzeButton" disabled>{% trans "Analyze" %}</button>
     
             </form>
@@ -393,6 +542,16 @@
  
     <script>
         $(document).ready(function() {
+            let selectedCSV = '';
+            let selectedPDF = '';
+
+            $('#csvFile').on('click', function() {
+                if($('#csv-form').prop('hidden')) {
+                    $('#csv-form').attr('hidden', false);
+                    $('#pdf-form').attr('hidden', true);
+                } else $('#csv-form').attr('hidden', true);
+            });
+
             $('#csvFile').change(function() {
                 handleFileUpload(this, 'csv');
                 checkFiles();
@@ -401,6 +560,13 @@
             $('#pdfFile').change(function() {
                 handleFileUpload(this, 'pdf');
                 checkFiles();
+            });
+
+            $('#pdfFile').on('click', function() {
+                if($('#pdf-form').prop('hidden')) {
+                    $('#pdf-form').attr('hidden', false);
+                    $('#csv-form').attr('hidden', true);
+                } else $('#pdf-form').attr('hidden', true);
             });
    
             function handleFileUpload(input, fileType) {
@@ -417,6 +583,8 @@
                 $('#' + fileType + 'File').val('');
                 $('#' + fileType + 'FileName').text('');
                 $('#' + fileType + 'Checkmark').hide();
+                if (fileType === 'csv') selectedCSV = '';
+                else selectedPDF = '';
                 $('#analyzeButton').prop('disabled', true);
             }
        
@@ -478,6 +646,139 @@
                         alert('Something went wrong. Please try again.');
                     }
                 });
+            });
+
+            $('#uploadCSVButton').click(function(e) {  
+                e.preventDefault();
+                console.log(selectedCSV)
+                $('#csvFile').val(selectedCSV);  
+                $('#csvFileName').text(selectedCSV);
+                $('#uploadCSVButton').prop('disabled', true);
+                $('#csv-form').attr('hidden', true);
+
+                if (selectedCSV !== '' && selectedPDF !== '') $('#analyzeButton').prop('disabled', false);
+            });  
+
+            $('#example1-csv-button').click(function(e) {  
+                e.preventDefault();
+                $('#example1-csv-button').prop('disabled', true)
+                                    .addClass('selected');
+                if (selectedPDF === '') {
+                    $('#example2-csv-button').prop('disabled', false)
+                                    .removeClass('selected');
+                    $('#example3-csv-button').prop('disabled', false)
+                                    .removeClass('selected');
+                }
+                $('#example2-pdf-button').prop('disabled', true)
+                                    .removeClass('selected');
+                $('#example3-pdf-button').prop('disabled', true)
+                                    .removeClass('selected');
+                selectedCSV = '{{ request.session.sample1_csv_name_url }}'; 
+                $('#uploadCSVButton').prop('disabled', false); 
+            });  
+    
+            $('#example2-csv-button').click(function(e) {  
+                e.preventDefault();
+                $('#example2-csv-button').prop('disabled', true)
+                                    .addClass('selected');
+                if (selectedPDF === '') {
+                    $('#example1-csv-button').prop('disabled', false)
+                                    .removeClass('selected');
+                    $('#example3-csv-button').prop('disabled', false)
+                                    .removeClass('selected');
+                }
+                $('#example1-pdf-button').prop('disabled', true)
+                                    .removeClass('selected');
+                $('#example2-pdf-button').prop('disabled', false)
+                                    .removeClass('selected');
+                $('#example3-pdf-button').prop('disabled', true)
+                                    .removeClass('selected');
+                selectedCSV = '{{ request.session.sample2_csv_name_url }}'; 
+                $('#uploadCSVButton').prop('disabled', false); 
+            });  
+    
+            $('#example3-csv-button').click(function(e) {  
+                e.preventDefault();
+                if (selectedPDF === '') {
+                    $('#example1-csv-button').prop('disabled', false)
+                                    .removeClass('selected');
+                    $('#example2-csv-button').prop('disabled', false)
+                                    .removeClass('selected');
+                }
+                $('#example3-csv-button').prop('disabled', true)
+                                    .addClass('selected');
+                $('#example1-pdf-button').prop('disabled', true)
+                                    .removeClass('selected');
+                $('#example2-pdf-button').prop('disabled', true)
+                                    .removeClass('selected');
+                selectedCSV = '{{ request.session.sample3_csv_name_url }}'; 
+                $('#uploadCSVButton').prop('disabled', false); 
+            });
+
+            $('#uploadPDFButton').click(function(e) {  
+                e.preventDefault();
+                
+                $('#pdfFile').val(selectedPDF);  
+                $('#pdfFileName').text(selectedPDF);
+                $('#uploadPDFButton').prop('disabled', true);
+                $('#pdf-form').attr('hidden', true);
+                console.log($('#csvFile'))
+
+                if (selectedCSV !== '' && selectedPDF !== '') $('#analyzeButton').prop('disabled', false);
+            });  
+
+            $('#example1-pdf-button').click(function(e) {  
+                e.preventDefault();
+                $('#example1-pdf-button').prop('disabled', true)
+                                    .addClass('selected');
+                if (selectedCSV === '') {
+                    $('#example2-pdf-button').prop('disabled', false)
+                                    .removeClass('selected');
+                    $('#example3-pdf-button').prop('disabled', false)
+                                    .removeClass('selected');
+                }
+                $('#example2-csv-button').prop('disabled', true)
+                                    .removeClass('selected');
+                $('#example3-csv-button').prop('disabled', true)
+                                    .removeClass('selected');
+                selectedPDF = '{{ request.session.sample1_pdf_name_url }}'; 
+                $('#uploadPDFButton').prop('disabled', false); 
+            });  
+    
+            $('#example2-pdf-button').click(function(e) {  
+                e.preventDefault();
+                $('#example2-pdf-button').prop('disabled', true)
+                                    .addClass('selected');
+                if (selectedCSV === '') {
+                    $('#example1-pdf-button').prop('disabled', false)
+                                    .removeClass('selected');
+                    $('#example3-pdf-button').prop('disabled', false)
+                                    .removeClass('selected');
+                }
+                $('#example1-csv-button').prop('disabled', true)
+                                    .removeClass('selected');
+                $('#example3-csv-button').prop('disabled', true)
+                                    .removeClass('selected');
+                selectedPDF = '{{ request.session.sample2_pdf_name_url }}'; 
+                $('#uploadPDFButton').prop('disabled', false);  
+            });  
+    
+            $('#example3-pdf-button').click(function(e) {  
+                e.preventDefault();
+                if (selectedCSV === '') {
+                    $('#example1-pdf-button').prop('disabled', false)
+                                    .removeClass('selected');
+                    $('#example2-pdf-button').prop('disabled', false)
+                                    .removeClass('selected');
+                }
+                $('#example3-pdf-button').prop('disabled', true)
+                                    .addClass('selected');
+                $('#example1-csv-button').prop('disabled', true)
+                                    .removeClass('selected');
+                $('#example2-csv-button').prop('disabled', true)
+                                    .removeClass('selected');
+                selectedPDF = '{{ request.session.sample3_pdf_name_url }}'; 
+                $('#uploadPDFButton').prop('disabled', false);  
             });
         });
     </script>
