@@ -37,3 +37,5 @@ src/setupProxy.js
 src/services/apiService.js
 backend/chroma_store/
 backend/db/
+
+.vscode
