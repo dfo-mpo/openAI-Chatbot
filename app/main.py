@@ -1,0 +1,156 @@
+# ------ Imports ------
+import os
+from typing import Any, Dict, List
+import httpx
+from dotenv import load_dotenv
+from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+import app.utils.azure_key_vault as keys
+
+# load env keys
+load_dotenv()
+
+app = FastAPI(title="Classification Models", prefix="/api", tags=["classification_model"])
+
+# Configure CORS  
+origins = [  
+    "http://localhost:3000",  # React frontend  
+    "http://localhost:3001",  # React frontend  
+    "http://localhost:3080",  # React frontend  
+    "https://sdpa-ai-computervision-portal.azurewebsites.net",
+    "https://sdpa-ai-tools-frontend.azurewebsites.net",
+    "http://ai-ml-tools-frontend",
+    "http://frontend",
+    # Add other origins if needed  
+]  
+print(origins)
+
+app.add_middleware(  
+    CORSMiddleware,  
+    allow_origins=origins,  
+    allow_credentials=True,  
+    allow_methods=["*"],  
+    allow_headers=["*"],  
+)
+
+MODEL_CONFIG = None
+
+def set_MODEL_CONFIG():
+    global MODEL_CONFIG
+    MODEL_CONFIG = {
+        "fresh-vs-infected-salmon": {
+            "url": os.getenv("CUSTOM_VISION_FRESH_VS_INFECTED_SALMON_SPECIES_CLASSIFIER_URL"),
+            "key": keys.get_CUSTOM_VISION_PREDICTION_KEY(), # Reads .env in dev and key vault in prod
+        },
+        "eel-vs-catfish": {
+            "url": os.getenv("CUSTOM_VISION_EEL_VS_CATFISH_PREDICTION_URL"),
+            "key": keys.get_CUSTOM_VISION_PREDICTION_KEY(), # Reads .env in dev and key vault in prod
+        },
+        "healthy-vs-bleached-coral": {
+            "url": os.getenv("CUSTOM_VISION_HEALTHY_VS_BLEACHED_CORAL_PREDICTION_URL"),
+            "key": keys.get_CUSTOM_VISION_PREDICTION_KEY(), # Reads .env in dev and key vault in prod
+        },
+        "trout-vs-mosquito-fish": {
+            "url": os.getenv("CUSTOM_VISION_TROUT_VS_MOSQUITO_FISH_PREDICTION_URL"),
+            "key": keys.get_CUSTOM_VISION_PREDICTION_KEY(), # Reads .env in dev and key vault in prod
+        },
+    }
+
+MODEL_META = {
+    "fresh-vs-infected-salmon": {"name": "Fresh vs Infected Salmon", "description": "Binary Classifier"},
+    "eel-vs-catfish": {"name": "Freshwater Eel vs Catfish", "description": "Binary Classifier"},
+    "healthy-vs-bleached-coral": {"name": "Healthy vs Bleached Coral Reefs", "description": "Binary Classifier"},
+    "trout-vs-mosquito-fish": {"name": "Trout vs Mosquito Fish", "description": "Binary Classifier"},
+}
+
+# define global vars
+ALLOWED_EXTS = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
+MAX_BYTES = 8 * 1024 * 1024  # 8MB
+
+# helper function
+async def call_custom_vision(url: str, key: str, image_bytes: bytes) -> Dict[str, Any]:
+    headers = {
+        "Prediction-Key": key,
+        "Content-Type": "application/octet-stream",
+    }
+
+    # Reuse a client per request
+    async with httpx.AsyncClient(timeout=60) as client:
+        r = await client.post(url, headers=headers, content=image_bytes)
+
+    if r.status_code >= 400:
+        raise HTTPException(
+            status_code=502,
+            detail={
+                "error": "Custom Vision prediction failed",
+                "status_code": r.status_code,
+                "response": r.text,
+            },
+        )
+    return r.json()
+
+# get router (static for now, will be dynamic later on)
+@app.get("/classificationmodels")
+def list_models():
+    items = []
+    set_MODEL_CONFIG()
+    for model_id, cfg in MODEL_CONFIG.items():
+        # Only return models that are actually configured
+        if cfg.get("url") and cfg.get("key"):
+            meta = MODEL_META.get(model_id, {"name": model_id, "description": ""})
+            items.append({"id": model_id, **meta})
+
+    return {"items": items}
+
+# Predict endpoint (model-specific)
+@app.post("/predict/{model_id}")
+async def predict(model_id: str, image: UploadFile = File(...)):
+    set_MODEL_CONFIG()
+    cfg = MODEL_CONFIG.get(model_id)
+    if not cfg or not cfg.get("url") or not cfg.get("key"):
+        raise HTTPException(status_code=400, detail=f"Unknown/unconfigured model: {model_id}")
+
+    filename = (image.filename or "").lower()
+    ext = "." + filename.split(".")[-1] if "." in filename else ""
+    if ext and ext not in ALLOWED_EXTS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unsupported file type '{ext}'. Allowed: {sorted(ALLOWED_EXTS)}",
+        )
+
+    img_bytes = await image.read()
+    if not img_bytes:
+        raise HTTPException(status_code=400, detail="Empty file.")
+    if len(img_bytes) > MAX_BYTES:
+        raise HTTPException(status_code=413, detail=f"File too large (> {MAX_BYTES} bytes).")
+
+    # call the correct Custom Vision model
+    data = await call_custom_vision(cfg["url"], cfg["key"], img_bytes)
+    preds: List[Dict[str, Any]] = data.get("predictions", [])
+
+    if not preds:
+        print("No predictions returned from Custom Vision.")
+        return {"label": None, "confidence": 0.0, "predictions": []}
+
+    # Sort by probability and pick top
+    preds_sorted = sorted(preds, key=lambda p: float(p.get("probability", 0.0)), reverse=True)
+    top = preds_sorted[0]
+
+    label = top.get("tagName")
+    confidence = float(top.get("probability", 0.0))
+    predictions = [
+        {"label": p.get("tagName"), "confidence": float(p.get("probability", 0.0))}
+        for p in preds_sorted
+    ]
+
+    # Print to server console/logs
+    print("label:", label)
+    print("confidence:", confidence)
+    print("predictions:", predictions)
+
+    # return results to frontend
+    return {
+        "label": label,
+        "confidence": confidence,
+        "predictions": predictions,
+    }
