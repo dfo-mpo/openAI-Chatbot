@@ -1,0 +1,15 @@
+azure-identity==1.15.0
+azure-ai-ml==1.19.0
+azure-keyvault-secrets==4.10.0
+azure-storage-blob==12.19.0
+azure-storage-common==1.4.2
+azure-core==1.31.0
+fastapi==0.115.11
+reportlab==4.3.1
+cachetools==7.0.1
+marshmallow==3.23.2
+python-multipart
+python-dotenv==1.0.1
+uvicorn
+pandas==1.4.2
+numpy==1.26.4

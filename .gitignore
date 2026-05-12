@@ -2,40 +2,40 @@
 
 # dependencies
 /node_modules
+**/__pycache__
 /.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+.pnp.js
 
 # testing
 /coverage
-
-# next.js
-/.next/
-/out/
+**/venv
+**/ai_portal_env
+**/ai_portal_venv
 
 # production
 /build
 
 # misc
 .DS_Store
-*.pem
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
 
-# debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# auth config
+src/components/auth/authConfig.js
+/public/lib/webviewer
 
-# vercel
-.vercel
+# venv 
+backend/.venv/
+src/setupProxy.js
+src/services/apiService.js
+backend/chroma_store/
+backend/db/
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+.vscode

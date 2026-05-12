@@ -1,6 +1,5 @@
 venv/
 Dockerfile
-/node_modules
 .gitingore
 .vscode
 .git

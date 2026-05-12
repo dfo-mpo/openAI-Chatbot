@@ -1,35 +1,31 @@
-# Stage 1: Build the Next.js app
-FROM node:20-alpine AS builder
-
-# Set working directory
+# Dockerfile for React frontend
+# Stage 1: Build the React app
+FROM node:22.12.0 AS build
 WORKDIR /app
 
-# Install dependencies first (better caching)
-COPY package.json package-lock.json* pnpm-lock.yaml* yarn.lock* ./
-RUN npm ci --only=production && npm install --only=development
+# Accept build-time argument
+ARG REACT_APP_MODE
+ENV REACT_APP_MODE=$REACT_APP_MODE
 
-# Copy the rest of the application
-COPY . .
+COPY package.json package-lock.json ./
+RUN npm install
+COPY public/ ./public
+COPY src/ ./src
+COPY tailwind.config.js ./
 
-# Build the Next.js app
+# Copy WebViewer asset
+COPY copy-webviewer.js ./
+
+# Inject REACT_APP_MODE into a .env file CRA will read
+RUN echo "REACT_APP_MODE=$REACT_APP_MODE" > .env
+
 RUN npm run build
 
-# Stage 2: Production image
-FROM node:20-alpine AS runner
-
-WORKDIR /app
-
-# Set NODE_ENV to production
-ENV NODE_ENV=production
-
-# Copy only the necessary files from builder
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
-
-# Expose the port Next.js runs on
-EXPOSE 3000
-
-# Start the Next.js app
-CMD ["npm", "start"]
+# Stage 2: Serve the React app with Nginx
+FROM nginx:alpine
+# Copy the React build files
+COPY --from=build /app/build /usr/share/nginx/html
+# Copy your custom Nginx config file. (Make sure nginx-app.conf is in your build context.)
+COPY nginx-app.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
