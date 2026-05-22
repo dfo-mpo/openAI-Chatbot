@@ -97,7 +97,7 @@ This tool uses a computer vision model trained on annotated salmon scale images 
 
 The tool originates from a pilot project to help reduce the manual workload currently born by subject matter experts (SMEs) for the DFO Science Branch's Sclerochronology Lab (Fish Ageing Lab). During this pilot, a YOLOv9 model was developed that achieved high accuracy in detecting scale features (clipping, center points, and fragments). The tool also provides transparent explanations by identifying and displaying winter ring patterns corresponding to age determination. <br>
 
-
+The git repo for this tool's API serivce can be found [here](https://github.com/dfo-mpo/scale-age).
 
 #### Fence Counting 
 This tool uses computer vision to analyze each frame of river monitoring videos, detecting and classifying salmon as they pass through counting fences. The AI model helps automate species identification and improve accuracy in population tracking. <br>
@@ -106,7 +106,7 @@ This tool originates from a pilot project to help DFO’s Science Branch’s Sto
 
 During the pilot, a YOLOv11 detection model was successfully trained and integrated with BOT-SORT tracking algorithms to identify and count five salmon species: Pink, Chum, Chinook, Sockeye, and Coho. The model achieved 87% precision and 88% recall, demonstrating near-expert-level performance. When deployed, this system tracks individual fish throughout video segments and generates automated counts, eliminating the need for frame-by-frame manual review. <br>
 
-
+The git repo for this tool's web interface can be found [here](https://github.com/dfo-mpo/pssi-image-recognition/tree/webInterface).
 
 #### Electronic Monitoring 
 This tool is a proof-of-concept demo for DFO's Automated Electronic Monitoring. The project aims to modernize the currently labour-intensive process of manually reviewing video footage of selected sets of tows. The underlying fish counting model was developed in collaboration with the Pacific Groundfish EM Program and various industry partners. The model is capable of identifying and counting in real-time commonly harvested fish species in imagery collected from electronic monitoring equipment onboard commercial fishing vessels. 
@@ -136,33 +136,43 @@ The application is hosted on a different web application used by the OCDS team u
 #### Classification Model 
 This tool sends your image to the already-built Azure Custom Vision models and returns a predicted label + confidence. All models are accessed via the backend component of the AI Hub. 
 
+The git repo for this tool's API serivce can be found [here](https://github.com/dfo-mpo/SDPA-AI-Portal/tree/classification).
+
 ### Large Language Models 
 #### CSV/PDF Analyzer 
 This tool enables structured document analysis by processing CSV-based prompts against PDF files. Users can define specific questions or extraction tasks in a CSV file, and the tool will analyze the uploaded document accordingly. 
 
 This tool originates from pilot projects aiming to use OCR and OpenAI to extract and summarize data from documents. A prebuilt OCR extraction model from Azure Document Intelligence is used to process the uploaded document, and then Azure OpenAI is used on the prompts defined in the CSV file to summarize relevant data with source references. Prompt engineering techniques (question formation and structuring) developed throughout the pilot are used on all prompts in the provided CSV file. 
 
+The git repo for this tool's API serivce can be found [here](https://github.com/dfo-mpo/openAI-Script/tree/api_service).
+
 #### PDF Chatbot 
 This tool uses OpenAI's language model to answer questions about uploaded documents. It provides direct responses with sourced references, making document exploration faster and more efficient. 
 
 Like the CSV/PDF Analyzer, this tool originates from pilot projects using OCR and OpenAI to extract and summarize data from documents; however, it does one prompt at a time and uses retrieval-augmented generation (RAG) using chromadb. RAG allows only relevant chunks of the uploaded document to be passed to OpenAI for a given prompt, reducing processing time and cost. 
+
+The git repo for this tool's API serivce can be found [here](https://github.com/dfo-mpo/pdf-chatbot).
 
 #### PII Redactor 
 This tool leverages [Microsoft Presidio](https://microsoft.github.io/presidio/) to detect and redact Personally Identifiable Information (PII) such as names, addresses, and phone numbers in PDF documents. It helps enhance data privacy by automatically censoring sensitive content. 
 
 OCR is used to extract the text from the uploaded PDF and after Presidio is used, the uploaded PDF is modified with black boxes placed over all text determined to be sensitive content. This tool works well in some cases but needs to be future explored and developed to have useful applications in DFO. 
 
+The git repo for this tool's API serivce can be found [here](https://github.com/dfo-mpo/pii-detection).
+
 #### Sensitivity Score Calculator 
 This tool uses [Microsoft Presidio](https://microsoft.github.io/presidio/) to analyze documents and determine their sensitivity score based on the presence of Personally Identifiable Information (PII). The higher the score, the more likely a document contains sensitive information. 
 
 OCR is used to extract the text from the uploaded PDF and after Presidio is used, a score is calculated based on the type of sensitive data detected and the number of detections. This tool works well in some cases but needs to be future explored and developed to have useful applications in DFO. 
+
+The git repo for this tool's API serivce can be found [here](https://github.com/dfo-mpo/pii-detection).
 
 #### French Translation 
 This tool uses Google's multilingual AI model ([MADLAD400 10B](https://huggingface.co/google/madlad400-10b-mt)) to translate PDF documents from English to French. It provides fast and efficient translations for various types of content while maintaining context and readability. 
 
 This tool originates from a pilot project aimed to create a LLM that can translate English to French at the level of the French Translation Bureau. Training was done by collecting English-French text pairs from translated documents and fine-tuning an existing LLM with the training data. Although the pilot has been on hold due to lack of training documents and capacity, the latest iteration was proven to provide more accurate translations in a DFO context compared to other publicly available LLM tools. 
 
-The AI model for this tool is hosted on premise and accessed via the backend. 
+The git repo for this tool's API serivce can be found [here](https://github.com/dfo-mpo/french-translation-llm/tree/API_tool).
 
 #### Web Scraper 
 This tool allows users to input a website URL and automatically scrape its contents for structured data extraction. Once scraped, users can ask questions about the page using OpenAI-powered analysis. Ideal for quick insights, research, or prototyping, this scraper simplifies the process of turning raw web content into actionable answers. 
@@ -178,11 +188,19 @@ From a user’s perspective, this turns a complex website into a single, interac
 
 For more detailed and technical documentation specifically on this tool, see the [WebScraper Chatbot Documentation](https://086gc.sharepoint.com/:w:/r/sites/PacificSalmonTeam/_layouts/15/Doc.aspx?sourcedoc=%7B43E161EB-4D11-4214-B6CD-E72F0272B56E%7D&file=WebScraper%20Chatbot%20Documentation.docx). 
 
+The git repo for this tool's API serivce can be found [here](https://github.com/dfo-mpo/web-scraper)
+
 ### Optical Character Recognition 
 #### Document OCR 
 This tool allows users to upload a PDF and automatically scrape its contents for structured data extraction. Once scraped, users can ask questions about the PDF using OpenAI-powered analysis. Ideal for quick insights, research, or prototyping, this tool simplifies the process of turning raw PDF content into actionable answers. 
 
-This tool uses Azure Document Intelligence and Azure OpenAI via the backend component. 
+The git repo for this tool's API serivce can be found [here](https://github.com/dfo-mpo/ocr-document-intelligence/tree/openai-ocr).
+
+#### OCR Review Tool
+This tool allows users review documents that have been processed using Azure Document Intelligence's OCR custom models. The tool on hosted in the OCDS E-AI Hub is a demo version with serveral unprotected documents that have been copied from real proof-of-concept projects. <br>
+The interface allows users to quickly identify what has been detected by the OCR model and make any corrections. It supports adding a status to each document such as if it has been reviewed or if it has a problem.
+
+The git repo for this tool's web interface can be found [here](https://github.com/dfo-mpo/ocr-json2web).
 
 ### Model Repo 
 #### Models 
@@ -193,6 +211,8 @@ The solution introduces a model repository within the AI Hub, designed specifica
 Users continue to upload, version, and manage their models entirely through the AML workspace, while the repository simply exposes this information through the AI Hub. The backends' endpoints communicate directly with AML to retrieve lists of models, fetch metadata, download artifacts, and extract READMEs. The frontend then presents this information in a consistent, searchable, and user-friendly catalogue. The result is a centralized hub that makes internal models easy to discover and reuse while keeping all model lifecycle operations inside AML. 
 
 For more detailed and technical documentation specifically on this tool, see the [ML Model Repo Documentation](https://086gc.sharepoint.com/:w:/r/sites/PacificSalmonTeam/_layouts/15/Doc.aspx?sourcedoc=%7B9e61821f-450d-4817-b33c-f468ed18f0f1%7D). 
+
+The git repo for this tool's web interface can be found [here](https://github.com/dfo-mpo/SDPA-AI-Portal/tree/ml-models-repo).
 
 ### AI Inventory Form 
 #### Form 
