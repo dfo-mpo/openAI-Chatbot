@@ -21,22 +21,8 @@ import {
  * Note: For HTTP requests we use http://, and for WebSocket connections we'll use ws://.
  */
 // const API_BASE_URL = 'http://localhost:8080';
-const API_BASE_URL = '/api';
-
-export const processFenceCounting = async (file, settings = {}) => {
-  const adaptedSettings = adaptFenceCountingSettings(settings);
-  const formData = new FormData();
-  formData.append('file', file);
-  try {
-    const response = await axios.post(`${API_BASE_URL}/fence_counting/`, formData, {
-      responseType: 'blob',
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error in processFenceCounting:', error);
-    throw error;
-  }
-};
+// const API_BASE_URL = '/api';
+const API_BASE_URL = 'https://ocds-ai-portal.canadacentral.cloudapp.azure.com'; // For API services hosted in SSC VM
 
 export const processScaleAge = async (file, settings = {}) => {
   const adaptedSettings = adaptScaleAgeingSettings(settings);
@@ -46,7 +32,7 @@ export const processScaleAge = async (file, settings = {}) => {
   formData.append('species', adaptedSettings.species);
   try {
     console.log("Sending species:", adaptedSettings.species);
-    const response = await fetch(`${API_BASE_URL}/age_scale/`, {
+    const response = await fetch(`${API_BASE_URL}/scale-age/age_scale/`, {
       method: 'POST',
       body: formData
     });
@@ -68,7 +54,7 @@ export const convertToPng = async (file) => {
   const formData = new FormData();
   formData.append('file', file);
   try {
-    const response = await axios.post(`${API_BASE_URL}/to_png/`, formData, {
+    const response = await axios.post(`${API_BASE_URL}/scale-age/to_png/`, formData, {
       responseType: 'blob',
     });
     return response.data;
@@ -102,7 +88,7 @@ export const analyzeCsvPdf = async (csvFile, pdfFile, settings = {}) => {
         params.append('outputType', adaptedSettings.outputType);
       }
       const response = await axios.post(
-        `${API_BASE_URL}/openai_csv_analyze/?${params.toString()}`, 
+        `${API_BASE_URL}/analyzer/openai_csv_analyze/?${params.toString()}`, 
         formData, 
         { responseType: 'blob' }
       );
@@ -145,7 +131,7 @@ export const redactPII = async (file, settings = {}) => {
     formData.append(key, value);
   }
   try {
-    const response = await axios.post(`${API_BASE_URL}/pii_redact/`, formData, {
+    const response = await axios.post(`${API_BASE_URL}/pii-detection/pii_redact/`, formData, {
       responseType: 'blob',
       timeout: 60000
     });
@@ -161,7 +147,7 @@ export const translateToFrench = async (file, settings = {}) => {
   const formData = new FormData();
   formData.append('file', file);
   try {
-    const response = await fetch(`${API_BASE_URL}/pdf_to_french/`, {
+    const response = await fetch(`${API_BASE_URL}/french-translations/pdf_to_french/`, {
       method: 'POST',
       body: formData
     });
@@ -191,7 +177,7 @@ export const calculateSensitivityScore = async (file, settings = {}) => {
   const adaptedSettings = adaptSensitivityScoreSettings(settings);
   formData.append('settings', JSON.stringify(adaptedSettings));
   try {
-    const response = await fetch(`${API_BASE_URL}/sensitivity_score/`, {
+    const response = await fetch(`${API_BASE_URL}/pii-detection/sensitivity_score/`, {
       method: 'POST',
       body: formData
     });
@@ -212,7 +198,7 @@ export const processPdfDocument = async (files) => {
     formData.append(files.length > 1? 'files' : 'file', files[i]);
   }
   try {
-    const response = await fetch(files.length > 1? `${API_BASE_URL}/di_chunk_multi_document/` : `${API_BASE_URL}/di_chunk_single_document/`, {
+    const response = await fetch(files.length > 1? `${API_BASE_URL}/pdf-chatbot/di_chunk_multi_document/` : `${API_BASE_URL}/pdf-chatbot/di_chunk_single_document/`, {
       method: 'POST',
       body: formData
     });
@@ -233,7 +219,8 @@ export async function* askOpenAI(chatHistory, currentMessage, documentContent, s
   const adaptedSettings = adaptPdfChatbotSettings(settings);
   
   const protocol = window.location.protocol === "https:" ? "wss" : "ws";
-  const wsUrl = `${protocol}://${window.location.host}/ws/chat_stream`;
+  // const wsUrl = `${protocol}://${window.location.host}/ws/chat_stream`;
+  const wsUrl = `wss://ocds-ai-portal.canadacentral.cloudapp.azure.com/pdf-chatbot/chat_stream`;
   const socket = new WebSocket(wsUrl);
 
   await new Promise((resolve, reject) => {
@@ -286,7 +273,7 @@ export const predictWithModel = async (modelId, imageFile) => {
   const formData = new FormData();
   formData.append("image", imageFile);
   try {
-    const response = await fetch(`${API_BASE_URL}/api/predict/${encodeURIComponent(modelId)}`, {
+    const response = await fetch(`${API_BASE_URL}/classification/predict/${encodeURIComponent(modelId)}`, {
       method: "POST",
       body: formData,
     });
@@ -302,7 +289,7 @@ export const predictWithModel = async (modelId, imageFile) => {
 };
 
 export const listClassificationModels = async () => {
-  const res = await fetch(`${API_BASE_URL}/api/classificationmodels`);
+  const res = await fetch(`${API_BASE_URL}/classification/classificationmodels`);
   if (!res.ok) {
     const text = await res.text();
     throw new Error(`Models fetch failed (${res.status}): ${text}`);

@@ -16,7 +16,8 @@ import { flushSync } from "react-dom";
 import { useToolSettings } from "../../contexts";
 
 // const API_BASE = "http://localhost:8080"; // for dev
-const API_BASE = "/api"; // for prod
+// const API_BASE = "/api"; // for prod
+const API_BASE = 'https://ocds-ai-portal.canadacentral.cloudapp.azure.com/web-scrape'; // For API services hosted in SSC VM
 
 const FREE_MODEL = "gpt4omini";
 

@@ -27,7 +27,8 @@ import {
 import { useToolSettings } from "../../contexts";
 
 // const API_BASE = "http://localhost:8000";
-const API_BASE = "/api";
+// const API_BASE = "/api";
+const API_BASE = 'https://ocds-ai-portal.canadacentral.cloudapp.azure.com/pdf-extraction'; // For API services hosted in SSC VM
 
 export function PDFExtractionTool() {
   /* Hooks */
