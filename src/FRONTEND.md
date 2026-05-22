@@ -1,6 +1,6 @@
 # Frontend Image Logic
 ## Framework/Structure 
-The frontend component is a React JS project located under `./src`. This component creates an interface where users interact with the AI Hub and its various tools.  
+The frontend component is a React JS project located under `./src`. This component creates an interface where users interact with the OCDS E-AI Hub and its various tools.  
 
 The frontend component does not have its own direct backend and processing any of the hosted tools is done by making requests to the server and backend components. 
 
@@ -9,11 +9,11 @@ Using a terminal shell, the frontend can be started by simply using the `npm run
 All dependencies used in this component are defined in the `package.json` and `package-lock.json` files. 
 
 ## Communicating with tool APIs 
-All requests made to in house APIs (hosted in an Azure Shared Services Canada enviroment) are handled in the `/services/apiService.js` file using helper functions called by various tool pages needing the API. 
+All requests made to in house APIs (hosted in an Azure Shared Services Canada environment) are handled in the `/services/apiService.js` file using helper functions called by various tool pages needing the API. 
 
 ## Authenticating Users into the Platform 
 ### Authentication Overview 
-User authentication within the AI Hub frontend is implemented using Microsoft Entra ID through the Microsoft Authentication Library (MSAL) for Reach. 
+User authentication within the OCDS E-AI Hub frontend is implemented using Microsoft Entra ID through the Microsoft Authentication Library (MSAL) for Reach. 
 
 The implementation follows Microsoft’s official guidance for React-based Page Applications (SPA):  
 - [Get started with MSAL React - Microsoft Authentication Library for JavaScript | Microsoft Learn](https://learn.microsoft.com/en-us/entra/msal/javascript/react/getting-started?view=msal-js-latest)
@@ -43,18 +43,18 @@ This design allows authentication state to be accessed globally without tightly 
 Authentication state is exposed via `AuthContext`, and UI components consume authentication state via `useAuth()`. 
 
 ### Login Behavior and Access Control Model 
-The AI Hub does not enforce mandatory login on initial page load. Instead, it fllows a conditional access visibility model: 
+The OCDS E-AI Hub does not enforce mandatory login on initial page load. Instead, it fllows a conditional access visibility model: 
 - Users may browse publicly accessible content without authentication. 
 - Certain components and features remain restricted until the user is authenticated. 
 - When unauthenticated, a login button is displayed in the header; if authenticated, the login button is replaced by logout functionality. 
 
 ## Language Toggling 
-Due to the unreliability of automatic translation tools/libraries especially in a DFO context; a custom built in tool is used for toggling language between English and French. Each piece of English text needs to have a French translation (acquired manually) in a structured object in the `translations/` folder. Each page in the AI Hub then needs to use these defined objects in place of any text, so what is generated depends on the current language selected. 
+Due to the unreliability of automatic translation tools/libraries especially in a DFO context; a custom built in tool is used for toggling language between English and French. Each piece of English text needs to have a French translation (acquired manually) in a structured object in the `translations/` folder. Each page in the OCDS E-AI Hub then needs to use these defined objects in place of any text, so what is generated depends on the current language selected. 
 
-When the language toggle button is used, the `contexts/LanguageContext.js` file is used by the toggle and all AI Hub pages to keep track of what the current language is. 
+When the language toggle button is used, the `contexts/LanguageContext.js` file is used by the toggle and all OCDS E-AI Hub pages to keep track of what the current language is. 
 
 ## Google Analytics 
-Google Analytics has been setup to track various events and pages in the AI Hub to better understand user behavior. The `react-ga4` library is used in the file `src/utils/analytics.js` to set up helper functions to track page views and specific events. It is then called in `src/App.js` to initialize the Google Analytics connection and page tracking. Any page in the AI Hub can then track specific events by importing `trackEvent()` from `analytics.js` and calling it during an event (such as a button click or API request failure). The name of the tool, description of the event, and label of the event type should always be passed to the `trackEvent()` function. 
+Google Analytics has been setup to track various events and pages in the OCDS E-AI Hub to better understand user behavior. The `react-ga4` library is used in the file `src/utils/analytics.js` to set up helper functions to track page views and specific events. It is then called in `src/App.js` to initialize the Google Analytics connection and page tracking. Any page in the OCDS E-AI Hub can then track specific events by importing `trackEvent()` from `analytics.js` and calling it during an event (such as a button click or API request failure). The name of the tool, description of the event, and label of the event type should always be passed to the `trackEvent()` function. 
 
 For documentation on setting up and tracking events in a Google Analytics workspace see the document [How to Track Web App Traffic Using Google Analytics 4.docx](https://086gc.sharepoint.com/:w:/r/sites/PacificSalmonTeam/Shared%20Documents/General/02%20-%20PSSI%20Secretariat%20Teams/04%20-%20Strategic%20Salmon%20Data%20Policy%20and%20Analytics/10%20-%20Documentation/01%20-%20Data%20Analytics%20Team/08%20-%20Google%20Analytics/How%20to%20Track%20Web%20App%20Traffic%20Using%20Google%20Analytics%204.docx?d=w3290d776fea34e8d916826fe338dd091&csf=1&web=1&e=vExLV4). 
 
@@ -67,10 +67,9 @@ For documentation on setting up and tracking events in a Google Analytics worksp
     4. Go to the file `src/layouts/LeftPanel.js` and add your settings component to both the `../components/tools/settings` import and to the `toolSettings` dictionary, add your tool name as the key. 
     5. Go to the file `src/contexts/ToolSettingsContext.js`, create a new React `useState` for the left panel parameter default states. Then add a function to update the React state with new parameter values. Include both in the `value` object at the bottom of the file. 
     6. (Optional) To prevent issues with passing the parameters to the backend, cleaning/processing can be done to ensure compatibility. Go to the file `src/utils/settingsAdapter.js` create a new export function for your tool left panel parameters and add it to the adapters dictionary at the bottom of the file.
-3. For any calls/requests made to the backend call one of the functions defined in `services/apiService.js`. 
-If you need to add a new API route for the backend: 
-    1. Follow section 4.5 Adding a New API Route. 
-    2. Create a new function in `services/apiService.js` that makes this new API request. 
+3. For any calls/requests made to the tool call one of the functions defined in `services/apiService.js`. 
+If you need to add a new API route for the tool: 
+    1. Create a new function in `services/apiService.js` that makes this new API request. 
 4. Add in the language/translation logic: 
     1. Create a new JS file for your tool in the `translations/tools/` folder.  
     2. In this new file, export 2 dictionaries, one called `en` for all text used in the tool’s UI page and `fr` for all the translated text. Both dictionaries must share the same keys. 
@@ -111,7 +110,7 @@ The git repo for this tool's web interface can be found [here](https://github.co
 #### Electronic Monitoring 
 This tool is a proof-of-concept demo for DFO's Automated Electronic Monitoring. The project aims to modernize the currently labour-intensive process of manually reviewing video footage of selected sets of tows. The underlying fish counting model was developed in collaboration with the Pacific Groundfish EM Program and various industry partners. The model is capable of identifying and counting in real-time commonly harvested fish species in imagery collected from electronic monitoring equipment onboard commercial fishing vessels. 
 
-The application is hosted on a different web application used by the OCDS team using Gradio. The version on the AI Hub is created by using an iframe rendering the Gradio page. As a result, it has its own English/French toggle that is independent of the AI Hub’s toggle. 
+The application is hosted on a different web application used by the OCDS team using Gradio. The version on the OCDS E-AI Hub is created by using an iframe rendering the Gradio page. As a result, it has its own English/French toggle that is independent of the AI Hub’s toggle. 
 
 #### Underwater Marine Life Annotation 
 Proof-of-concept demo for DFO Underwater Benthic Marine species identification. This project proposed by Quebec Region's science team aims to automate the review of underwater imagery and video footage collected for biodiversity surveys. The model developed is currently capable of identifying 21 benthic marine life categories drawn from underwater remotely operated vehicles. The project has also since garnered support from the science teams of other regions including Pacific Region. 
@@ -121,7 +120,7 @@ The application is hosted on a different web application used by the OCDS team u
 #### Fish Population Estimation 
 This tool is a proof-of-concept demo for an AI-based tool for DFO's underwater fish population estimation tasks. This project explores the potential of a tool that automates detection and estimation of the number of fish in underwater shoals and schools in imagery collected from camera equipment during underwater surveys. The model was developed as a by-product of the EM project, but it has since garnered interest from various programs like the Pacific Salmon Strategy Initiative where we are investigating the potential to leverage this model to automate salmon identification and counting. 
 
-The application is hosted on a different web application used by the OCDS team using Gradio. The version on the AI Hub is created by using an iframe rendering the Gradio page. As a result, it has its own English/French toggle that is independent of the AI Hub’s toggle. 
+The application is hosted on a different web application used by the OCDS team using Gradio. The version on the OCDS E-AI Hub is created by using an iframe rendering the Gradio page. As a result, it has its own English/French toggle that is independent of the AI Hub’s toggle. 
 
 #### Detection of Ghost Gear 
 Proof-of-concept demo for DFO's Side-scan Sonar Image Ghost Gear Detector. This project was undertaken in partnership with the Ghost Gear Program and aims to automate the process of reviewing side-scan sonar imagery. The system developed leverages an AI-based computer vision model trained on data provided by CSR GeoSurveys Ltd. to identify in real-time Ghost Gear (Abandonned Lobster Traps) from collected side-scan sonar imagery. 
@@ -131,10 +130,10 @@ The application is hosted on a different web application used by the OCDS team u
 #### CTD Data Quality Control 
 Proof-of-concept demo for DFO Pacific Region CTD (Conductivity-Temperature-Depth) Data Quality Control model. CTD profiles are depth-wise series' of sensor measures for oceanographic data taken at fixed locations. Challenging ocean conditions and sensor faults can lead to poor quality data that must be manually identified and removed by oceanographers. This project was developed in collaboration with the Pacific Region Ocean Sciences Division and aims to accelerate the CTD quality control process by flagging bad data to assist oceanographers in more rapidly identifying and removing the bad data. Through experimental results, the model achieves 92.6% global accuracy in identifying bad data. The project has also since gained interest from the oceanography teams of other regions including Maritime Region. 
 
-The application is hosted on a different web application used by the OCDS team using Gradio. The version on the AI Hub is created by using an iframe rendering the Gradio page. As a result, it has its own English/French toggle that is independent of the AI Hub’s toggle. 
+The application is hosted on a different web application used by the OCDS team using Gradio. The version on the OCDS E-AI Hub is created by using an iframe rendering the Gradio page. As a result, it has its own English/French toggle that is independent of the AI Hub’s toggle. 
 
 #### Classification Model 
-This tool sends your image to the already-built Azure Custom Vision models and returns a predicted label + confidence. All models are accessed via the backend component of the AI Hub. 
+This tool sends your image to the already-built Azure Custom Vision models and returns a predicted label + confidence. All models are accessed via the backend component of the OCDS E-AI Hub. 
 
 The git repo for this tool's API serivce can be found [here](https://github.com/dfo-mpo/SDPA-AI-Portal/tree/classification).
 
@@ -197,8 +196,8 @@ This tool allows users to upload a PDF and automatically scrape its contents for
 The git repo for this tool's API serivce can be found [here](https://github.com/dfo-mpo/ocr-document-intelligence/tree/openai-ocr).
 
 #### OCR Review Tool
-This tool allows users review documents that have been processed using Azure Document Intelligence's OCR custom models. The tool on hosted in the OCDS E-AI Hub is a demo version with serveral unprotected documents that have been copied from real proof-of-concept projects. <br>
-The interface allows users to quickly identify what has been detected by the OCR model and make any corrections. It supports adding a status to each document such as if it has been reviewed or if it has a problem.
+This tool allows users to review documents that have been processed using Azure Document Intelligence's OCR custom models. The tool hosted in the OCDS E-AI Hub is a demo version with several unprotected documents that have been copied from real proof-of-concept projects. <br>
+The interface allows users to quickly identify what has been detected by the OCR model and make any corrections. It supports adding a status to each document, such as if it has been reviewed or if it has a problem. 
 
 The git repo for this tool's web interface can be found [here](https://github.com/dfo-mpo/ocr-json2web).
 
@@ -206,9 +205,9 @@ The git repo for this tool's web interface can be found [here](https://github.co
 #### Models 
 A unified repository where users can upload, explore, and manage machine learning models. It supports versioning and model cards with key metadata to help teams quickly integrate models into their workflows. Users can browse existing models from OCDS and SDPA or contribute their own. 
 
-The solution introduces a model repository within the AI Hub, designed specifically to showcase the models that scientists have already built and trained. Rather than performing any machine learning tasks itself, the repository acts as a window into what already exists in Azure Machine Learning workspace which includes model versions, metadata, READMEs, tags, and artifacts stored within the MLflow registry server and Blob Storage.  
+The solution introduces a model repository within the OCDS E-AI Hub, designed specifically to showcase the models that scientists have already built and trained. Rather than performing any machine learning tasks itself, the repository acts as a window into what already exists in Azure Machine Learning workspace which includes model versions, metadata, READMEs, tags, and artifacts stored within the MLflow registry server and Blob Storage.  
 
-Users continue to upload, version, and manage their models entirely through the AML workspace, while the repository simply exposes this information through the AI Hub. The backends' endpoints communicate directly with AML to retrieve lists of models, fetch metadata, download artifacts, and extract READMEs. The frontend then presents this information in a consistent, searchable, and user-friendly catalogue. The result is a centralized hub that makes internal models easy to discover and reuse while keeping all model lifecycle operations inside AML. 
+Users continue to upload, version, and manage their models entirely through the AML workspace, while the repository simply exposes this information through the OCDS E-AI Hub. The backends' endpoints communicate directly with AML to retrieve lists of models, fetch metadata, download artifacts, and extract READMEs. The frontend then presents this information in a consistent, searchable, and user-friendly catalogue. The result is a centralized hub that makes internal models easy to discover and reuse while keeping all model lifecycle operations inside AML. 
 
 For more detailed and technical documentation specifically on this tool, see the [ML Model Repo Documentation](https://086gc.sharepoint.com/:w:/r/sites/PacificSalmonTeam/_layouts/15/Doc.aspx?sourcedoc=%7B9e61821f-450d-4817-b33c-f468ed18f0f1%7D). 
 
@@ -218,7 +217,7 @@ The git repo for this tool's web interface can be found [here](https://github.co
 #### Form 
 This form is meant to be use as guide to support business users in articulating and imagining the potential of using Data, Artificial Intelligence, and Machine Learning to improve productivity, efficiencies, and generate value for program and service delivery, operations, and other business processes. It is meant to help users determine the value and potential of new data innovation from a value proposition, scalability, and sustainability lens rather than a technical implementation perspective. Complete responses will help Data and AI Scientist to determine how feasible a solution could be. 
 
-Responses are handled by the server component which outputs into the Azure Storage Account connected to the AI Hub under the `ds_use_case_survey` folder. 
+Responses are handled by the server component which outputs into the Azure Storage Account connected to the OCDS E-AI Hub under the `ds_use_case_survey` folder. 
 
 ### Statistical and ML Algorithms Guide 
 #### Document 
@@ -226,4 +225,4 @@ This document will describe different categories of machine learning algorithms 
 
 This document is strictly scoped to the selection and training of ML models, which are a subset of tasks within the broader domains of ML Ops and AI Governance. There are many other tasks and responsibilities that constitute effective and responsible development, deployment and usage of ML models. The breadth of information needed to fully cover these domains requires a suite of policy, guidance, and educational materials. This document can be seen as one component of this broader suite that is currently being assembled within DFO. 
 
-The library `@pdftron/webviewer` is used to generate the PDF view which allows users who are authenticated into the AI Hub to edit and annotate the document guide which is saved onto the file stored in Azure Blob Storage via the server component. 
+The library `@pdftron/webviewer` is used to generate the PDF view which allows users who are authenticated into the OCDS E-AI Hub to edit and annotate the document guide which is saved onto the file stored in Azure Blob Storage via the server component. 
