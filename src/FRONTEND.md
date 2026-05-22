@@ -8,30 +8,8 @@ Using a terminal shell, the frontend can be started by simply using the `npm run
 
 All dependencies used in this component are defined in the `package.json` and `package-lock.json` files. 
 
-## Communicating with the Backend and Server 
-All requests made to the backend component are handled in the `/services/apiService.js` file using helper functions called by various tool pages needing the API. 
-
-All requests to the server component directly in the `/pages/SurveyForm/SurveyForm.jsx` and `pages/DocxEditor.js` files. 
-
-The file `src/services/apiService.js` is included in the gitignore so when the `local_dev` branch is pulled into `main` the routing method is not overwritten. If new APIs are added, they will need to be manually pasted in. 
-
-### When Running in a Terminal Window 
-The configuration in the frontend files to communicate to the server and backend using the terminal is only setup in the `local_dev`and feature branches. This will not work in the `main` branch. 
-
-Due to the defined paths in `./server/index.js`, when the server is run with the frontend in a terminal, all server requests made use `/api` as the API endpoint. 
-
-The API endpoint for all backend requests use the port number that the backend FastAPI is running on, such as `localhost:8000` if running on port 8000. 
-
-### When Running with Docker 
-The configuration in the frontend files to communicate to the server and backend using the Docker is only setup in the `main` branch. This will not work in other branches. 
-
-When hosting the AI Hub in the cloud, an nginx reverse proxy is required to securely manage communication between the frontend, server, and backend containers. In a Dockerized and cloud-hosted environment, each component runs as its own service on an internal network. Directly exposing these services would require multiple public ports and could unintentionally expose non-secure HTTP or WebSocket (WS) endpoints to users. 
-
-To avoid this, the frontend container includes an nginx instance that serves as a single secure entry point for all browser traffic. The proxy accepts HTTPS and secure WebSocket (WSS) requests from the client (rather than HTTP and WS in the `local_dev` branch) and forwards them internally as HTTP and WS traffic to the appropriate service. This ensures secure external communication while keeping internal service traffic private. 
-
-Due to the reverse proxy’s rerouting of request paths, any requests to the server need `/server` as the endpoint while the any to the backend uses `/api`. 
-
-The [nginx-app.conf](../nginx-app.conf) file is used to build the reverse proxy used by the frontend. Some of the configurations in this file include the line `client_max_body_size 10M;` which limits the size of all file uploads on the AI Hub to 10 megabytes. 
+## Communicating with tool APIs 
+All requests made to in house APIs (hosted in an Azure Shared Services Canada enviroment) are handled in the `/services/apiService.js` file using helper functions called by various tool pages needing the API. 
 
 ## Authenticating Users into the Platform 
 ### Authentication Overview 
@@ -109,8 +87,8 @@ const toolData = getToolTranslations("toolName", language);
     2. Go to the `src/layouts/Dashboard.js` file, import your tool’s UI page, and add it to the `toolComponents` dictionary. 
     3. Go to the file `src/utils/constants.js` define a new object for your tool, then add your new object to the `TOOL_CATEGORIES` export under the most relevant section (for example if the tool uses OpenAI put it under Large Language Models) 
  
-## Current AI Hub Tools 
-This section covers all of the tools currently deployed on the AI Hub. More technical details on how some of these tools are implemented in the backend are found in [BACKEND.md at Supported APIs](../backend/BACKEND.md#supported-apis). <br>
+## Current OCDS E-AI Hub Tools 
+This section covers all of the tools currently deployed on the OCDS E-AI Hub. <br>
 The source code for all the UI pages for all these tools are found in the `./src/pages/tools/` folder except for the AI Inventory Form located in `./src/pages/SurvayForm/` and the Statistical and ML Algorithms Guide UI found in `./src/pages/DocxEditor.js`. 
 
 ### Computer Vision 
@@ -119,7 +97,7 @@ This tool uses a computer vision model trained on annotated salmon scale images 
 
 The tool originates from a pilot project to help reduce the manual workload currently born by subject matter experts (SMEs) for the DFO Science Branch's Sclerochronology Lab (Fish Ageing Lab). During this pilot, a YOLOv9 model was developed that achieved high accuracy in detecting scale features (clipping, center points, and fragments). The tool also provides transparent explanations by identifying and displaying winter ring patterns corresponding to age determination. <br>
 
-The model itself is hosted on premise which is accessed via the backend component. 
+
 
 #### Fence Counting 
 This tool uses computer vision to analyze each frame of river monitoring videos, detecting and classifying salmon as they pass through counting fences. The AI model helps automate species identification and improve accuracy in population tracking. <br>
@@ -128,7 +106,7 @@ This tool originates from a pilot project to help DFO’s Science Branch’s Sto
 
 During the pilot, a YOLOv11 detection model was successfully trained and integrated with BOT-SORT tracking algorithms to identify and count five salmon species: Pink, Chum, Chinook, Sockeye, and Coho. The model achieved 87% precision and 88% recall, demonstrating near-expert-level performance. When deployed, this system tracks individual fish throughout video segments and generates automated counts, eliminating the need for frame-by-frame manual review. <br>
 
-Due to the file sizes of videos and the processing time of the footage, the AI Hub only has sample videos that have been processed with the YOLOv11 model in advance. 
+
 
 #### Electronic Monitoring 
 This tool is a proof-of-concept demo for DFO's Automated Electronic Monitoring. The project aims to modernize the currently labour-intensive process of manually reviewing video footage of selected sets of tows. The underlying fish counting model was developed in collaboration with the Pacific Groundfish EM Program and various industry partners. The model is capable of identifying and counting in real-time commonly harvested fish species in imagery collected from electronic monitoring equipment onboard commercial fishing vessels. 

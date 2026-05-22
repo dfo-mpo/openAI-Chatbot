@@ -1,21 +1,18 @@
 # Contributing
 Before doing any work on the AI Hub make sure to read through the documentation for each component to understand how everything works.
 
-To understand how the interface, communication between docker images, and authentication are implemented see [FRONTEND](src/FRONTEND.md).
+To understand how the interface and authentication are implemented see [FRONTEND](src/FRONTEND.md).
 
-To understand how AI/ML models and tools are implemented, see [BACKEND](backend/BACKEND.md).
-
-**Recommened Branch Workflow for adding new feature:** Create a new branch for your feature based off the `local_dev` branch. Once the feature is working, merge the feature branch with `local_dev`, then pull `local_dev` into `main`. You can verify everything works with docker before updating any cloud deployment.<br>
-How to run the AI Hub without docker can be found in the `local_dev` [README](https://github.com/dfo-mpo/SDPA-AI-Portal/blob/local_dev/README.md) file.
+**Recommened Branch Workflow for adding new feature:** Create a new branch for your feature based off the `main` branch. Once the feature is working, merge the feature branch with `main`. You can verify everything works with docker before updating any cloud deployment.<br>
 
 ## Deploying the Docker Container on Azure Webapps
-The AI Hub is deployed on Azure Web Apps with the dockerized images hosted on an Azure Container Registry resource. Azure Key Vault is also used for storing keys instead of using enviroment variables. <br>
-This section will help you update the current Azure Hub instance with a new release but also provide additional context to allow replication in a new Azure enviroment.<br>
+The OCDS E-AI Hub is deployed on Azure Web Apps with the dockerized image hosted on an Azure Container Registry resource. <br>
+This section will help you update the current OCDS E-AI Hub instance with a new release but also provide additional context to allow replication in a new Azure enviroment.<br>
 If you are using the existing deployment in Azure, you can jump to [docker requirments](CONTRIBUTE.md#install-docker-desktop-if-you-dont-already-have-it-on-your-device).
 
 ### Prerequisites
 #### Setup Web App Resource
-1. Create an Azure Web App resource. Make sure that the option for Publish is set to *Container*.
+1. Create an Azure Web App resource. Make sure that the option for `Publish` is set to *Container*.
 2. Once the resource is created, open it and go into the `Configuration` page under settings and apply the following changes the click on save:
     * Set SCM Basic Auth Publishing Credentials to `On`
     * Set FTP Basic Auth Publishing Credentials to `On`
@@ -34,39 +31,20 @@ If you are using the existing deployment in Azure, you can jump to [docker requi
 7. You will need to create an App Registration for the Azure Web App used and the users that will have the ability to authenticate when logging in. You will likely need to reach out to IT to create this, see [this documentation](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app) for more details.
 8. Get the application ID of the App Registration and the application ID of the service principle tied to the web application. They will be needed later.
 
-#### Setup Azure Key Vault
-9. Create an Azure Key Vault resource using default configurations.
-10. Go to the resource once it is created and open the `Access Control (IAM)` page
-11. Create a new role granting at least `Get` and `List` for secrets for the Object ID for the Azure Web App **AND** the application ID from the service principle tied to the Azure Web App.
-12. Go to the `Secrets` page and create secrets for each key as identified in the [backend](backend/ai_ml_tools/utils/azure_key_vault.py). The name of the keys must match as they are shown in these files as Azure Key Vault uses different naming conventions than what is used in `.env` files.
-13. Go back to the Azure Web App resource created earlier.
-14. Go to the `Environment variables` page. Click on *Add* to create a new environment variable: 
-    * Set the *Name* to `KEY_VAULT_NAME`
-    * Set the *Value* to the name of your Azure Key Vault resource.
-    * Click *Apply* to add the variable, then click *Apply* again to save the change.
-
-#### Setup Azure Storage Account
-15. Create an Azure Storage account resource.
-    * You can use the default settings, but it is recommended to select `Enable hierarchical namespace` under the *Advanced* window.
-16. Once the resource is created, open it and go to the `Containers` page and add a new container (pick any name you want).
-17. In this container, create 2 folders:
-    * `ds_use_case_survey`, this will be where survey responses are outputted.
-    * `ai_ml_document`, you will need to upload a `pdf` and `docx` version of the `Statistical and ML Algorithms Guide` into this folder.
-18. See additional setup needed in the Azure Storage Account if using the Web Scraper tool in [BACKEND.md at Chroma Storage in Volumes and File Share](./backend/BACKEND.md#choma-storage-in-volumes-and-file-share). 
 #### Install Docker Desktop (If you don't already have it on your device)
-18. First you need to install the Linux subsystem for Windows, open a PowerShell or Command Prompt terminal using Admin Privileges and run the following command: 
+9. First you need to install the Linux subsystem for Windows, open a PowerShell or Command Prompt terminal using Admin Privileges and run the following command: 
 ```bash
 wsl --install 
 ```
 You may need to restart the computer after this step.
 
-19. Download and install Docker Desktop from the Docker Website [Docker Downloads](https://docs.docker.com/desktop/setup/install/windows-install/). 
+10. Download and install Docker Desktop from the Docker Website [Docker Downloads](https://docs.docker.com/desktop/setup/install/windows-install/). 
 
 When prompted, ensure the Use WSL 2 instead of Hyper-V option on the Configuration page is selected 
 #### Setup Terminal Connection
-20. Download and install Azure CLI from Microsoft:
+11. Download and install Azure CLI from Microsoft:
 [Azure CLI Downloads](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-windows?pivots=msi). Note that you may need admin privileges to run the msi file.
-21. Open a terminal on your PC and log into the azure subscription you wish to use:
+12. Open a terminal on your PC and log into the azure subscription you wish to use:
 ```bash
 az login
 ```
@@ -77,17 +55,15 @@ az login --tenant <tenantID>
 ```
 Note SSC 163Oxygen tenantID is 8c1a4d93-d828-4d0e-9303-fd3bd611c822. You can find it as Directory ID when viewing directories in Azure. 
 
-22. Log into your Azure Container Registry resource using the following command:
+13. Log into your Azure Container Registry resource using the following command:
 ```bash
 az acr login --name <acr_resource_name>
 ```
 Where acr_resource is the name of the resource you want to push your docker images too.
 
 ### Create Deployment on Web App
-1. In the `./backend/ai_ml_tools` folder, copy and rename the '.env.sample' file to '.env'. 
-    * (Optional, only for testing) Fill in the keys for OpenAI, Document Intelligence, and other APIs used.
-2. In the `./src/components/auth/` folder, copy and rename the 'authConfig.example.js' into 'authConfig.js'. Make sure to add in the values for clientId, authority, redirectURI, and postLogoutRedirectUri.
-3. Build the local docker container using the command:
+1. In the `./src/components/auth/` folder, copy and rename the 'authConfig.example.js' into 'authConfig.js'. Make sure to add in the values for clientId, authority, redirectURI, and postLogoutRedirectUri.
+2. Build the local docker container using the command:
 ```bash
 # Use this command if your docker engine version is below 20.10
 docker-compose up --build
@@ -95,21 +71,17 @@ docker-compose up --build
 # Use this command if you have docker engine v20.10 or newer
 docker compose up --build
 ```
-4. Verify that everything is working as expected on http://localhost:3080.
-5. **IMPORTANT** If you included keys in steps `1` and `2`, **REMOVE THESE KEYS BEFORE PROCEEDING**.
-    * After **removing** keys from the `.env` files, **rerun** the docker compose command in step `4` to build the image without any keys.
-6. Once you have built your local docker container you need to tag the images that have modifications.<br>
+3. Verify that everything is working as expected on http://localhost:3080.
+4. Once you have built your local docker container you need to tag the image that have modifications.<br>
 <b>Important:</b> If you tag and push a version (eg. v1, v2, ...) that already exists in the ACR resource, it will overwrite it.<br>
 ```bash
-docker tag <project-foldername-lowercase>-backend <acr_resource_name>.azurecr.io/ai-ml-tools-backend:v1
 docker tag <project-foldername-lowercase>-frontend <acr_resource_name>.azurecr.io/ai-ml-tools-frontend:v1
 ```
-7. Push your local images with changes to the ACR:
+5. Push your local images with changes to the ACR:
 ```bash
-docker push <acr_resource_name>.azurecr.io/ai-ml-tools-backend:v1
 docker push <acr_resource_name>.azurecr.io/ai-ml-tools-frontend:v1
 ```
-8. Go to your Azure Web App resource to the *Deployment Center* page then set up the container:
+6. Go to your Azure Web App resource to the *Deployment Center* page then set up the container:
     * Make sure 'Source' is set to Container Registry.
     * Make sure 'Container type' is set to Docker Compose.
     * 'Authentication' Needs to be set to Admin Credentials
@@ -120,13 +92,7 @@ docker push <acr_resource_name>.azurecr.io/ai-ml-tools-frontend:v1
       frontend:  
         image: <your_registry_name>.azurecr.io/frontend:latest  
         ports:  
-        - "3080:80"  
-        depends_on:  
-        - backend  
-      backend:  
-        image: <your_registry_name>.azurecr.io/backend:latest  
-        ports:  
-        - "8080:8000" 
+        - "3080:80"
     ```
     * (Optional) Set 'Continuous deployment' to 'On' if you want the website to update if push a new image versions.
-    * Press Save, after your web app refreshes it will be running of the frontend and backend containers.
+    * Press Save, after your web app refreshes it will be running of the frontend image.
