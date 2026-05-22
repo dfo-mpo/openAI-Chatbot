@@ -41,8 +41,8 @@
     "dev": "npm run copy-webviewer && concurrently \"npm run start:client\" \"npm run start:server\"",
     "start:client": "cross-env NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
     "start:server": "node server/index.js",
-    "build": "npm run copy-webviewer && react-scripts build",
-    "start": "npx serve -s build --listen 3000",
+    "build": "npm run copy-webviewer && NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
+    "start": "node server/index.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "copy-webviewer": "node copy-webviewer.js"
