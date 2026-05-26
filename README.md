@@ -1,4 +1,4 @@
-# DFO AI Hub
+# DFO OCDS E-AI Hub
 This repository is for the DFO Office of the Chief Data Steward (OCDS) Educational AI Hub (OCDS E-AI Hub), a platform designed to explore the potential of artificial intelligence in fisheries and oceans research. Our initiatives harness the power of advanced data and A.I. technologies like machine learning, computer vision, and natural language processing to revolutionize how to support marine conservation and rebuilding efforts in the modern data and digital era.
 
 These tools are prototypes designed to illustrate possible AI applications for DFO scientists, therefore, are strictly for educational purposes and are not to be used in any work processes. Please avoid uploading any sensitive or operational data if using this tool.
