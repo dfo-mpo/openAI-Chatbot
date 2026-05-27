@@ -96,6 +96,8 @@ This tool uses a computer vision model trained on annotated salmon scale images 
 
 The tool originates from a pilot project to help reduce the manual workload currently born by subject matter experts (SMEs) for the DFO Science Branch's Sclerochronology Lab (Fish Ageing Lab). During this pilot, a YOLOv9 model was developed that achieved high accuracy in detecting scale features (clipping, center points, and fragments). The tool also provides transparent explanations by identifying and displaying winter ring patterns corresponding to age determination. <br>
 
+For more detailed documentation specifically on this project, see the [Scale Aging Lessons Learned](https://086gc.sharepoint.com/:w:/r/sites/OCDO/_layouts/15/Doc.aspx?sourcedoc=%7BF61D0A3A-169E-4D70-8C54-A488CAB8BE3E%7D&file=Scale%20Aging%20Lessons%20Learned_EN.docx&action=default&mobileredirect=true). 
+
 The git repo for this tool's API serivce can be found [here](https://github.com/dfo-mpo/scale-age).
 
 #### Fence Counting 
@@ -105,6 +107,8 @@ This tool originates from a pilot project to help DFO’s Science Branch’s Sto
 
 During the pilot, a YOLOv11 detection model was successfully trained and integrated with BOT-SORT tracking algorithms to identify and count five salmon species: Pink, Chum, Chinook, Sockeye, and Coho. The model achieved 87% precision and 88% recall, demonstrating near-expert-level performance. When deployed, this system tracks individual fish throughout video segments and generates automated counts, eliminating the need for frame-by-frame manual review. <br>
 
+For more detailed documentation specifically on this project, see the [Fence Counting Lessons Learned](https://086gc.sharepoint.com/:w:/r/sites/OCDO/_layouts/15/Doc.aspx?sourcedoc=%7BF2769DB9-ACA1-4905-8293-41B2A7AFF4DC%7D&file=Fence%20Counting%20Lessons%20Learned_EN.docx&action=default&mobileredirect=true). 
+
 The git repo for this tool's web interface can be found [here](https://github.com/dfo-mpo/pssi-image-recognition/tree/webInterface).
 
 #### Electronic Monitoring 
@@ -112,28 +116,50 @@ This tool is a proof-of-concept demo for DFO's Automated Electronic Monitoring. 
 
 The application is hosted on a different web application used by the OCDS team using Gradio. The version on the OCDS E-AI Hub is created by using an iframe rendering the Gradio page. As a result, it has its own English/French toggle that is independent of the AI Hub’s toggle. 
 
+More details about the models used, see [Overview | DFO-MPO](https://ocds-ai-portal.canadacentral.cloudapp.azure.com/details/). 
+
+The git repo for this tool's web interface can be found [here](https://github.com/dfo-mpo/OCDS-AI-Portal).
+
 #### Underwater Marine Life Annotation 
 Proof-of-concept demo for DFO Underwater Benthic Marine species identification. This project proposed by Quebec Region's science team aims to automate the review of underwater imagery and video footage collected for biodiversity surveys. The model developed is currently capable of identifying 21 benthic marine life categories drawn from underwater remotely operated vehicles. The project has also since garnered support from the science teams of other regions including Pacific Region. 
 
 The application is hosted on a different web application used by the OCDS team using Gradio. The version on the AI Hub is created by using an iframe rendering the Gradio page. As a result, it has its own English/French toggle that is independent of the AI Hub’s toggle. 
+
+More details about the models used, see [Overview | DFO-MPO](https://ocds-ai-portal.canadacentral.cloudapp.azure.com/details/). 
+
+The git repo for this tool's web interface can be found [here](https://github.com/dfo-mpo/OCDS-AI-Portal).
 
 #### Fish Population Estimation 
 This tool is a proof-of-concept demo for an AI-based tool for DFO's underwater fish population estimation tasks. This project explores the potential of a tool that automates detection and estimation of the number of fish in underwater shoals and schools in imagery collected from camera equipment during underwater surveys. The model was developed as a by-product of the EM project, but it has since garnered interest from various programs like the Pacific Salmon Strategy Initiative where we are investigating the potential to leverage this model to automate salmon identification and counting. 
 
 The application is hosted on a different web application used by the OCDS team using Gradio. The version on the OCDS E-AI Hub is created by using an iframe rendering the Gradio page. As a result, it has its own English/French toggle that is independent of the AI Hub’s toggle. 
 
+More details about the models used, see [Overview | DFO-MPO](https://ocds-ai-portal.canadacentral.cloudapp.azure.com/details/). 
+
+The git repo for this tool's web interface can be found [here](https://github.com/dfo-mpo/OCDS-AI-Portal).
+
 #### Detection of Ghost Gear 
 Proof-of-concept demo for DFO's Side-scan Sonar Image Ghost Gear Detector. This project was undertaken in partnership with the Ghost Gear Program and aims to automate the process of reviewing side-scan sonar imagery. The system developed leverages an AI-based computer vision model trained on data provided by CSR GeoSurveys Ltd. to identify in real-time Ghost Gear (Abandonned Lobster Traps) from collected side-scan sonar imagery. 
 
 The application is hosted on a different web application used by the OCDS team using Gradio. The version on the AI Hub is created by using an iframe rendering the Gradio page. As a result, it has its own English/French toggle that is independent of the AI Hub’s toggle. 
+
+More details about the models used, see [Overview | DFO-MPO](https://ocds-ai-portal.canadacentral.cloudapp.azure.com/details/). 
+
+The git repo for this tool's web interface can be found [here](https://github.com/dfo-mpo/OCDS-AI-Portal).
 
 #### CTD Data Quality Control 
 Proof-of-concept demo for DFO Pacific Region CTD (Conductivity-Temperature-Depth) Data Quality Control model. CTD profiles are depth-wise series' of sensor measures for oceanographic data taken at fixed locations. Challenging ocean conditions and sensor faults can lead to poor quality data that must be manually identified and removed by oceanographers. This project was developed in collaboration with the Pacific Region Ocean Sciences Division and aims to accelerate the CTD quality control process by flagging bad data to assist oceanographers in more rapidly identifying and removing the bad data. Through experimental results, the model achieves 92.6% global accuracy in identifying bad data. The project has also since gained interest from the oceanography teams of other regions including Maritime Region. 
 
 The application is hosted on a different web application used by the OCDS team using Gradio. The version on the OCDS E-AI Hub is created by using an iframe rendering the Gradio page. As a result, it has its own English/French toggle that is independent of the AI Hub’s toggle. 
 
+More details about the models used, see [Overview | DFO-MPO](https://ocds-ai-portal.canadacentral.cloudapp.azure.com/details/). 
+
+The git repo for this tool's web interface can be found [here](https://github.com/dfo-mpo/OCDS-AI-Portal).
+
 #### Classification Model 
-This tool sends your image to the already-built Azure Custom Vision models and returns a predicted label + confidence. All models are accessed via the backend component of the OCDS E-AI Hub. 
+This tool sends your image to the already-built Azure Custom Vision models and returns a predicted label + confidence. All models are accessed via the external API service through the OCDS E-AI Hub. 
+
+For more detailed and technical documentation specifically on this tool, see the [Image Classification Model Documentation](https://086gc.sharepoint.com/:w:/r/sites/OCDO/_layouts/15/Doc.aspx?sourcedoc=%7BCC141451-EE6D-4B10-B9CF-DCEE1B1275B3%7D&file=Image%20Classification%20Model%20Documentation.docx&action=default&mobileredirect=true). 
 
 The git repo for this tool's API serivce can be found [here](https://github.com/dfo-mpo/SDPA-AI-Portal/tree/classification).
 
@@ -143,12 +169,16 @@ This tool enables structured document analysis by processing CSV-based prompts a
 
 This tool originates from pilot projects aiming to use OCR and OpenAI to extract and summarize data from documents. A prebuilt OCR extraction model from Azure Document Intelligence is used to process the uploaded document, and then Azure OpenAI is used on the prompts defined in the CSV file to summarize relevant data with source references. Prompt engineering techniques (question formation and structuring) developed throughout the pilot are used on all prompts in the provided CSV file. 
 
+For more detailed documentation specifically on this project, see the [RCOE Lessons Learned](https://086gc.sharepoint.com/:w:/r/sites/OCDO/_layouts/15/Doc.aspx?sourcedoc=%7B802054AF-F14F-47E2-8C5E-9CF22AC3A3F9%7D&file=RCOE%20Lessons%20Learned_EN.docx&action=default&mobileredirect=true). 
+
 The git repo for this tool's API serivce can be found [here](https://github.com/dfo-mpo/openAI-Script/tree/api_service).
 
 #### PDF Chatbot 
 This tool uses OpenAI's language model to answer questions about uploaded documents. It provides direct responses with sourced references, making document exploration faster and more efficient. 
 
 Like the CSV/PDF Analyzer, this tool originates from pilot projects using OCR and OpenAI to extract and summarize data from documents; however, it does one prompt at a time and uses retrieval-augmented generation (RAG) using chromadb. RAG allows only relevant chunks of the uploaded document to be passed to OpenAI for a given prompt, reducing processing time and cost. 
+
+For more detailed and technical documentation specifically on this tool, see the [PDF Chatbot Documentation](https://086gc.sharepoint.com/:w:/r/sites/OCDO/_layouts/15/Doc.aspx?sourcedoc=%7BCFB8CB0C-145E-4218-BD70-F0D0A1E9C110%7D&file=PDF%20Chatbot%20Documentation.docx&action=default&mobileredirect=true). 
 
 The git repo for this tool's API serivce can be found [here](https://github.com/dfo-mpo/pdf-chatbot).
 
@@ -157,6 +187,8 @@ This tool leverages [Microsoft Presidio](https://microsoft.github.io/presidio/) 
 
 OCR is used to extract the text from the uploaded PDF and after Presidio is used, the uploaded PDF is modified with black boxes placed over all text determined to be sensitive content. This tool works well in some cases but needs to be future explored and developed to have useful applications in DFO. 
 
+For more detailed documentation specifically on this project, see the [Personally Identifiable Information Documentation](https://086gc.sharepoint.com/:w:/r/sites/OCDO/_layouts/15/Doc.aspx?sourcedoc=%7BFDA3415D-7BC8-47F4-B563-56DD5868D169%7D&file=Personally%20Identifiable%20Information.docx&action=default&mobileredirect=true). 
+
 The git repo for this tool's API serivce can be found [here](https://github.com/dfo-mpo/pii-detection).
 
 #### Sensitivity Score Calculator 
@@ -164,12 +196,16 @@ This tool uses [Microsoft Presidio](https://microsoft.github.io/presidio/) to an
 
 OCR is used to extract the text from the uploaded PDF and after Presidio is used, a score is calculated based on the type of sensitive data detected and the number of detections. This tool works well in some cases but needs to be future explored and developed to have useful applications in DFO. 
 
+For more detailed documentation specifically on this project, see the [Personally Identifiable Information Documentation](https://086gc.sharepoint.com/:w:/r/sites/OCDO/_layouts/15/Doc.aspx?sourcedoc=%7BFDA3415D-7BC8-47F4-B563-56DD5868D169%7D&file=Personally%20Identifiable%20Information.docx&action=default&mobileredirect=true). 
+
 The git repo for this tool's API serivce can be found [here](https://github.com/dfo-mpo/pii-detection).
 
 #### French Translation 
 This tool uses Google's multilingual AI model ([MADLAD400 10B](https://huggingface.co/google/madlad400-10b-mt)) to translate PDF documents from English to French. It provides fast and efficient translations for various types of content while maintaining context and readability. 
 
 This tool originates from a pilot project aimed to create a LLM that can translate English to French at the level of the French Translation Bureau. Training was done by collecting English-French text pairs from translated documents and fine-tuning an existing LLM with the training data. Although the pilot has been on hold due to lack of training documents and capacity, the latest iteration was proven to provide more accurate translations in a DFO context compared to other publicly available LLM tools. 
+
+For more detailed documentation specifically on this project, see the [French Translation Lessons Learned](https://086gc.sharepoint.com/:w:/r/sites/OCDO/_layouts/15/Doc.aspx?sourcedoc=%7B7AC1D3B1-520F-4305-8FE7-0F1ED2610F5D%7D&file=French%20Translation%20Lessons%20Learned_EN.docx&action=default&mobileredirect=true). 
 
 The git repo for this tool's API serivce can be found [here](https://github.com/dfo-mpo/french-translation-llm/tree/API_tool).
 
@@ -193,11 +229,15 @@ The git repo for this tool's API serivce can be found [here](https://github.com/
 #### Document OCR 
 This tool allows users to upload a PDF and automatically scrape its contents for structured data extraction. Once scraped, users can ask questions about the PDF using OpenAI-powered analysis. Ideal for quick insights, research, or prototyping, this tool simplifies the process of turning raw PDF content into actionable answers. 
 
+For more detailed and technical documentation specifically on this tool, see the [PDF Extraction Tool Documentation](https://086gc.sharepoint.com/:w:/r/sites/OCDO/_layouts/15/Doc.aspx?sourcedoc=%7B60BDA078-BC15-4784-836E-03F2FF21C758%7D&file=PDF%20Extraction%20Tool%20Documentation.docx&action=default&mobileredirect=true). 
+
 The git repo for this tool's API serivce can be found [here](https://github.com/dfo-mpo/ocr-document-intelligence/tree/openai-ocr).
 
 #### OCR Review Tool
 This tool allows users to review documents that have been processed using Azure Document Intelligence's OCR custom models. The tool hosted in the OCDS E-AI Hub is a demo version with several unprotected documents that have been copied from real proof-of-concept projects. <br>
 The interface allows users to quickly identify what has been detected by the OCR model and make any corrections. It supports adding a status to each document, such as if it has been reviewed or if it has a problem. 
+
+For more detailed documentation specifically on this project, see the [FFHPP Lessons Learned](https://086gc.sharepoint.com/:w:/r/sites/OCDO/_layouts/15/Doc.aspx?sourcedoc=%7BAE91C791-6872-4038-9194-735D3E144A63%7D&file=FFHPP%20Lessons%20Learned_EN.docx&action=default&mobileredirect=true), [QCFM Lessons Learned](https://086gc.sharepoint.com/:w:/r/sites/OCDO/_layouts/15/Doc.aspx?sourcedoc=%7B7E1FE8AE-9279-4458-908A-AFFA55C45576%7D&file=QCFM%20Lessons%20Learned_EN.docx&action=default&mobileredirect=true), or [FM Lessons Learned](https://086gc.sharepoint.com/:w:/r/sites/OCDO/_layouts/15/Doc.aspx?sourcedoc=%7B211B9679-46DC-4928-9AF9-A0714869AB72%7D&file=FM%20Lessons%20Learned_EN.docx&action=default&mobileredirect=true). 
 
 The git repo for this tool's web interface can be found [here](https://github.com/dfo-mpo/ocr-json2web).
 
@@ -217,7 +257,7 @@ The git repo for this tool's web interface can be found [here](https://github.co
 #### Form 
 This form is meant to be use as guide to support business users in articulating and imagining the potential of using Data, Artificial Intelligence, and Machine Learning to improve productivity, efficiencies, and generate value for program and service delivery, operations, and other business processes. It is meant to help users determine the value and potential of new data innovation from a value proposition, scalability, and sustainability lens rather than a technical implementation perspective. Complete responses will help Data and AI Scientist to determine how feasible a solution could be. 
 
-Responses are handled by the server component which outputs into the Azure Storage Account connected to the OCDS E-AI Hub under the `ds_use_case_survey` folder. 
+For more information on mapping AI intitiatives, advancing AI use cases, and analyzing AI initiatives, see the [AI Enablement Site](https://086gc.sharepoint.com/sites/AIEnablementActivationdelIA/SitePages/ProjectHome.aspx?csf=1&web=1&e=IVjjIm&CID=7229b7a1-b01e-9000-c80d-b5d30c2f75a9&cidOR=SPO&OR=Teams-HL&CT=1767809285809&isSPOFile=1&xsdata=MDV8MDJ8fDRmZjVjMTk4NDYyNTQ1ZjgzY2FiMDhkZWJiNGU0YmY2fDE1OTRmZGFlYTFkOTQ0MDU5MTVkMDExNDY3MjM0MzM4fDB8MHw2MzkxNTQxNDIwODk0NjA5MDd8VW5rbm93bnxWR1ZoYlhOVFpXTjFjbWwwZVZObGNuWnBZMlY4ZXlKRFFTSTZJbFJsWVcxelgwRlVVRk5sY25acFkyVmZVMUJQVEU5R0lpd2lWaUk2SWpBdU1DNHdNREF3SWl3aVVDSTZJbGRwYmpNeUlpd2lRVTRpT2lKUGRHaGxjaUlzSWxkVUlqb3hNWDA9fDF8TDJOb1lYUnpMekU1T20xbFpYUnBibWRmV1RKUk1WcFVWVEphYWtGMFRtMU5NRTU1TURCYVZGSm9URlJvYWsxdFdYUk9WR2Q1VG5wSmVVNHlUWGxOUkdSclFIUm9jbVZoWkM1Mk1pOXRaWE56WVdkbGN5OHhOemM1T0RFM05EQTJOVEV4fGRkOWRkYmI1ZTM2NzQxNjEzY2FiMDhkZWJiNGU0YmY2fGY5Yjk3YTkwNmYwYzQzZDQ4N2Q0MzVjMGU5ODUxMmFm&sdata=alpod3pKeFppRVU0TUE4VGJ0bHd5MUppUXd5eFM3Q2tESFA2bHphOFdQWT0%3D&ovuser=1594fdae-a1d9-4405-915d-011467234338%2CDavid.Onak%40dfo-mpo.gc.ca&TeamsCID=0511a010-24f1-4d41-a9ee-109c9a87e5a5&clickparams=eyJBcHBOYW1lIjoiVGVhbXMtRGVza3RvcCIsIkFwcFZlcnNpb24iOiI0OS8yNjA0MzAxOTIxNiJ9&linkOpenTime=1779835334937#welcome-to-the-ai-enablement-site).
 
 ### Statistical and ML Algorithms Guide 
 #### Document 
@@ -225,4 +265,4 @@ This document will describe different categories of machine learning algorithms 
 
 This document is strictly scoped to the selection and training of ML models, which are a subset of tasks within the broader domains of ML Ops and AI Governance. There are many other tasks and responsibilities that constitute effective and responsible development, deployment and usage of ML models. The breadth of information needed to fully cover these domains requires a suite of policy, guidance, and educational materials. This document can be seen as one component of this broader suite that is currently being assembled within DFO. 
 
-The library `@pdftron/webviewer` is used to generate the PDF view which allows users who are authenticated into the OCDS E-AI Hub to edit and annotate the document guide which is saved onto the file stored in Azure Blob Storage via the server component. 
+See the [Statistical and ML algorithms Guide](https://086gc.sharepoint.com/:w:/r/sites/DataEthicsWorkingGroup/_layouts/15/Doc.aspx?sourcedoc=%7BEF8A436D-7BA0-422E-89D9-211130F5C7EB%7D&file=Statistical%20and%20ML%20algorithms%20Guide.docx&action=default&mobileredirect=true).
