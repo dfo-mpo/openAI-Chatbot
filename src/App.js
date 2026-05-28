@@ -42,8 +42,9 @@ function AppContent() {
         display: 'flex',
         flexDirection: 'column',
         height: '100vh',
-        overflow: 'hidden',
+        overflowX: 'hidden',
         bgcolor: 'background.default',
+        overflowY: 'auto'
       }}
     >
       <Dashboard  />
