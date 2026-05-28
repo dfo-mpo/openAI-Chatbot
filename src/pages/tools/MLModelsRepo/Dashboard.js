@@ -20,10 +20,9 @@ export function MLModelsRepo() {
         src='https://ml-model-repo-demo.azurewebsites.net/'
         sx={{
           position: 'absolute',
-          top: '-14px',
           left: 0,
           width: '100%',
-          height: 'calc(100vh + 120px)',
+          height: 'calc(100vh)',
         }}
       />
     </Box>
