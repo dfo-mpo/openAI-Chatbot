@@ -220,7 +220,7 @@ export async function* askOpenAI(chatHistory, currentMessage, documentContent, s
   
   const protocol = window.location.protocol === "https:" ? "wss" : "ws";
   // const wsUrl = `${protocol}://${window.location.host}/ws/chat_stream`;
-  const wsUrl = `wss://ocds-ai-portal.canadacentral.cloudapp.azure.com/pdf-chatbot/chat_stream`;
+  const wsUrl = `wss://ocds-ai-portal.canadacentral.cloudapp.azure.com/pdf-chatbot/ws/chat_stream`;
   const socket = new WebSocket(wsUrl);
 
   await new Promise((resolve, reject) => {

@@ -50,7 +50,7 @@ function useBasePresets() {
     setLoading(true);
     setErr("");
     try {
-      const r = await fetch(`${API_BASE}/api/base-presets`);
+      const r = await fetch(`${API_BASE}/base-presets`);
       const j = await r.json();
       setPresets(j?.presets || []);
     } catch (e) {
@@ -79,7 +79,7 @@ function urlKeyStrict(val) {
 }
 
 function downloadCombinedByUrl(u) {
-  const href = `${API_BASE}/api/combined-by-url?url=${encodeURIComponent(u)}`;
+  const href = `${API_BASE}/combined-by-url?url=${encodeURIComponent(u)}`;
   const a = document.createElement("a");
   a.href = href;
   a.rel = "noopener";
@@ -647,7 +647,7 @@ export function WebScraper() {
     setScrapeEstimate(prev?.last_scrape_duration || null);
 
     try {
-      const r = await fetch(`${API_BASE}/api/scrape`, {
+      const r = await fetch(`${API_BASE}/scrape`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url, force }),
@@ -778,7 +778,8 @@ export function WebScraper() {
 
     // const wsUrl = API_BASE.replace(/^http/, "ws") + "/api/ws/website_chat"; // for dev
     const protocol = window.location.protocol === "https:" ? "wss" : "ws"; // for prod
-    const wsUrl = `${protocol}://${window.location.host}/api/ws/website_chat`; // for prod
+    // const wsUrl = `${protocol}://${window.location.host}/ws/website_chat`; // for prod
+    const wsUrl = `wss://ocds-ai-portal.canadacentral.cloudapp.azure.com/web-scrape/ws/website_chat`;
     const ws = new WebSocket(wsUrl);
     wsRef.current = ws;
     wsReadyRef.current = false;

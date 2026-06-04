@@ -168,7 +168,7 @@ export function PDFExtractionTool() {
       const fd = new FormData();
       files.forEach(f => fd.append("files", f));
 
-      const r = await fetch(`${API_BASE}/api/index`, { method: "POST", body: fd });
+      const r = await fetch(`${API_BASE}/index`, { method: "POST", body: fd });
       if (!r.ok) throw new Error(await r.text());
       const data = await r.json();
 
@@ -218,7 +218,7 @@ export function PDFExtractionTool() {
     setExtracting(true);
     setExtractionStatus({ type: "info", msg: "Extracting…" });
     try {
-      const res = await fetch(`${API_BASE}/api/extract_per_file`, {
+      const res = await fetch(`${API_BASE}/extract_per_file`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         // ← CHANGED: include api_key alongside model_type
